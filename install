@@ -1,0 +1,18 @@
+#!/bin/sh
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+cd $SCRIPT_DIR
+echo $SCRIPT_DIR
+echo "Install bin hacks"
+sudo cp -rf $SCRIPT_DIR/bin/* /usr/bin/.
+
+echo "Setting up home ($PWD)"
+cd $SCRIPT_DIR/home
+rg --files --hidden
+cp -RT . ~/.
+
+echo "Setting up terminal aliases"
+cd /usr/bin/
+sudo ln -sf terminal term
+sudo ln -sf terminal gnome-terminal
+sudo ln -sf terminal default-terminal
