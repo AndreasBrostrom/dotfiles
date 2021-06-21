@@ -148,6 +148,6 @@ fi
 # POP
 if [[ "$(which pop 1>/dev/null 2>&1; echo $?)" == "0" ]]; then
     popj () {
-        op pop://join?roomId=$1
+        pop pop://join?roomId=$1
     }
 fi
