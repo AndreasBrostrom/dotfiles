@@ -76,8 +76,6 @@ if [[ "$(which adb 1>/dev/null 2>&1; echo $?)" == "0" ]]; then
     alias adb-reload='adb-ksey -r'
     alias adb-re='adb-reload'
     
-    alias adb-u='adb uninstall'
-
     alias logcat='adb logcat'
 fi
 
