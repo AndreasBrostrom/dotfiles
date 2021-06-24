@@ -11,7 +11,7 @@ if [ -d $SCRIPT_DIR/home ]; then
     done
 fi
 
-if [ -d $SCRIPT_DIR/home ]; then 
+if [ -d $SCRIPT_DIR/bin ]; then 
     echo "Install bin scripts"
     sudo cp -rf $SCRIPT_DIR/bin/* /usr/bin/.
 
