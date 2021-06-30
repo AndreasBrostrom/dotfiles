@@ -83,6 +83,7 @@ fi
 if [[ "$(which git 1>/dev/null 2>&1; echo $?)" == "0" ]]; then
     alias g-s='git status'
     alias g-c='git checkout'
+    alias g-cm='git checkout master'
     alias g-cpr='git checkout-pr'
     alias g-b='git branch'
     alias g-f='git fetch --all --prune'
@@ -100,6 +101,8 @@ if [[ "$(which git 1>/dev/null 2>&1; echo $?)" == "0" ]]; then
     alias g-pp='git stash pop'
 
     alias g-cp='g-p; g-c'
+    alias g-cmp='g-p; g-cm'
+    alias g-cmpp='g-p; g-cm; g-pp'
     alias g-frp='g-p; g-rf'
     alias g-rfp='g-frp'
     alias g-frpp='g-frp; g-pp'
