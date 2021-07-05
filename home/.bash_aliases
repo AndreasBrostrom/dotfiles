@@ -23,8 +23,10 @@ if [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "arch" ]; then
         echo "Arch Linux"
         echo -e "\033[32mPacman\033[0m"
         sudo pacman -Syyu
-        echo -e "\033[32mYey\033[0m"
-        yay -Syyu;
+        echo -e "\033[32mYay\033[0m"
+        yay -Syyu
+        notify-send "Pacman and Yay" "Upgrade completed" --urgency=low
+        echo -e "\033[1mFull upgrade completed\033[0m"
     '
     alias upgrade-unattended='
         sudo -v
@@ -32,16 +34,18 @@ if [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "arch" ]; then
         echo "Arch Linux (Unattended)"
         echo -e "\033[32mPacman\033[0m"
         yes | sudo pacman -Syyu
-        echo -e "\033[32mYey\033[0m"
-        yes | yay -Syyu;
+        echo -e "\033[32mYay\033[0m"
+        yes | yay -Syyu
+        notify-send "Pacman and Yay" "Upgrade completed" --urgency=low
+        echo -e "\033[1mFull upgrade completed\033[0m"
     '
 fi
 if [ "$(cat /etc/os-release | grep ID | cut -f 2 -d '=' | head -1)" == "alpine" ]; then
     alias upgrade='
         sudo -v
         echo -e "\033[1mUpgrading all system...\033[0m"
-        sudo apk update;
-        sudo apk upgrade;
+        sudo apk update
+        sudo apk upgrade
         echo -e "\033[1mAll updates are completed.\033[0m"
     '
 fi
@@ -53,7 +57,7 @@ if [[ -d "/data/data/com.termux/" ]]; then
         apt update && apt full-upgrade -y
         apt autoremove -y
         echo -e "\033[32mpkg\033[0m"
-        pkg upgrade -y;
+        pkg upgrade -y
         echo -e "\033[1mAll updates are completed.\033[0m"
     '
 fi
