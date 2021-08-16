@@ -67,7 +67,7 @@
       profile = default
       title = React Native Log
       uuid = b8de308e-0d18-4d2a-91c5-699d20fcd8e8
-      command = echo -e "\e[1mCommands:\e[0m\n > rn-s\n"; bash
+      command = echo -e "\e[1mCommands:\e[0m\n > r-s\n"; bash
       directory = /home/andre/Reposetories/connect/web
     [[[child5]]]
       type = VPaned
@@ -82,7 +82,7 @@
       profile = default
       title = React Log
       uuid = df276adf-94f4-477f-8bc4-16d5703cb981
-      command = echo -e "\e[1mCommands:\e[0m\n > rn-s\n"; bash
+      command = echo -e "\e[1mCommands:\e[0m\n > r-s\n"; bash
       directory = /home/andre/Reposetories/connect/native
     [[[terminal7]]]
       type = Terminal
@@ -92,7 +92,7 @@
       title = React
       uuid = 9be02bed-c4ed-47db-8935-e34362ea78c7
       directory = /home/andre/Reposetories/connect/native
-      command = echo -e "\e[1mCommands:\e[0m\n > rn-au\n"; bash
+      command = echo -e "\e[1mCommands:\e[0m\n > r-au\n"; bash
     [[[child8]]]
       type = HPaned
       parent = child2
@@ -115,7 +115,7 @@
       profile = default
       title = Script Runner
       uuid = b637f42d-73a4-4bec-8df2-707197f21794
-      command = echo -e "\e[1mCommands:\e[0m\n > run-all\n"; bash
+      command = echo -e "\e[1mCommands:\e[0m\n > runall\n"; bash
       directory = /home/andre/Reposetories/connect/scripts
     [[[child11]]]
       type = VPaned
