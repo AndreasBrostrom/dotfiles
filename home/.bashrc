@@ -53,6 +53,7 @@ alias ls='ls --color=auto'
 alias ll='ls -alF'
 alias lsl='ls -lF'
 alias la='ls -A'
+alias lsa='la'
 alias l='ls -CF'
 alias lr='ls -ltrh'
 alias lra='ls -ltrha'
@@ -74,7 +75,7 @@ alias free='free -m'
 # ex - archive extractor
 # usage: ex <file>
 ex () {
-  if [ -f $1 ] ; then
+  if [ -f "$1" ] ; then
     case $1 in
       *.tar.bz2)   tar xjf $1   ;;
       *.tar.gz)    tar xzf $1   ;;
