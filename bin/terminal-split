@@ -1,4 +1,4 @@
 #!/bin/sh
 terminal=terminator
 
-terminal --layout split
+terminal --layout "split"
