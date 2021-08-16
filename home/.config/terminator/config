@@ -146,7 +146,7 @@
       title = Android emulator
       uuid = 2a51cbff-3a2e-4979-9f4e-0ba4699c355a
       directory = /home/andre/Reposetories/connect/
-      command = echo -e "\e[1mCommands:\e[0m\n > pop\n > popc\n"; bash
+      command = echo -e "\e[1mCommands:\e[0m\n > emulator\n"; bash
     [[[terminal15]]]
       type = Terminal
       parent = child13
@@ -155,5 +155,5 @@
       title = Pop process screen
       uuid = 8e025ff5-9902-4aca-a77f-6c6ae78ac887
       directory = /home/andre/Reposetories/connect/
-      command = echo -e "\e[1mCommands:\e[0m\n > emulator\n"; bash
+      command = echo -e "\e[1mCommands:\e[0m\n > pop\n > popc\n"; bash
 [plugins]
