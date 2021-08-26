@@ -68,7 +68,7 @@
       title = React Native Log
       uuid = b8de308e-0d18-4d2a-91c5-699d20fcd8e8
       command = echo -e "\e[1mCommands:\e[0m\n > r-s\n"; bash
-      directory = /home/andre/Reposetories/connect/web
+      directory = /home/andre/Repositories/connect/web
     [[[child5]]]
       type = VPaned
       parent = child3
@@ -83,7 +83,7 @@
       title = React Log
       uuid = df276adf-94f4-477f-8bc4-16d5703cb981
       command = echo -e "\e[1mCommands:\e[0m\n > r-s\n"; bash
-      directory = /home/andre/Reposetories/connect/native
+      directory = /home/andre/Repositories/connect/native
     [[[terminal7]]]
       type = Terminal
       parent = child5
@@ -91,7 +91,7 @@
       profile = default
       title = React
       uuid = 9be02bed-c4ed-47db-8935-e34362ea78c7
-      directory = /home/andre/Reposetories/connect/native
+      directory = /home/andre/Repositories/connect/native
       command = echo -e "\e[1mCommands:\e[0m\n > r-au\n"; bash
     [[[child8]]]
       type = HPaned
@@ -107,7 +107,7 @@
       title = Git Runner
       uuid = 6fdb9f53-dbec-445a-95a8-1b3f497fdc04
       command = echo -e "\e[1mGit:\e[0m\n"; git status; bash
-      directory = /home/andre/Reposetories/connect/
+      directory = /home/andre/Repositories/connect/
     [[[terminal10]]]
       type = Terminal
       parent = child8
@@ -116,7 +116,7 @@
       title = Script Runner
       uuid = b637f42d-73a4-4bec-8df2-707197f21794
       command = echo -e "\e[1mCommands:\e[0m\n > runall\n"; bash
-      directory = /home/andre/Reposetories/connect/scripts
+      directory = /home/andre/Repositories/connect/scripts
     [[[child11]]]
       type = VPaned
       parent = child1
@@ -131,7 +131,7 @@
       title = Misc
       uuid = 6f7d588b-ac69-4fac-abb6-cac573407191
       command = ""
-      directory = /home/andre/Reposetories/connect/
+      directory = /home/andre/Repositories/connect/
     [[[child13]]]
       type = HPaned
       parent = child11
@@ -145,7 +145,7 @@
       profile = default
       title = Android emulator
       uuid = 2a51cbff-3a2e-4979-9f4e-0ba4699c355a
-      directory = /home/andre/Reposetories/connect/
+      directory = /home/andre/Repositories/connect/
       command = echo -e "\e[1mCommands:\e[0m\n > emulator\n"; bash
     [[[terminal15]]]
       type = Terminal
@@ -154,7 +154,7 @@
       profile = default
       title = Pop process screen
       uuid = 8e025ff5-9902-4aca-a77f-6c6ae78ac887
-      directory = /home/andre/Reposetories/connect/
+      directory = /home/andre/Repositories/connect/
       command = echo -e "\e[1mCommands:\e[0m\n > pop\n > popc\n"; bash
   [[split]]
     [[[child0]]]
