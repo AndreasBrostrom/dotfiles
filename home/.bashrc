@@ -121,4 +121,8 @@ if ! shopt -oq posix; then
   fi
 fi
 
+if [ -z "$SSH_AGENT_PID" ]; then
+  eval `ssh-agent -s` >/dev/null 2>/dev/null 
+fi
+
 eval "$(starship init bash)"
