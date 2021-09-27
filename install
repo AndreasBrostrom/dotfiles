@@ -21,3 +21,6 @@ if [ -d $SCRIPT_DIR/bin ]; then
     sudo ln -sf terminal gnome-terminal
     sudo ln -sf terminal default-terminal
 fi
+
+echo "Adding custom conky"
+sudo cp -rf $SCRIPT_DIR/usr/share/conky/* /usr/share/conky/.
