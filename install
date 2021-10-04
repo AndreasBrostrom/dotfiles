@@ -7,7 +7,8 @@ if [ -d $SCRIPT_DIR/home ]; then
     echo "Linking up home"
     cd $SCRIPT_DIR/home
     for FILE in $(rg --files --hidden); do
-        ln -f "$SCRIPT_DIR/home/$FILE" "$HOME/$FILE"
+        echo "Creating softlink for $FILE"
+        ln -sf "$SCRIPT_DIR/home/$FILE" "$HOME/$FILE"
     done
 fi
 
