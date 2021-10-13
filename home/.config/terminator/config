@@ -116,7 +116,7 @@
       profile = default
       title = Script Runner
       uuid = b637f42d-73a4-4bec-8df2-707197f21794
-      command = echo -e "\e[1mCommands:\e[0m\n > runall\n"; bash
+      command = echo -e "\e[1mCommands:\e[0m\n > runall\n > ./proj-up\n > ./lint-all\n"; bash
       directory = /home/andre/Repositories/connect/scripts
     [[[child11]]]
       type = VPaned
@@ -144,10 +144,10 @@
       parent = child13
       order = 0
       profile = default
-      title = Android emulator
+      title = Android
       uuid = 2a51cbff-3a2e-4979-9f4e-0ba4699c355a
       directory = /home/andre/Repositories/connect/
-      command = echo -e "\e[1mCommands:\e[0m\n > emulator\n"; bash
+      command = echo -e "\e[1mCommands:\e[0m\n > emulator\n > scrcpy\n"; bash
     [[[terminal15]]]
       type = Terminal
       parent = child13
