@@ -13,8 +13,8 @@ shopt -s histappend
 shopt -s expand_aliases
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=10000000
+HISTFILESIZE=20000000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
