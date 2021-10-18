@@ -50,7 +50,7 @@ disk "/home/andre" {
 }
 
 wireless _first_ {
-        format_up = " WiFi: %ip (%bitrate %quality) "
+        format_up = " WiFi: (%bitrate, %quality) %ip "
         format_down = ""
 }
 
@@ -85,7 +85,7 @@ memory {
 }
 
 tztime local {
-        format = " 1%Y-%m-%d (W:%W) %H:%M "
+        format = " 1%Y-%m-%d (w%W) %H:%M "
 }
 
 read_file dotfiles {
