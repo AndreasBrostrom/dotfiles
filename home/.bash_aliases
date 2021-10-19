@@ -1,6 +1,6 @@
  
 # Upgrade
-if [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "ubuntu" ] || [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "debian" ]; then
+if [ "$(cat /etc/os-release 1>/dev/null 2>&1 | grep ID_LIKE | cut -f 2 -d '=')" == "ubuntu" ] || [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "debian" ]; then
     alias upgrade='
         sudo -v
         echo -e "\033[1mUpgrading all system ...\033[0m"
@@ -16,7 +16,7 @@ if [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "ubuntu" ] || 
         echo -e "\033[1mAll updates are completed.\033[0m"
     '
 fi
-if [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "arch" ]; then
+if [ "$(cat /etc/os-release 1>/dev/null 2>&1 | grep ID_LIKE | cut -f 2 -d '=')" == "arch" ]; then
     alias upgrade='
         sudo -v
         echo -e "\033[1mUpgrading all system...\033[0m"
@@ -33,14 +33,14 @@ if [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "arch" ]; then
         echo -e "\033[1mUpgrading all system...\033[0m"
         echo "Arch Linux (Unattended)"
         echo -e "\033[32mPacman\033[0m"
-        yes | sudo pacman -Syyu
+        yes "" | sudo pacman -Syyu
         echo -e "\033[32mYay\033[0m"
-        yes | yay -Syyu
+        yes "" | yay -Syyu
         notify-send "Pacman and Yay" "Upgrade completed" --urgency=low
         echo -e "\033[1mFull upgrade completed\033[0m"
     '
 fi
-if [ "$(cat /etc/os-release | grep ID | cut -f 2 -d '=' | head -1)" == "alpine" ]; then
+if [ "$(cat /etc/os-release 1>/dev/null 2>&1 | grep ID | cut -f 2 -d '=' | head -1)" == "alpine" ]; then
     alias upgrade='
         sudo -v
         echo -e "\033[1mUpgrading all system...\033[0m"
