@@ -44,12 +44,12 @@ disk "/home/andre" {
 }
 
 wireless _first_ {
-        format_up = " WiFi: (%bitrate, %quality) %ip "
+        format_up = " w: (%bitrate, %quality) %ip "
         format_down = ""
 }
 
 ethernet _first_ {
-        format_up = " lan: %ip (%speed) "
+        format_up = " e: %ip (%speed) "
         format_down = ""
 }
 
