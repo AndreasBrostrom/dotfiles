@@ -37,12 +37,6 @@ if grep -iq 'microsoft' /proc/version &> /dev/null; then
   fi
 fi
 
-# Android Termux Terminal
-if [[ -d "/data/data/com.termux/" ]]; then
-  cd
-  clear
-fi
-
 # SSH Client Login
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
   echo -e "\e[2;1mssh login \e[0;32;1m$USER@$HOSTNAME\e[0m"
@@ -94,13 +88,6 @@ ex () {
     echo "'$1' is not a valid file"
   fi
 }
-
-# Cinnamon Desktop
-if [ "$DESKTOP_SESSION" == "cinnamon" ]; then
-  # Add an "alert" alias for long running commands.
-  # usage: alert
-  alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-fi
 
 # Bash Aliases
 if [ -f ~/.bash_aliases ]; then

@@ -16,7 +16,7 @@ if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 
         echo -e "\033[1mAll updates are completed.\033[0m"
     '
 fi
-if [ -f "/etc/os-release" ] && [ $("$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "arch") ]; then
+if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "arch" ]; then
     alias upgrade='
         sudo -v
         echo -e "\033[1mUpgrading all system...\033[0m"
