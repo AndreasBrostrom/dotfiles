@@ -1,6 +1,6 @@
  
 # Upgrade
-if [ "$(cat /etc/os-release 1>/dev/null 2>&1 | grep ID_LIKE | cut -f 2 -d '=')" == "ubuntu" ] || [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "debian" ]; then
+if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "ubuntu" ] || [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "debian" ]; then
     alias upgrade='
         sudo -v
         echo -e "\033[1mUpgrading all system ...\033[0m"
@@ -16,7 +16,7 @@ if [ "$(cat /etc/os-release 1>/dev/null 2>&1 | grep ID_LIKE | cut -f 2 -d '=')" 
         echo -e "\033[1mAll updates are completed.\033[0m"
     '
 fi
-if [ "$(cat /etc/os-release 1>/dev/null 2>&1 | grep ID_LIKE | cut -f 2 -d '=')" == "arch" ]; then
+if [ -f "/etc/os-release" ] && [ $("$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "arch") ]; then
     alias upgrade='
         sudo -v
         echo -e "\033[1mUpgrading all system...\033[0m"
@@ -40,7 +40,7 @@ if [ "$(cat /etc/os-release 1>/dev/null 2>&1 | grep ID_LIKE | cut -f 2 -d '=')" 
         echo -e "\033[1mFull upgrade completed\033[0m"
     '
 fi
-if [ "$(cat /etc/os-release 1>/dev/null 2>&1 | grep ID | cut -f 2 -d '=' | head -1)" == "alpine" ]; then
+if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID | cut -f 2 -d '=' | head -1)" == "alpine" ]; then
     alias upgrade='
         sudo -v
         echo -e "\033[1mUpgrading all system...\033[0m"
@@ -49,7 +49,7 @@ if [ "$(cat /etc/os-release 1>/dev/null 2>&1 | grep ID | cut -f 2 -d '=' | head 
         echo -e "\033[1mAll updates are completed.\033[0m"
     '
 fi
-if [[ -d "/data/data/com.termux/" ]]; then
+if [ -d "/data/data/com.termux" ]; then
     alias upgrade='
         echo -e "\033[1mUpgrading all system...\033[0m"
         echo "Termux (Android)"
@@ -125,7 +125,7 @@ if [[ "$(which git 1>/dev/null 2>&1; echo $?)" == "0" ]]; then
 fi
 
 # Arch
-if [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "arch" ]; then
+if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "arch" ]; then
     alias ifconfig='ip addr'
 fi
 
@@ -139,7 +139,7 @@ if grep -iq 'microsoft' /proc/version &> /dev/null; then
 fi
 
 # Android Termux Terminal
-if [[ -d "/data/data/com.termux/" ]]; then
+if [ -d "/data/data/com.termux" ]; then
     alias sudo='su'
     
     alias toast='termux-toast -g top'
