@@ -8,6 +8,7 @@ if [ -d $SCRIPT_DIR/home ]; then
     cd $SCRIPT_DIR/home
     for FILE in $(rg --files --hidden); do
         echo "Creating softlink for $FILE"
+        [ ! -d $(dirname "$HOME/$FILE") ] && mkdir $(dirname "$HOME/$FILE")
         ln -sf "$SCRIPT_DIR/home/$FILE" "$HOME/$FILE"
     done
 fi

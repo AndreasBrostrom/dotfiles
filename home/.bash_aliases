@@ -126,7 +126,10 @@ fi
 
 # Arch
 if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "arch" ]; then
-    alias ifconfig='ip addr'
+    alias arp='echo "$ ip neighbor"; ip neighbor'
+    alias netstat='echo "$ ss"; ss'
+    alias route='echo "$ ip route"; ip route'
+    alias ifconfig='echo "$ ip addr"; ip addr'
 fi
 
 # Windows Linux SubSytstem
