@@ -66,6 +66,8 @@ alias cp='cp -i'
 alias df='df -h'
 alias free='free -m'
 
+alias ..='cd ..'
+
 # ex - archive extractor
 # usage: ex <file>
 ex () {

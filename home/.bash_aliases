@@ -151,6 +151,7 @@ if [ -d "/data/data/com.termux" ]; then
     alias vol='termux-volume'
     alias vib='termux-vibrate -f'
     alias clip='termux-clipboard-set'
+    alias sms='termux-sms-send'
 fi
 
 # POP
