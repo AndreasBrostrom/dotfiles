@@ -93,7 +93,7 @@
       title = React
       uuid = 9be02bed-c4ed-47db-8935-e34362ea78c7
       directory = /home/andre/Repositories/connect/native
-      command = echo -e "\e[1mCommands:\e[0m\n > r-au\n"; bash
+      command = echo -e "\e[1mCommands:\e[0m\n > r-a\n > r-au\n"; bash
     [[[child8]]]
       type = HPaned
       parent = child2
@@ -116,7 +116,7 @@
       profile = default
       title = Script Runner
       uuid = b637f42d-73a4-4bec-8df2-707197f21794
-      command = echo -e "\e[1mCommands:\e[0m\n > runall\n > ./proj-up\n > ./lint-all\n"; bash
+      command = echo -e "\e[1mCommands:\e[0m\n > run-all\n > projectmanager\n > lint-all\n"; bash
       directory = /home/andre/Repositories/connect/scripts
     [[[child11]]]
       type = VPaned
