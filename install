@@ -2,27 +2,32 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 cd $SCRIPT_DIR
+echo -e "\033[34;1mInstalling $(basename $SCRIPT_DIR)...\033[0m"
 
 if [ -d $SCRIPT_DIR/home ]; then 
-    echo "Linking up home"
+    echo -e "\033[1mLinking up home\033[0m"
     cd $SCRIPT_DIR/home
     for FILE in $(rg --files --hidden); do
-        echo "Creating softlink for $FILE"
+        echo -e " \033[2mCreating softlink for $FILE\033[0m"
         [ ! -d $(dirname "$HOME/$FILE") ] && mkdir $(dirname "$HOME/$FILE")
         ln -sf "$SCRIPT_DIR/home/$FILE" "$HOME/$FILE"
     done
 fi
 
 if [ -d $SCRIPT_DIR/bin ]; then 
-    echo "Install bin scripts"
-    sudo cp -rf $SCRIPT_DIR/bin/* /usr/bin/.
+    echo -e "\033[1mInstall bin scripts\033[0m"
+    cd $SCRIPT_DIR/bin
+    for FILE in $(rg --files --hidden); do
+        echo -e " \033[2mCopying $FILE\033[0m"
+        sudo cp -f $FILE /usr/bin/$FILE
+    done
 
-    echo "Setting up aliases"
+    echo -e "\033[1mSetting up aliases\033[0m"
     cd /usr/bin/
     sudo ln -sf terminal term
     sudo ln -sf terminal gnome-terminal
     sudo ln -sf terminal default-terminal
 fi
 
-echo "Adding custom conky"
+echo -e "\033[1mAdding custom conky\033[0m"
 sudo cp -rf $SCRIPT_DIR/usr/share/conky/* /usr/share/conky/.
