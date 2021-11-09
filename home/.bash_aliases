@@ -117,6 +117,12 @@ if [[ "$(which git 1>/dev/null 2>&1; echo $?)" == "0" ]]; then
             git branch -vv | cut -c 3- | awk '$3 !~/\[/ { print " > "$1 }'
         fi
     }
+
+    # GitHub-Cli
+    alias ghc='gcpr'
+    alias ghr='gh pr review'
+    alias ghm='gh pr merge'
+
 fi
 
 # Arch
