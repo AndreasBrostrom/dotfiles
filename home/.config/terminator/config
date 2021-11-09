@@ -68,7 +68,7 @@
       profile = default
       title = React Native Log
       uuid = b8de308e-0d18-4d2a-91c5-699d20fcd8e8
-      command = echo -e "\e[1mCommands:\e[0m\n > r-s\n"; bash
+      command = echo -e "\e[1mCommands:\e[0m\n > rs\n"; bash
       directory = /home/andre/Repositories/connect/web
     [[[child5]]]
       type = VPaned
@@ -83,7 +83,7 @@
       profile = default
       title = React Log
       uuid = df276adf-94f4-477f-8bc4-16d5703cb981
-      command = echo -e "\e[1mCommands:\e[0m\n > r-s\n"; bash
+      command = echo -e "\e[1mCommands:\e[0m\n > rs\n"; bash
       directory = /home/andre/Repositories/connect/native
     [[[terminal7]]]
       type = Terminal
@@ -93,7 +93,7 @@
       title = React
       uuid = 9be02bed-c4ed-47db-8935-e34362ea78c7
       directory = /home/andre/Repositories/connect/native
-      command = echo -e "\e[1mCommands:\e[0m\n > r-a\n > r-au\n"; bash
+      command = echo -e "\e[1mCommands:\e[0m\n > ra\n > rau\n"; bash
     [[[child8]]]
       type = HPaned
       parent = child2

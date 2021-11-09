@@ -9,6 +9,7 @@ general {
 }
 
 order += "read_file dotfiles"
+order += "read_file android"
 order += "battery all"
 # order += "ipv6"
 order += "disk /"
@@ -88,4 +89,9 @@ read_file dotfiles {
         format_bad = ""
         color_good = "#DC322F"
         color_bad = "#DC322F"
+}
+read_file android {
+        path = "/home/andre/.cache/androidDeviceWatcher/log"
+        format = "%content"
+        format_bad = ""
 }

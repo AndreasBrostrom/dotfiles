@@ -85,35 +85,29 @@ fi
 
 # Git
 if [[ "$(which git 1>/dev/null 2>&1; echo $?)" == "0" ]]; then
-    alias g-s='git status'
-    alias g-c='git checkout'
-    alias g-cm='git checkout master'
-    alias g-cpr='git checkout-pr'
-    alias g-b='git branch'
-    alias g-f='git fetch --all --prune'
-    alias g-r='git rebase'
-    alias g-u='git rebase master'
-    alias g-pu='git push'
-    alias g-puf='git push fork'
-    alias g-puff='git push --set-upstream fork $(git rev-parse --abbrev-ref HEAD)'
-    alias g-fr='g-f; g-r'
-    alias g-rf='g-fr'
-    alias g-fu='g-f; g-u'
-    alias g-uf='g-fu'
+    alias gs='git status'
+    alias gc='git checkout'
+    alias gcm='git checkout master'
+    alias gcpr='git checkout-pr'
+    alias gb='git branch'
+    alias gf='git fetch --all --prune'
+    alias gr='git rebase'
+    alias grm='git rebase origin/master'
+    alias gpu='git push'
+    alias gpuf='git push fork'
+    alias gpuff='git push --set-upstream fork $(git rev-parse --abbrev-ref HEAD)'
+    alias gp='git stash'
+    alias gpp='git stash pop'
 
-    alias g-p='git stash'
-    alias g-pp='git stash pop'
-
-    alias g-cp='g-p; g-c'
-    alias g-cmp='g-p; g-cm'
-    alias g-cmpp='g-p; g-cm; g-pp'
-    alias g-frp='g-p; g-rf'
-    alias g-rfp='g-frp'
-    alias g-frpp='g-frp; g-pp'
-    alias g-rfpp='g-rfpp'
-    g-clean () {
+    alias gfr='gf; gr'          # fetch rebase
+    alias gfm='gf; grm'         # fetch rebase:orgin/master
+    alias gcp='gp; gc'          # stash checkout
+    alias gcpp='gp; gc gpp'     # stash checkout pop
+    alias gcmp='gp; gcm'        # stash checkout:master
+    alias gcmpp='gp; gcm; gpp'  # stash checkout:master pop
+    gclean () {
         echo "Clearing merged/gone local branches..."
-        git fetch -p
+        git fetch --prune
         for branch in $(git for-each-ref --format '%(refname) %(upstream:track)' refs/heads | awk '$2 == "[gone]" {sub("refs/heads/", "", $1); print $1}'); do git branch -D $branch; done
         git branch --merged | egrep -v "(^\*|master)" | xargs git branch -d 2&>/dev/null
         echo -e "Cleaning completed."
