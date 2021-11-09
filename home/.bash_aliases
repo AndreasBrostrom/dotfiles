@@ -100,12 +100,14 @@ if [[ "$(which git 1>/dev/null 2>&1; echo $?)" == "0" ]]; then
     alias gp='git stash'
     alias gpp='git stash pop'
 
-    alias gfr='gf; gr'          # fetch rebase
-    alias gfm='gf; grm'         # fetch rebase:orgin/master
-    alias gcp='gp; gc'          # stash checkout
-    alias gcpp='gp; gc gpp'     # stash checkout pop
-    alias gcmp='gp; gcm'        # stash checkout:master
-    alias gcmpp='gp; gcm; gpp'  # stash checkout:master pop
+    alias gfr='gf; gr'              # fetch rebase
+    alias gfm='gf; grm'             # fetch rebase:orgin/master
+    alias gfrp='gp; gf; grm'        # stash fetch rebase:orgin/master
+    alias gfrpp='gp; gf; grm; gpp'  # stash fetch rebase:orgin/master pop
+    alias gcp='gp; gc'              # stash checkout
+    alias gcpp='gp; gc gpp'         # stash checkout pop
+    alias gcmp='gp; gcm'            # stash checkout:master
+    alias gcmpp='gp; gcm; gpp'      # stash checkout:master pop
     gclean () {
         echo "Clearing merged/gone local branches..."
         git fetch --prune
