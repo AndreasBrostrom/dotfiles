@@ -93,7 +93,7 @@
       title = React
       uuid = 9be02bed-c4ed-47db-8935-e34362ea78c7
       directory = /home/andre/Repositories/connect/native
-      command = echo -e "\e[1mCommands:\e[0m\n > ra\n > rau\n"; bash
+      command = echo -e "\e[1mCommands:\e[0m\n > ra\n > rau\n > raup\n"; bash
     [[[child8]]]
       type = HPaned
       parent = child2
