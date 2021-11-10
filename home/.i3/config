@@ -79,6 +79,7 @@ bindsym $mod+Shift+Print --release exec --no-startup-id e-scrot -sc
 # Start Applications
 bindsym $mod+n exec --no-startup-id nemo .
 bindsym XF86Calculator exec --no-startup-id galculator
+#bindsym $alt+Shift+l exec --no-startup-id $HOME/.bin/lorem -w
 # bindsym $mod+Ctrl+b exec terminal -e 'bmenu'
 # bindsym $mod+F2 exec palemoo
 # bindsym $mod+F3 exec pcmanfm
