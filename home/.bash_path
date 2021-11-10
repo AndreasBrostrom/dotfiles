@@ -4,6 +4,7 @@ export GIT_EDITOR=nvim
 
 [[ -d $HOME/Programs/bin      ]] && export PATH=$PATH:$HOME/Programs/bin
 [[ -d $HOME/.bin              ]] && export PATH=$PATH:$HOME/.bin
+[[ -d $HOME/.bin/completion   ]] && source <(cat $HOME/.bin/completion/*)
 
 # Android
 if [ -d $HOME/.android ]; then
