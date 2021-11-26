@@ -4,7 +4,6 @@ if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 
     alias upgrade='
         sudo -v
         echo -e "\033[1mUpgrading all system ...\033[0m"
-        echo "Ubuntu (Debian)"
         echo -e "\033[32mapt\033[0m"
         sudo apt update
         sudo apt full-upgrade -y
@@ -17,28 +16,40 @@ if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 
     '
 fi
 if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "arch" ]; then
-    alias upgrade='
+    upgrade () {
         sudo -v
-        echo -e "\033[1mUpgrading all system...\033[0m"
-        echo "Arch Linux"
+        if [[ $? == 1 ]] || [[ $(sudo -n uptime 2>&1 | grep "load" | grep -v "Sorry" | wc -l) != 1 ]]; then
+            echo -e "\033[31mYou are not running as root\033[0m"
+            return
+        fi
+        echo -e "\033[1mFully upgrading system and packages...\033[0m"
+        if [[ "$1" == "-u" ]] || [[ "$1" == "--unattended" ]]; then
+            echo -e "\033[2mUpgrade is running as unattended\033[0m"
+        fi
         echo -e "\033[32mPacman\033[0m"
-        sudo pacman -Syyu
+        if [[ "$1" == "-u" ]] || [[ "$1" == "--unattended" ]]; then
+            yes ""| sudo pacman -Syyu
+        else
+            sudo pacman -Syyu
+        fi
+        if [[ $(sudo -n uptime 2>&1 | grep "load" | grep -v "Sorry" | wc -l) != 1 ]]; then
+            echo -e "\033[33mYou have lost your root access...\033[0m"
+            sudo -v
+            [[ $? == 1 ]] && echo -e "\033[31mSomethign went wrong here\033[0m" && return
+        fi
         echo -e "\033[32mYay\033[0m"
-        yay -Syyu
+        if [[ "$1" == "-u" ]] || [[ "$1" == "--unattended" ]]; then
+            echo -e "\033[2mUpgrade is running as unattended\033[0m"
+        fi
+        if [[ "$1" == "-y" ]]; then
+            yes "" | yay -Syyu
+        else
+            yay -Syyu
+        fi
         notify-send "Pacman and Yay" "Upgrade completed" --urgency=low
+        sudo --reset-timestamp
         echo -e "\033[1mFull upgrade completed\033[0m"
-    '
-    alias upgrade-unattended='
-        sudo -v
-        echo -e "\033[1mUpgrading all system...\033[0m"
-        echo "Arch Linux (Unattended)"
-        echo -e "\033[32mPacman\033[0m"
-        yes "" | sudo pacman -Syyu
-        echo -e "\033[32mYay\033[0m"
-        yes "" | yay -Syyu
-        notify-send "Pacman and Yay" "Upgrade completed" --urgency=low
-        echo -e "\033[1mFull upgrade completed\033[0m"
-    '
+    }
 fi
 if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID | cut -f 2 -d '=' | head -1)" == "alpine" ]; then
     alias upgrade='
@@ -52,12 +63,8 @@ fi
 if [ -d "/data/data/com.termux" ]; then
     alias upgrade='
         echo -e "\033[1mUpgrading all system...\033[0m"
-        echo "Termux (Android)"
-        echo -e "\033[32mapt\033[0m"
-        apt update && apt full-upgrade -y
-        apt autoremove -y
-        echo -e "\033[32mpkg\033[0m"
         pkg upgrade -y
+	    pkg autoclean
         echo -e "\033[1mAll updates are completed.\033[0m"
     '
 fi
