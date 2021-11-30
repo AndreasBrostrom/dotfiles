@@ -141,6 +141,8 @@ if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 
     alias netstat='echo "$ ss"; ss'
     alias route='echo "$ ip route"; ip route'
     alias ifconfig='echo "$ ip addr"; ip addr'
+
+    alias lock='blurlock'
 fi
 
 # Windows Linux SubSytstem
