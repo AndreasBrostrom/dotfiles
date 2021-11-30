@@ -46,7 +46,7 @@ if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 
             yay -Syyu
         fi
 
-        notify-send --app-name=pacman "Pacman and Yay" "<i>System upgrade is complet.</i>" --urgency=normal
+        notify-send "Pacman and Yay" "<i>System upgrade is complet.</i>" --urgency=normal
         sudo --reset-timestamp
         echo -e "\033[1mFull upgrade completed\033[0m"
     }
