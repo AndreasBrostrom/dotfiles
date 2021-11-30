@@ -23,30 +23,30 @@ if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 
             return
         fi
         echo -e "\033[1mFully upgrading system and packages...\033[0m"
-        if [[ "$1" == "-u" ]] || [[ "$1" == "--unattended" ]]; then
-            echo -e "\033[2mUpgrade is running as unattended\033[0m"
-        fi
+
         echo -e "\033[32mPacman\033[0m"
         if [[ "$1" == "-u" ]] || [[ "$1" == "--unattended" ]]; then
+            echo -e "\033[2mUpgrade is running as unattended\033[0m"
             yes ""| sudo pacman -Syyu
         else
             sudo pacman -Syyu
         fi
+
         if [[ $(sudo -n uptime 2>&1 | grep "load" | grep -v "Sorry" | wc -l) != 1 ]]; then
             echo -e "\033[33mYou have lost your root access...\033[0m"
             sudo -v
             [[ $? == 1 ]] && echo -e "\033[31mSomethign went wrong here\033[0m" && return
         fi
+
         echo -e "\033[32mYay\033[0m"
         if [[ "$1" == "-u" ]] || [[ "$1" == "--unattended" ]]; then
             echo -e "\033[2mUpgrade is running as unattended\033[0m"
-        fi
-        if [[ "$1" == "-y" ]]; then
             yes "" | yay -Syyu
         else
             yay -Syyu
         fi
-        notify-send "Pacman and Yay" "Upgrade completed" --urgency=low
+
+        notify-send --app-name=pacman "Pacman and Yay" "<i>System upgrade is complet.</i>" --urgency=normal
         sudo --reset-timestamp
         echo -e "\033[1mFull upgrade completed\033[0m"
     }
