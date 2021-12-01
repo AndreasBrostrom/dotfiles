@@ -31,3 +31,19 @@ fi
 
 echo -e "\033[1mAdding custom conky\033[0m"
 sudo cp -rf $SCRIPT_DIR/usr/share/conky/* /usr/share/conky/.
+
+
+if [ -d $SCRIPT_DIR/../Tools ]; then
+    echo -e "\033[1mHome scripts from Tools\033[0m"
+    cd $SCRIPT_DIR/../Tools/ScriptsLinux
+    [ ! -d "$HOME/.bin" ] && mkdir -p $HOME/.bin
+    EXISTING=($(ls /usr/bin/))
+    for FILE in $(rg --files --hidden); do
+        if [[ " ${EXISTING[*]} " =~ " ${FILE} " ]]; then
+            echo -e " \033[2mScript "$FILE" already pressent in /usr/bin skipping\033[0m"
+            continue
+        fi
+        echo -e " \033[2mCopying $FILE\033[0m"
+        cp -f $FILE $HOME/.bin/$FILE
+    done
+fi
