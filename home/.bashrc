@@ -30,8 +30,13 @@ fi
 
 # Windows Linux SubSytstem Terminal WSL
 if grep -iq 'microsoft' /proc/version &> /dev/null; then
-  export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0.0
-  export LIBGL_ALWAYS_INDIRECT=1
+  alias startx="""
+    export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0.0;
+    export LIBGL_ALWAYS_INDIRECT=1;
+    startlxde || export DISPLAY=:0 &&
+    echo -e '\e[1mRetrying with different method...\e[0m' &&
+    startlxde;
+  """
   if [[ "$PWD" = "/mnt/c/Windows/system32" || "$PWD" = "/mnt/c/WINDOWS/system32" ]]; then
     cd ~
   fi
