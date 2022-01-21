@@ -1,6 +1,6 @@
 #!/bin/bash
 
-conky -c /usr/share/conky/conky1.10_shortcuts_evul &&
+conky -c /usr/share/conky/conky_shortcuts_evul &&
 conky -c /usr/share/conky/conky_evul &&
 
 exit 0
