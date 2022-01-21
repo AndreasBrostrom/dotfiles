@@ -100,7 +100,7 @@ if [[ "$(which git 1>/dev/null 2>&1; echo $?)" == "0" ]]; then
     alias gb='git branch'
     alias gf='git fetch --all --prune'
     alias gr='git rebase'
-    alias grm='git rebase origin/master'
+    alias grm='git rebase origin/main'
     alias gpu='git push'
     alias gpuf='git push fork'
     alias gpuff='git push --set-upstream fork $(git rev-parse --abbrev-ref HEAD)'
