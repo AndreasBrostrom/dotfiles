@@ -49,7 +49,7 @@ if [ -d $SCRIPT_DIR/../Tools ]; then
 fi
 
 # If not i3 remove the i3 configs
-if [ "$XDG_CURRENT_DESKTOP" -ne "i3" ]; then
+if [[ "$XDG_CURRENT_DESKTOP" -ne "i3" ]]; then
     rm -rf $HOME/.i3
     rm -rf $HOME/.config/i3status
 fi
