@@ -54,9 +54,10 @@ if [ -d $SCRIPT_DIR/../Tools ]; then
     done
 fi
 
-if [ -d $SCRIPT_DIR/../secure ]; then
+# ssh configs
+if [ -d $SCRIPT_DIR/../secure/ssh ]; then
     echo -e "\033[1mHome secret from secure\033[0m"
-    cd $SCRIPT_DIR/../secure
+    cd $SCRIPT_DIR/../secure/ssh
     [ ! -d "$HOME/.ssh" ] && mkdir -p $HOME/.ssh
     EXISTING=($(ls $HOME/.ssh))
     for FILE in $(rg --files --hidden); do
