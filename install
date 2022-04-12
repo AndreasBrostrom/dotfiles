@@ -33,6 +33,12 @@ echo -e "\033[1mAdding custom conky\033[0m"
 sudo cp -rf $SCRIPT_DIR/usr/share/conky/* /usr/share/conky/.
 
 
+# Get tools folder if non exist
+if [ ! -d $SCRIPT_DIR/../Tools ]; then
+    cd $SCRIPT_DIR/..
+    git clone https://github.com/AndreasBrostrom/Tools.git
+fi
+
 if [ -d $SCRIPT_DIR/../Tools ]; then
     echo -e "\033[1mHome scripts from Tools\033[0m"
     cd $SCRIPT_DIR/../Tools/ScriptsLinux
@@ -45,6 +51,21 @@ if [ -d $SCRIPT_DIR/../Tools ]; then
         fi
         echo -e " \033[2mCopying $FILE\033[0m"
         cp -f $FILE $HOME/.bin/$FILE
+    done
+fi
+
+if [ -d $SCRIPT_DIR/../secure ]; then
+    echo -e "\033[1mHome secret from secure\033[0m"
+    cd $SCRIPT_DIR/../secure
+    [ ! -d "$HOME/.ssh" ] && mkdir -p $HOME/.ssh
+    EXISTING=($(ls $HOME/.ssh))
+    for FILE in $(rg --files --hidden); do
+        if [[ " ${EXISTING[*]} " =~ " ${FILE} " ]]; then
+            echo -e " \033[2mFile "$FILE" already pressent in .ssh skipping\033[0m"
+            continue
+        fi
+        echo -e " \033[2mCopying $FILE\033[0m"
+        cp -f $FILE $HOME/.ssh/$FILE
     done
 fi
 
