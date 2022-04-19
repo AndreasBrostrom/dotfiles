@@ -143,6 +143,7 @@ if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 
     alias ifconfig='echo "$ ip addr"; ip addr'
 
     alias lock='blurlock'
+    alias disable-lock='pkill -9 -f xautolock'
 fi
 
 # Windows Linux SubSytstem
@@ -165,11 +166,4 @@ if [ -d "/data/data/com.termux" ]; then
     alias vib='termux-vibrate -f'
     alias clip='termux-clipboard-set'
     alias sms='termux-sms-send'
-fi
-
-# POP
-if [[ "$(which pop 1>/dev/null 2>&1; echo $?)" == "0" ]]; then
-    popj () {
-        pop pop://join?roomId=$1
-    }
 fi

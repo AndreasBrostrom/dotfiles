@@ -2,8 +2,8 @@
 export EDITOR=nvim
 export GIT_EDITOR=nvim
 
-[[ -d $HOME/Programs/bin      ]] && export PATH=$PATH:$HOME/Programs/bin
-[[ -d $HOME/.bin              ]] && export PATH=$PATH:$HOME/.bin
+export PATH=$PATH:$HOME/Programs/bin
+export PATH=$PATH:$HOME/.bin
 
 # Android
 if [ -d $HOME/.android ]; then
@@ -16,5 +16,5 @@ if [ -d $HOME/.android ]; then
     export PATH=$PATH:$ANDROID_HOME/platform-tools
 fi
 
-[[ -d $HOME/.yarn/bin         ]] && export PATH=$PATH:$HOME/.yarn/bin
-[[ -d $HOME/.cargo/bin        ]] && export PATH=$PATH:$HOME/.cargo/bin
+export PATH=$PATH:$HOME/.yarn/bin
+export PATH=$PATH:$HOME/.cargo/bin
