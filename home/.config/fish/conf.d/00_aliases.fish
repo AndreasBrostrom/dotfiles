@@ -1,4 +1,21 @@
 
+alias ls='ls --color=auto'
+alias ll='ls -alF'
+alias lsl='ls -lF'
+alias la='ls -A'
+alias lsa='la'
+alias l='ls -CF'
+alias lr='ls -ltrh'
+alias lra='ls -ltrha'
+alias dir='dir --color=auto'
+alias dir='ls -l'
+alias vdir='vdir --color=auto'
+
+alias arp='ip neighbor'
+alias netstat='ss'
+alias route='ip route'
+alias ifconfig='ip addr'
+
 function upgrade
     sudo -v
     echo -e '\033[1mFully upgrading system and packages...\033[0m'
@@ -66,11 +83,6 @@ end
 alias ghc='gcpr'
 alias ghr='gh pr review'
 alias ghm='gh pr merge'
-
-alias arp='ip neighbor'
-alias netstat='ss'
-alias route='ip route'
-alias ifconfig='ip addr'
 
 # Arch
 alias lock='blurlock'
