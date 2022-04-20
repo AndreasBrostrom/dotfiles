@@ -30,9 +30,7 @@ function upgrade
     sudo -v
     echo -e '\033[1mFully upgrading system and packages...\033[0m'
     echo -e '\033[32mPacman\033[0m'
-    echo -e '\033[2mUpgrade is running as unattended\033[0m'
     sudo pacman -Syyu
-    echo -e '\033[2mUpgrade is running as unattended\033[0m'
     yay -Syyu
     notify-send 'Pacman and Yay' '<i>System upgrade is complet.</i>' --urgency=normal
     sudo --reset-timestamp
