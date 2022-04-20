@@ -16,6 +16,16 @@ alias netstat='ss'
 alias route='ip route'
 alias ifconfig='ip addr'
 
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+alias clr='clear'
+alias cp='cp -i'
+alias df='df -h'
+alias free='free -m'
+
+
 function upgrade
     sudo -v
     echo -e '\033[1mFully upgrading system and packages...\033[0m'
