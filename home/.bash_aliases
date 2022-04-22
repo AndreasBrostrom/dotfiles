@@ -144,6 +144,7 @@ if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 
 
     alias lock='blurlock'
     alias disable-lock='pkill -9 -f xautolock'
+    alias disable-autolock='disable-lock'
 fi
 
 # Windows Linux SubSytstem
