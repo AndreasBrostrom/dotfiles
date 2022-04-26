@@ -1,7 +1,7 @@
 
 set --export EDITOR nvim
 set --export GIT_EDITOR nvim
-set --export DISPLAY=:0
+set --export DISPLAY :0
 
 fish_add_path -Pa $HOME/Programs/bin
 fish_add_path -Pa $HOME/.bin
