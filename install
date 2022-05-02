@@ -68,6 +68,11 @@ if [ -d $SCRIPT_DIR/../secure/ssh ]; then
         echo -e " \033[2mCopying $FILE\033[0m"
         cp -f $FILE $HOME/.ssh/$FILE
     done
+    chmod 700 $HOME/.ssh
+    chmod 600 $HOME/.ssh/config
+    chmod 600 $HOME/.ssh/authorized_keys
+    chmod 600 $HOME/.ssh/*id_rsa
+    chmod 644 $HOME/.ssh/*.pub
 fi
 
 # If not i3 remove the i3 configs
