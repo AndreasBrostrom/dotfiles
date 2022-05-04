@@ -36,7 +36,7 @@ sudo cp -rf $SCRIPT_DIR/usr/share/conky/* /usr/share/conky/.
 # Get tools folder if non exist
 if [ ! -d $SCRIPT_DIR/../Tools ]; then
     cd $SCRIPT_DIR/..
-    git clone https://github.com/AndreasBrostrom/Tools.git
+    git clone git@github.com:AndreasBrostrom/Tools.git
 fi
 
 if [ -d $SCRIPT_DIR/../Tools ]; then
@@ -52,6 +52,12 @@ if [ -d $SCRIPT_DIR/../Tools ]; then
         echo -e " \033[2mCopying $FILE\033[0m"
         cp -f $FILE $HOME/.bin/$FILE
     done
+fi
+
+# Get ssh folder if non exist
+if [ ! -d $SCRIPT_DIR/../secure ]; then
+    cd $SCRIPT_DIR/..
+    git clone git@github.com:AndreasBrostrom/secure.git
 fi
 
 # ssh configs
