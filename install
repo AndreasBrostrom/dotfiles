@@ -67,10 +67,10 @@ if [ -d $SCRIPT_DIR/../secure/ssh ]; then
     [ ! -d "$HOME/.ssh" ] && mkdir -p $HOME/.ssh
     EXISTING=($(ls $HOME/.ssh))
     for FILE in $(rg --files --hidden); do
-        if [[ " ${EXISTING[*]} " =~ " ${FILE} " ]]; then
-            echo -e " \033[2mFile "$FILE" already pressent in .ssh skipping\033[0m"
-            continue
-        fi
+        #if [[ " ${EXISTING[*]} " =~ " ${FILE} " ]]; then
+        #    echo -e " \033[2mFile "$FILE" already pressent in .ssh skipping\033[0m"
+        #    continue
+        #fi
         echo -e " \033[2mCopying $FILE\033[0m"
         cp -f $FILE $HOME/.ssh/$FILE
     done
