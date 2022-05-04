@@ -74,6 +74,7 @@ if [ -d $SCRIPT_DIR/../secure/ssh ]; then
         echo -e " \033[2mCopying $FILE\033[0m"
         cp -f $FILE $HOME/.ssh/$FILE
     done
+    echo -e " \033[2mFixing SSH permissions\033[0m"
     chmod 700 $HOME/.ssh
     chmod 600 $HOME/.ssh/config
     chmod 600 $HOME/.ssh/authorized_keys
