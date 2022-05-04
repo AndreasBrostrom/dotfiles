@@ -40,7 +40,7 @@ if [ ! -d $SCRIPT_DIR/../Tools ]; then
 fi
 
 if [ -d $SCRIPT_DIR/../Tools ]; then
-    echo -e "\033[1mHome scripts from Tools\033[0m"
+    echo -e "\033[34;1mCopying scripts from Tools\033[0m"
     cd $SCRIPT_DIR/../Tools/ScriptsLinux
     [ ! -d "$HOME/.bin" ] && mkdir -p $HOME/.bin
     EXISTING=($(ls /usr/bin/))
