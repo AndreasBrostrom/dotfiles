@@ -1,0 +1,14 @@
+[Nemo Action]
+
+# https://wiki.archlinux.org/index.php/Nemo
+# https://github.com/linuxmint/nemo/blob/master/files/usr/share/nemo/actions/sample.nemo_action
+
+Name=Open files with VS Code
+Comment=Open selected files in Visual Studio Code
+Icon-Name=com.visualstudio.code
+MimeType=text/plain;inode/directory;
+Selection=m
+Extensions=nodirs;
+EscapeSpaces=true
+Exec=code %P/%f
+Dependencies=code;
