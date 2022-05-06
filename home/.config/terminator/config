@@ -19,10 +19,11 @@
     background_darkness = 0.94
     cursor_color = "#aaaaaa"
     font = NotoSansMono Nerd Font 10
-    foreground_color = "#839496"
+    foreground_color = "#ccedea"
     scrollback_infinite = True
-    palette = "#073642:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#77767b:#cb4b16:#586e75:#657b83:#839496:#6c71c4:#93a1a1:#fdf6e3"
+    palette = "#202020:#a51d2d:#26a269:#f6d32d:#62a0ea:#c061cb:#2fe0c8:#96a8a7:#676767:#e01b24:#8ff0a4:#f9f06b:#99c1f1:#de4974:#38add8:#aed5c6"
     use_system_font = False
+    bold_is_bright = True
 [layouts]
   [[default]]
     [[[window0]]]
