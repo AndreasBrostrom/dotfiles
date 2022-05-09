@@ -83,10 +83,10 @@ if [[ "$(which adb 1>/dev/null 2>&1; echo $?)" == "0" ]]; then
     alias adb-reverse='adb reverse tcp:8081 tcp:8081'
     alias adb-r='adb-reverse'
 
-    [[ -f $(which adb-push 1>/dev/null 2>&1)  ]] && alias adb-p='adb-push'
+    alias adb-p='adb-push'
 
-    [[ -f $(which adb-key 1>/dev/null 2>&1)   ]] && alias adb-reload='adb-key -r'
-    [[ -f $(which adb-key 1>/dev/null 2>&1)   ]] && alias adb-re='adb-reload'
+    alias adb-reload='adb-key -r'
+    alias adb-re='adb-reload'
     
     alias logcat='adb logcat'
 fi
