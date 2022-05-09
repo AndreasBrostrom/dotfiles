@@ -16,7 +16,7 @@ if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 
     '
 fi
 if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "arch" ]; then
-    if [[ ! "$(which yey 1>/dev/null 2>&1; echo $?)" == "0"]]; then
+    if [[ ! "$(which yey 1>/dev/null 2>&1; echo $?)" == "0" ]]; then
         alias upgrade='
             sudo -v
             echo -e "\033[1mFully upgrading system and packages...\033[0m"
