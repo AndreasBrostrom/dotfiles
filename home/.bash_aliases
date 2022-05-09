@@ -16,43 +16,27 @@ if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 
     '
 fi
 if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "arch" ]; then
-    upgrade () {
-        sudo -v
-        if [[ $? == 1 ]] || [[ $(sudo -n uptime 2>&1 | grep "load" | grep -v "Sorry" | wc -l) != 1 ]]; then
-            echo -e "\033[31mYou are not running as root\033[0m"
-            return
-        fi
-        echo -e "\033[1mFully upgrading system and packages...\033[0m"
-
-        if [[ ! "$(which yay 1>/dev/null 2>&1; echo $?)" == "0" ]]; then
-
-            echo -e "\033[32mPacman\033[0m"
-            if [[ "$1" == "-u" ]] || [[ "$1" == "--unattended" ]]; then
-                echo -e "\033[2mUpgrade is running as unattended\033[0m"
-                yes ""| sudo pacman -Syyu
-            else
-                sudo pacman -Syyu
-            fi
-
-            if [[ $(sudo -n uptime 2>&1 | grep "load" | grep -v "Sorry" | wc -l) != 1 ]]; then
-                echo -e "\033[33mYou have lost your root access...\033[0m"
-                sudo -v
-                [[ $? == 1 ]] && echo -e "\033[31mSomethign went wrong here\033[0m" && return
-            fi
-            notify-send "Pacman" "<i>System upgrade is complet.</i>" --urgency=normal
-        else
-            echo -e "\033[32mYay\033[0m"
-            if [[ "$1" == "-u" ]] || [[ "$1" == "--unattended" ]]; then
-                echo -e "\033[2mUpgrade is running as unattended\033[0m"
-                yes "" | yay -Syyu
-            else
-                yay -Syyu
-            fi
-            notify-send "Yay" "<i>System upgrade is complet.</i>" --urgency=normal
-        fi
-        sudo --reset-timestamp
-        echo -e "\033[1mFull upgrade completed\033[0m"
-    }
+    if [[ ! "$(which yey 1>/dev/null 2>&1; echo $?)" == "0"]]; then
+        alias upgrade='
+            sudo -v
+            echo -e "\033[1mFully upgrading system and packages...\033[0m"
+            echo -e "\033[32mpacman\033[0m"
+            yay -Syyu --color=always
+            notify-send "pacman" "<i>System upgrade is complet.</i>" --urgency=normal
+            sudo --reset-timestamp
+            echo -e "\033[1mFull upgrade completed\033[0m"
+        '
+    else
+        alias upgrade='
+            sudo -v
+            echo -e "\033[1mFully upgrading system and packages...\033[0m"
+            echo -e "\033[32myay\033[0m"
+            yay -Syyu --color=always
+            notify-send "yay" "<i>System upgrade is complet.</i>" --urgency=normal
+            sudo --reset-timestamp
+            echo -e "\033[1mFull upgrade completed\033[0m"
+        '
+    fi 
 fi
 if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID | cut -f 2 -d '=' | head -1)" == "alpine" ]; then
     alias upgrade='
