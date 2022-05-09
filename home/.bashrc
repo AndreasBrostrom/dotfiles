@@ -28,23 +28,17 @@ if [ -f ~/.bash_path ]; then
   . ~/.bash_path
 fi
 
+# set object colors for ls
+eval "$(dircolors ~/.dir_colors)"
+
 # Windows Linux SubSytstem Terminal WSL
 if grep -iq 'microsoft' /proc/version &> /dev/null; then
-  alias startx="""
-    export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0.0;
-    export LIBGL_ALWAYS_INDIRECT=1;
-    startlxde || export DISPLAY=:0 &&
-    echo -e '\e[1mRetrying with different method...\e[0m' &&
-    startlxde;
-  """
+    #export DISPLAY=:0
+    #export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0.0;
+    #export LIBGL_ALWAYS_INDIRECT=1;
   if [[ "$PWD" = "/mnt/c/Windows/system32" || "$PWD" = "/mnt/c/WINDOWS/system32" ]]; then
     cd ~
   fi
-fi
-
-# SSH Client Login
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-  echo -e "\e[2;1mssh login \e[0;32;1m$USER@$HOSTNAME\e[0m"
 fi
 
 # ls Aliases
