@@ -235,11 +235,11 @@ DOOR 01;35	                    # door
 .xspf 00;36
 
 # modding and development
-.editorconfig 02
-.firebaserc 02
-.gitattributes
-.gitignore 02
-.prettierrc 02
+.editorconfig v02
+.firebaserc 00;02
+.gitattributes 00;02
+.gitignore 00;02
+.prettierrc 00;02
 
 .js 00;32
 .jsx 00;32
