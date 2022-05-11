@@ -1,0 +1,8 @@
+#!/bin/sh
+terminal=terminator
+
+$terminal $@
+if [ $? -eq 2 ]; then
+  $terminal $@
+fi
+
