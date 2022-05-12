@@ -3,6 +3,7 @@
 # First time install with no repo setup
 [ ! -d "$HOME/Repositories/" ] && mkdir -p $HOME/.Repositories
 [ ! -d "$HOME/Repositories/dotfiles" ] || [ ! -d "$HOME/Repositories/dotfiles_private " ] &&
+    cd $HOME/Repositories
     git clone git@github.com:AndreasBrostrom/dotfiles.git &&
     bash $HOME/Repositories/dotfiles/install &&
     exit 0
