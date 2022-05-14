@@ -3,7 +3,7 @@
 ./install
 ```
 
-### Setup new
+## Setup new
 
 #### Termux Android
 ```bash
