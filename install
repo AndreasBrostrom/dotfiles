@@ -30,7 +30,7 @@ if [ -d $SCRIPT_DIR/bin ]; then
 fi
 
 echo -e "\033[1mAdding custom conky\033[0m"
-[ ! -d "/usr/share/conky/" ] && mkdir -p /usr/share/conky/
+[ ! -d "/usr/share/conky/" ] && sudo mkdir -p /usr/share/conky/
 sudo cp -rf $SCRIPT_DIR/usr/share/conky/* /usr/share/conky/.
 
 echo -e " \033[2mFixing SSH permissions\033[0m"
