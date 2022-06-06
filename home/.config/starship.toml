@@ -1,5 +1,12 @@
 add_newline = false
+command_timeout = 800
 
 [character]
 success_symbol = "[\\$](bold green)"
 error_symbol   = "[\\$](bold red)"
+
+[hostname]
+ssh_only       = true
+format         = "[$ssh_symbol](bold blue)[$hostname]($style) "
+ssh_symbol     = "🌐 "
+disabled       = false
