@@ -1,10 +1,14 @@
+[core]
+	editor = nvim
 [user]
 	name = AndreasBrostrom
 	email = andreas.brostrom.ce@gmail.com
-[core]
-	editor = nvim
 [alias]
-	checkout-pr = "!bash github_checkout_pr"
 	root = rev-parse --show-toplevel
+	checkout-pr = "!bash github_checkout_pr"
+[init]
+	defaultBranch = main
 [checkout]
 	defaultRemote = origin
+[pull]
+	rebase = true
