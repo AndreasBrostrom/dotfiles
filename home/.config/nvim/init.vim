@@ -11,7 +11,6 @@ map <S-ScrollWheelUp> <C-U>
 map <ScrollWheelDown> <C-E>
 map <S-ScrollWheelDown> <C-D>
 
-
 " copy paste
 vmap <C-c> "+yi
 vmap <C-x> "+c
