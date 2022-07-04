@@ -47,10 +47,7 @@ bindsym $mod+z exec --no-startup-id morc_menu
 
 exec --no-startup-id volumeicon
 exec --no-startup-id pulseaudio
-#exec --no-startup-id pa-applet
-#bindsym $mod+Ctrl+m exec terminal -e 'alsamixer'
 bindsym $mod+Ctrl+m exec pavucontrol
-
 ################################################################################################
 
 # Screen brightness controls
@@ -79,7 +76,6 @@ bindsym $mod+Shift+Print --release exec --no-startup-id e-scrot -sc
 # Start Applications
 bindsym $mod+n exec --no-startup-id nemo .
 bindsym XF86Calculator exec --no-startup-id galculator
-# bindsym $alt+Shift+l exec --no-startup-id $HOME/.bin/lorem -w
 # bindsym $mod+Ctrl+b exec terminal -e 'bmenu'
 # bindsym $mod+F2 exec palemoo
 # bindsym $mod+F3 exec pcmanfm
@@ -260,7 +256,7 @@ bindsym $mod+Shift+r restart
 
 # Set shut down, restart and locking features
 bindsym $mod+9 exec --no-startup-id blurlock
-bindsym $mod+l exec --no-startup-id i3exit lock, mode "default"
+bindsym $mod+l exec --no-startup-id blurlock
 bindsym $mod+Ctrl+l exec --no-startup-id i3exit logout, mode "default"
 
 bindsym $mod+0 mode "$mode_system"
@@ -316,6 +312,8 @@ exec --no-startup-id $HOME/.bin/monitor_dotfilestatus
 exec --no-startup-id xautolock -time 10 -locker blurlock
 exec_always --no-startup-id ff-theme-util
 exec_always --no-startup-id fix_xcursor
+exec --no-startup-id barriers -f --no-tray --debug INFO --name main --log $HOME/.cache/barrier.log --disable-client-cert-checking -c $HOME/.config/Debauchee/server.conf --address :24800
+#exec --no-startup-id barrierc -f --no-tray --daemon --debug INFO --log $HOME/.cache/barrier.log --name secondary [10.41.2.55]:24800
 
 
 # Color palette used for the terminal ( ~/.Xresources file )
@@ -353,10 +351,10 @@ set_from_resource $term_color15    color15
 bar {
 	i3bar_command i3bar
 	status_command i3status
-	position top
+	position bottom
 
 ## please set your primary output first. Example: 'xrandr --output eDP1 --primary'
-#	tray_output primary
+	tray_output primary
 #	tray_output eDP1
 
 	bindsym button4 nop
