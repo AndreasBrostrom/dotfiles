@@ -9,6 +9,8 @@
 [keybindings]
   rotate_cw = ""
   rotate_ccw = ""
+  close_term = <Primary><Shift>d
+  close_window = ""
   group_all = ""
   group_tab = ""
   help = ""
