@@ -96,7 +96,15 @@ if [ ! "$XDG_CURRENT_DESKTOP" == "i3" ]; then
     rm -rf $HOME/.i3
     rm -rf $HOME/.config/i3status
     rm -rf $HOME/.config/i3-scrot.conf
+    rm -rf $HOME/.config/morc_menu
     
     sudo rm -f  /bin/start_conky_evul
     sudo rm -rf /usr/share/conky
+fi
+
+# If WSL remove unnecessary configs
+if grep -qi microsoft /proc/version; then
+    sudo rm -f /etc/samba/smb.conf
+    sudo rm -f /etc/X11/xorg.conf.d/91-monitor-office.conf
+    sudo rm -f /etc/X11/xorg.conf.d/92-xpra-virtual.conf
 fi
