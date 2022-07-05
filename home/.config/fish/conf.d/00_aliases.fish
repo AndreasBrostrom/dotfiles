@@ -62,7 +62,7 @@ alias logcat='adb logcat'
 # git
 alias gs='git status'
 alias gc='git checkout'
-alias gcm='git checkout master'
+alias gcm="git checkout (git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')"
 alias gcpr='git checkout-pr'
 alias gb='git branch'
 alias gf='git fetch --all --prune'
@@ -70,7 +70,7 @@ alias gr='git rebase'
 alias grm='git rebase origin/main'
 alias gpu='git push'
 alias gpuf='git push fork'
-alias gpuff='eval git push --set-upstream fork $(git rev-parse --abbrev-ref HEAD)'
+alias gpuff='eval git push --set-upstream fork (git rev-parse --abbrev-ref HEAD)'
 alias gp='git stash'
 alias gpp='git stash pop'
 

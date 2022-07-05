@@ -82,7 +82,7 @@ fi
 if [[ "$(which git 1>/dev/null 2>&1; echo $?)" == "0" ]]; then
     alias gs='git status'
     alias gc='git checkout'
-    alias gcm='git checkout master'
+    alias gcm="git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')"
     alias gcpr='git checkout-pr'
     alias gb='git branch'
     alias gf='git fetch --all --prune'
