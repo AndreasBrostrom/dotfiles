@@ -104,6 +104,7 @@ fi
 
 # If WSL remove unnecessary configs
 if grep -qi microsoft /proc/version; then
+    echo -e " \033[2mWSL used removing unnecessary configs.\033[0m"
     sudo rm -f /etc/samba/smb.conf
     sudo rm -f /etc/X11/xorg.conf.d/91-monitor-office.conf
     sudo rm -f /etc/X11/xorg.conf.d/92-xpra-virtual.conf
