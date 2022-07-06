@@ -1,4 +1,8 @@
 #!/bin/sh
 
+detachBarrier () {
+    nohup setsid $* </dev/null >/dev/null 2>&1 &
+}
+
 pkill -9 -f barriers
-barriers -f --no-tray --debug INFO --name main --log $HOME/.cache/barrier.log --disable-client-cert-checking -c $HOME/.config/Debauchee/server.conf --address :24800
+detachBarrier barriers -f --no-tray --debug INFO --name main --log $HOME/.cache/barrier.log --disable-client-cert-checking -c $HOME/.config/Debauchee/server.conf --address :24800

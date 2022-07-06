@@ -1,4 +1,8 @@
 #!/bin/sh
 
+detachBarrier () {
+    nohup setsid $* </dev/null >/dev/null 2>&1 &
+}
+
 pkill -9 -f barrierc
-barrierc -f --no-tray --daemon --debug INFO --log $HOME/.cache/barrier.log --name secondary [10.41.2.55]:24800
+detachBarrier barrierc -f --no-tray --daemon --debug INFO --log $HOME/.cache/barrier.log --name secondary [10.41.2.55]:24800

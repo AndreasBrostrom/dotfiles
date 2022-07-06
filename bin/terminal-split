@@ -1,4 +1,10 @@
 #!/bin/sh
 terminal=terminator
 
-terminal --layout "split"
+$terminal $@
+if [ $? -eq 2 ]; then
+  $terminal --layout "split" $@
+fi
+
+
+
