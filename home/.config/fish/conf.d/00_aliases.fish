@@ -19,6 +19,14 @@ alias netstat='ss'
 alias route='ip route'
 alias ifconfig='ip addr'
 
+function cdls
+    cd $argv; ls
+end
+
+function cdll
+    cd $argv; ll
+end
+
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
@@ -98,3 +106,5 @@ alias ghm='gh pr merge'
 alias lock='blurlock'
 alias disable-lock='pkill -9 -f xautolock'
 alias disable-autolock='disable-lock'
+
+
