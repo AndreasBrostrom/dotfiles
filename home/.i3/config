@@ -16,8 +16,8 @@ default_floating_border normal
 hide_edge_borders none
 
 # change borders
-bindsym $mod+u border none
-bindsym $mod+y border pixel 1
+#bindsym $mod+u border none
+#bindsym $mod+y border pixel 1
 #bindsym $mod+n border normal
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -48,6 +48,7 @@ bindsym $mod+z exec --no-startup-id morc_menu
 exec --no-startup-id volumeicon
 exec --no-startup-id pulseaudio
 bindsym $mod+Ctrl+m exec pavucontrol
+
 ################################################################################################
 
 # Screen brightness controls
@@ -76,8 +77,10 @@ bindsym $mod+Shift+Print --release exec --no-startup-id e-scrot -sc
 # Start Applications
 bindsym $mod+n exec --no-startup-id nemo .
 bindsym XF86Calculator exec --no-startup-id galculator
+bindsym Ctrl+XF86Calculator exec --no-startup-id code
+#bindsym $alt+Shift+l exec --no-startup-id $HOME/.bin/lorem -w
+
 # bindsym $mod+Ctrl+b exec terminal -e 'bmenu'
-# bindsym $mod+F2 exec palemoo
 # bindsym $mod+F3 exec pcmanfm
 # bindsym $mod+F3 exec ranger
 # bindsym $mod+Shift+F3 exec pcmanfm_pkexec
@@ -198,11 +201,10 @@ bindsym $mod+Shift+6 move container to workspace $ws6; workspace $ws6
 bindsym $mod+Shift+7 move container to workspace $ws7; workspace $ws7
 bindsym $mod+Shift+8 move container to workspace $ws8; workspace $ws8
 
+
 # Open applications on specific workspaces
-# assign [class="Thunderbird"] $ws1
-# assign [class="Pale moon"] $ws2
-# assign [class="Pcmanfm"] $ws3
-# assign [class="Skype"] $ws5
+assign [class="discord"] $ws3
+assign [title="Logscreen"] $ws3
 
 # Open specific applications in floating mode
 for_window [title="alsamixer"] floating enable border pixel 1
@@ -255,9 +257,9 @@ bindsym $mod+Shift+r restart
 #bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # Set shut down, restart and locking features
-bindsym $mod+9 exec --no-startup-id blurlock
-bindsym $mod+l exec --no-startup-id blurlock
-bindsym $mod+Ctrl+l exec --no-startup-id i3exit logout, mode "default"
+bindsym $mod+9 exec --no-startup-id i3exit lock
+bindsym $mod+l exec --no-startup-id i3exit lock
+bindsym $mod+Ctrl+l exec --no-startup-id i3exit logout
 
 bindsym $mod+0 mode "$mode_system"
 set $mode_system (l)ock, (e)xit, switch_(u)ser, (s)uspend, (h)ibernate, (r)eboot, (Shift+s)hutdown
@@ -274,6 +276,7 @@ mode "$mode_system" {
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
+
 
 # Resize window (you can also use the mouse for that)
 bindsym $mod+r mode "resize"
@@ -299,6 +302,7 @@ mode "resize" {
         bindsym Escape mode "default"
 }
 
+
 # Autostart applications
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec --no-startup-id nitrogen --restore; sleep 1; picom -b
@@ -313,7 +317,7 @@ exec --no-startup-id xautolock -time 10 -locker blurlock
 exec_always --no-startup-id ff-theme-util
 exec_always --no-startup-id fix_xcursor
 exec --no-startup-id barriers -f --no-tray --debug INFO --name main --log $HOME/.cache/barrier.log --disable-client-cert-checking -c $HOME/.config/Debauchee/server.conf --address :24800
-#exec --no-startup-id barrierc -f --no-tray --daemon --debug INFO --log $HOME/.cache/barrier.log --name secondary [10.41.2.55]:24800
+#exec --no-startup-id barrierc -f --no-tray --daemon --debug INFO --log $HOME/.cache/barrier.log --name secondary [10.41.2.219]:24800
 
 
 # Color palette used for the terminal ( ~/.Xresources file )
@@ -347,11 +351,12 @@ set_from_resource $term_color13    color13
 set_from_resource $term_color14    color14
 set_from_resource $term_color15    color15
 
+
 # Start i3bar to display a workspace bar (plus the system information i3status if available)
 bar {
 	i3bar_command i3bar
 	status_command i3status
-	position bottom
+	position top
 
 ## please set your primary output first. Example: 'xrandr --output eDP1 --primary'
 	tray_output primary
@@ -377,7 +382,8 @@ bar {
 }
 
 # hide/unhide i3status bar
-bindsym $mod+m bar mode toggle
+# bindsym $mod+m bar mode toggle
+
 
 # Theme colors
 # class                   border  backgr. text    indic.   child_border
@@ -389,62 +395,7 @@ bindsym $mod+m bar mode toggle
 
   client.background       #2B2C2B
 
-#############################
-### settings for i3-gaps: ###
-#############################
 
-# Set inner/outer gaps
-gaps inner 2
-gaps outer -2
-
-# Additionally, you can issue commands with the following syntax. This is useful to bind keys to changing the gap size.
-# gaps inner|outer current|all set|plus|minus <px>
-# gaps inner all set 10
-# gaps outer all plus 5
-
-# Smart gaps (gaps used if only more than one container on the workspace)
-smart_gaps on
-
-# Smart borders (draw borders around container only if it is not the only container on this workspace) 
-# on|no_gaps (on=always activate and no_gaps=only activate if the gap size to the edge of the screen is 0)
-smart_borders on
-
-# Press $mod+Shift+g to enter the gap mode. Choose o or i for modifying outer/inner gaps. Press one of + / - (in-/decrement for current workspace) or 0 (remove gaps for current workspace). If you also press Shift with these keys, the change will be global for all workspaces.
-set $mode_gaps Gaps: (o) outer, (i) inner
-set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
-set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
-bindsym $mod+Shift+g mode "$mode_gaps"
-
-mode "$mode_gaps" {
-        bindsym o      mode "$mode_gaps_outer"
-        bindsym i      mode "$mode_gaps_inner"
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-mode "$mode_gaps_inner" {
-        bindsym plus  gaps inner current plus 5
-        bindsym minus gaps inner current minus 5
-        bindsym 0     gaps inner current set 0
-
-        bindsym Shift+plus  gaps inner all plus 5
-        bindsym Shift+minus gaps inner all minus 5
-        bindsym Shift+0     gaps inner all set 0
-
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-mode "$mode_gaps_outer" {
-        bindsym plus  gaps outer current plus 5
-        bindsym minus gaps outer current minus 5
-        bindsym 0     gaps outer current set 0
-
-        bindsym Shift+plus  gaps outer all plus 5
-        bindsym Shift+minus gaps outer all minus 5
-        bindsym Shift+0     gaps outer all set 0
-
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-
-# key rebinding
+# keyboard rebinding
 exec --no-startup-id setxkbmap -option caps:escape
+exec_always --no-startup-id numlockx on
