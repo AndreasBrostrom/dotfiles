@@ -65,9 +65,11 @@ alias egrep='egrep --color=auto'
 
 # System alias
 alias clr='clear'
-alias cp='cp -i'
+alias more=less
+#alias cp="cp -i"
 alias df='df -h'
 alias free='free -m'
+alias np='vim PKGBUILD'
 
 alias ..='cd ..'
 
