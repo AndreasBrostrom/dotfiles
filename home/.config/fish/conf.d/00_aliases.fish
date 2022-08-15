@@ -41,7 +41,7 @@ function upgrade
     sudo -v
     echo -e '\033[1mFully upgrading system and packages...\033[0m'
     echo -e '\033[1;32myay\033[0m'
-    yay -Syyu --color=always
+    yay -Syyu --sudoloop --noconfirm --color=always
     notify-send 'yay' '<i>System upgrade is complet.</i>' --urgency=normal
     sudo --reset-timestamp
     echo -e '\033[1mFull upgrade completed\033[0m'
