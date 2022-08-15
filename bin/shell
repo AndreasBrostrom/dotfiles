@@ -1,0 +1,7 @@
+#!/bin/sh
+shell=$SHELL
+
+$shell $@
+if [ $? -eq 2 ]; then
+  $shell $@
+fi
