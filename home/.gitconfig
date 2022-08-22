@@ -1,5 +1,6 @@
 [core]
 	editor = nvim
+	autocrlf = false
 [user]
 	name = AndreasBrostrom
 	email = andreas.brostrom.ce@gmail.com
