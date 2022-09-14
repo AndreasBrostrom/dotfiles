@@ -68,7 +68,6 @@ function upgrade
     end
     if exist apt # Ubuntu
         if exist pkg # Termux wrapper
-            sudo -v
             echo -e '\033[1mFully upgrading system and packages...\033[0m'
             echo -e '\033[1;32mpkg\033[0m'
             pkg upgrade -y
