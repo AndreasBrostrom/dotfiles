@@ -73,7 +73,7 @@ function upgrade
             echo -e '\033[1;32mpkg\033[0m'
             pkg upgrade -y
             pkg auto-clean
-            exist termux-notification && termux-notification -i "tuUpdatePKG" -t "Termux PKG" -c "System upgrade is complet." --led-color 008800
+            exist termux-notification && termux-notification -i "tuUpdatePKG" -t "Termux PKG" -c "System upgrade is complet." --led-color AAFF00
             echo -e '\033[1mFull upgrade completed\033[0m'
             return
         end
