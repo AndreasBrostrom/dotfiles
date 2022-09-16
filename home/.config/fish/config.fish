@@ -8,6 +8,7 @@ if status is-interactive
     starship init fish | source
 end
 
+# Extract
 function ex
     if test -e "$argv[1]"
         switch $argv[1]
