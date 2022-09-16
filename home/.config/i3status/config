@@ -75,8 +75,8 @@ battery all {
 
 memory {
         format = "%used / %total (%available)"
-        threshold_degraded = "1G"
-        format_degraded = "MEMORY < %available"
+        threshold_degraded = "3G"
+        format_degraded = "%used / %total (%available)"
 }
 
 tztime local {
