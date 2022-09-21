@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+<action>
+	<icon>utilities-terminal</icon>
+	<name>Open Terminal Here</name>
+	<unique-id>1623318176668928-1</unique-id>
+	<command>exo-open --working-directory %f --launch TerminalEmulator</command>
+	<description>Allow you to open a terminal in given directory</description>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
+<action>
+	<icon>visual-studio-code</icon>
+	<name>Open Visual Studio Code Here</name>
+	<unique-id>4571324123634472-1</unique-id>
+	<command>code %f</command>
+	<description>Allow you to open vscode in given directory</description>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
+<action>
+	<icon>visual-studio-code</icon>
+	<name>Open With Visual Studio Code</name>
+	<unique-id>4571324123634472-2</unique-id>
+	<command>code %F</command>
+	<description>Allow you to open given file with vscode</description>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<other-files/>
+	<text-files/>
+</action>
+</actions>
