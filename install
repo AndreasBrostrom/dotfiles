@@ -27,6 +27,7 @@ if [ -d $SCRIPT_DIR/bin ]; then
     sudo ln -sf terminal term
     sudo ln -sf terminal gnome-terminal
     sudo ln -sf terminal default-terminal
+    sudo ln -sf terminal TerminalEmulator
 fi
 
 echo -e "\033[1mAdding custom conky\033[0m"
