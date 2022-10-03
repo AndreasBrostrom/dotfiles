@@ -46,21 +46,11 @@ if [ ! -d $SCRIPT_DIR/../Tools ]; then
     cd $SCRIPT_DIR/..
     git clone git@github.com:AndreasBrostrom/Tools.git
 fi
-
 if [ -d $SCRIPT_DIR/../Tools ]; then
-    echo -e "\033[34;1mCopying scripts from Tools\033[0m"
-    cd $SCRIPT_DIR/../Tools/ScriptsLinux
-    [ ! -d "$HOME/.bin" ] && mkdir -p $HOME/.bin
-    EXISTING=($(ls /usr/bin/))
-    for FILE in $(rg --files --hidden); do
-        if [[ " ${EXISTING[*]} " =~ " ${FILE} " ]]; then
-            echo -e " \033[2mScript "$FILE" already pressent in /usr/bin skipping\033[0m"
-            continue
-        fi
-        echo -e " \033[2mCopying $FILE\033[0m"
-        cp -f $FILE $HOME/.bin/$FILE
-    done
+    echo -e "\033[1mFetching scripts from Tools\033[0m"
+    $SCRIPT_DIR/../Tools/installScripts
 fi
+
 
 # Get ssh folder if non exist
 if [ ! -d $SCRIPT_DIR/../secure ]; then
@@ -89,6 +79,7 @@ if [ -d $SCRIPT_DIR/../secure/ssh ]; then
     chmod 600 $HOME/.ssh/*id_rsa
     chmod 644 $HOME/.ssh/*.pub
 fi
+
 
 # If not i3 remove the i3 configs
 echo -e "\033[1mChecking desktop enviroment\033[0m"
