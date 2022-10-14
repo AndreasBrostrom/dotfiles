@@ -78,49 +78,48 @@ if [[ "$(which adb 1>/dev/null 2>&1; echo $?)" == "0" ]]; then
     alias logcat='adb logcat'
 fi
 
-# Git
-if [[ "$(which git 1>/dev/null 2>&1; echo $?)" == "0" ]]; then
-    alias gs='git status'
-    alias gc='git checkout'
-    alias gcm="git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')"
-    alias gcpr='git checkout-pr'
-    alias gb='git branch'
-    alias gf='git fetch --all --prune'
-    alias gr='git rebase'
-    alias grm='git rebase origin/main'
-    alias gpu='git push'
-    alias gpuf='git push fork'
-    alias gpuff='git push --set-upstream fork $(git rev-parse --abbrev-ref HEAD)'
-    alias gp='git stash'
-    alias gpp='git stash pop'
+#Git
+alias gs='git status'
+alias gc='git checkout'
+gcm () { git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@') ; }
+alias gcpr='git checkout-pr'
+alias gb='git branch'
+alias gf='git fetch --all --prune'
+alias gr='git rebase'
+alias grm='git rebase origin/main'
+alias gpu='git push'
+alias gpuf='git push fork'
+alias gpuff='git push --set-upstream fork $(git rev-parse --abbrev-ref HEAD)'
+alias gp='git stash'
+alias gpp='git stash pop'
 
-    alias gfr='gf; gr'                                 # fetch rebase
-    alias gfm='gf; grm'                                # fetch rebase:orgin/master
-    alias gfrp='gp; gf; grm'                           # stash fetch rebase:orgin/master
-    alias gfrpp='gp; gf; grm; gpp'                     # stash fetch rebase:orgin/master pop
-    alias gcp='gp; gc'                                 # stash checkout
-    gcpp () { eval gp; eval gc $1; eval gpp ; }        # stash checkout pop
-    alias gcmp='gp; gcm'                               # stash checkout:master
-    alias gcmpp='gp; gcm; gpp'                         # stash checkout:master pop
-    gcprfr () { eval gf; eval gcpr $1; eval gr ; }     # fetch checkout:PR rebase
-    gclean () {
-        echo "Clearing merged/gone local branches..."
-        git fetch --prune
-        for branch in $(git for-each-ref --format '%(refname) %(upstream:track)' refs/heads | awk '$2 == "[gone]" {sub("refs/heads/", "", $1); print $1}'); do git branch -D $branch; done
-        git branch --merged | egrep -v "(^\*|master)" | xargs git branch -d 2&>/dev/null
-        echo -e "Cleaning completed."
-        if [[ $(git branch -vv | cut -c 3- | awk '$3 !~/\[/') ]]; then
-            echo -e "\nFollowing branches have no remote:"
-            git branch -vv | cut -c 3- | awk '$3 !~/\[/ { print " > "$1 }'
-        fi
-    }
+alias gfr='gf; gr'                                 # fetch rebase
+alias gfm='gf; grm'                                # fetch rebase:orgin/master
+alias gfrp='gp; gf; grm'                           # stash fetch rebase:orgin/master
+alias gfrpp='gp; gf; grm; gpp'                     # stash fetch rebase:orgin/master pop
+alias gcp='gp; gc'                                 # stash checkout
+gcpp () { eval gp; eval gc $1; eval gpp ; }        # stash checkout pop
+alias gcmp='gp; gcm'                               # stash checkout:master
+alias gcmpp='gp; gcm; gpp'                         # stash checkout:master pop
+gcprfr () { eval gf; eval gcpr $1; eval gr ; }     # fetch checkout:PR rebase
+gclean () {
+    echo "Clearing merged/gone local branches..."
+    git fetch --prune
+    for branch in $(git for-each-ref --format '%(refname) %(upstream:track)' refs/heads | awk '$2 == "[gone]" {sub("refs/heads/", "", $1); print $1}'); do git branch -D $branch; done
+    git branch --merged | egrep -v "(^\*|master)" | xargs git branch -d 2&>/dev/null
+    echo -e "Cleaning completed."
+    if [[ $(git branch -vv | cut -c 3- | awk '$3 !~/\[/') ]]; then
+        echo -e "\nFollowing branches have no remote:"
+        git branch -vv | cut -c 3- | awk '$3 !~/\[/ { print " > "$1 }'
+    fi
+}
+alias gpullp='gp; gpull'                           # stash pull
+alias gpullpp='gp; gpull; gpp'                     # stash pull pop
 
-    # GitHub-Cli
-    alias ghc='gcpr'
-    alias ghr='gh pr review'
-    alias ghm='gh pr merge'
-
-fi
+# GitHub-Cli
+alias ghc='gcpr'
+alias ghr='gh pr review'
+alias ghm='gh pr merge'
 
 # Arch
 if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 2 -d '=')" == "arch" ]; then

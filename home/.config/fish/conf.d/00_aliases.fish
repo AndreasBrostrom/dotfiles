@@ -121,6 +121,7 @@ alias gb='git branch'
 alias gf='git fetch --all --prune'
 alias gr='git rebase'
 alias grm='git rebase origin/main'
+alias gpull='git pull'
 alias gpu='git push'
 alias gpuf='git push fork'
 alias gpuff='eval git push --set-upstream fork (git rev-parse --abbrev-ref HEAD)'
@@ -132,6 +133,8 @@ alias gfm='gf; grm'                                # fetch rebase:orgin/master
 alias gfrp='gp; gf; grm'                           # stash fetch rebase:orgin/master
 alias gfrpp='gp; gf; grm; gpp'                     # stash fetch rebase:orgin/master pop
 alias gcp='gp; gc'                                 # stash checkout
+alias gpullp='gp; gpull'                           # stash pull
+alias gpullpp='gp; gpull; gpp'                     # stash pull pop
 
 function gcpp                                      # stash checkout pop
     eval gp; eval gc $argv; eval gpp ;
