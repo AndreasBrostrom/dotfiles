@@ -7,6 +7,7 @@
 [alias]
 	root = rev-parse --show-toplevel
 	checkout-pr = "!bash github_checkout_pr"
+	cc = rev-parse --verify HEAD
 [init]
 	defaultBranch = main
 [checkout]
