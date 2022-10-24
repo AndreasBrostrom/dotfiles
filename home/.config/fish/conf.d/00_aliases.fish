@@ -145,6 +145,10 @@ function gcprfr                                    # fetch checkout:PR rebase
     eval gf; eval gcpr $argv; eval gr ;
 end
 
+# Git other
+alias gccl='git ccl'
+alias gccs='git ccs'
+
 # GitHub-Cli
 alias ghc='gcpr'
 alias ghr='gh pr review'
