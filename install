@@ -37,7 +37,7 @@ if [ -d $SCRIPT_DIR/bin ]; then
     echo -e "\033[1mInstall bin scripts\033[0m"
     cd $SCRIPT_DIR/bin
     for FILE in $(rg --files --hidden); do
-        isProtected "$HOME/$FILE" && echo -e " \033[31m$FILE is protected\033[0m" && continue
+        isProtected "/usr/bin/$FILE" && echo -e " \033[31m$FILE is protected\033[0m" && continue
         echo -e " \033[2mCopying $FILE\033[0m"
         sudo cp -f $FILE /usr/bin/$FILE
     done
