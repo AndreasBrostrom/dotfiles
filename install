@@ -4,10 +4,21 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 cd $SCRIPT_DIR
 echo -e "\033[34;1mInstalling $(basename $SCRIPT_DIR)...\033[0m"
 
+function isProtected () {
+    # isProtected "$HOME/$FILE" && echo -e " \033[31m$FILE is protected\033[0m" && continue
+    mapfile -t < $SCRIPT_DIR/../.protected
+    protectedFiles="${MAPFILE[@]}"
+    for ProtectedFile in $protectedFiles; do
+        [[ "$ProtectedFile" == "$*" ]] && return 0
+    done
+    return 1
+}
+
 if [ -d $SCRIPT_DIR/home ]; then 
     echo -e "\033[1mLinking up home\033[0m"
     cd $SCRIPT_DIR/home
     for FILE in $(rg --files --hidden); do
+        isProtected "$HOME/$FILE" && echo -e " \033[31m$FILE is protected\033[0m" && continue
         echo -e " \033[2mCreating softlink for $FILE\033[0m"
         [ ! -d $(dirname "$HOME/$FILE") ] && mkdir -p $(dirname "$HOME/$FILE")
         ln -sf "$SCRIPT_DIR/home/$FILE" "$HOME/$FILE"
@@ -18,6 +29,7 @@ if [ -d $SCRIPT_DIR/bin ]; then
     echo -e "\033[1mInstall bin scripts\033[0m"
     cd $SCRIPT_DIR/bin
     for FILE in $(rg --files --hidden); do
+        isProtected "$HOME/$FILE" && echo -e " \033[31m$FILE is protected\033[0m" && continue
         echo -e " \033[2mCopying $FILE\033[0m"
         sudo cp -f $FILE /usr/bin/$FILE
     done
