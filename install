@@ -6,6 +6,7 @@ echo -e "\033[34;1mInstalling $(basename $SCRIPT_DIR)...\033[0m"
 
 function isProtected () {
     # isProtected "$HOME/$FILE" && echo -e " \033[31m$FILE is protected\033[0m" && continue
+    [[ ! -f "$SCRIPT_DIR/../.protected" ]] && return 1
     mapfile -t < $SCRIPT_DIR/../.protected
     protectedFiles="${MAPFILE[@]}"
     for ProtectedFile in $protectedFiles; do
