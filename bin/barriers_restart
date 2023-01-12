@@ -1,4 +1,4 @@
 #!/bin/sh
 
-pkill -9 -f barriers
-start_barrierc
+barriers_stop
+start_barriers
