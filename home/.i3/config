@@ -28,8 +28,8 @@ font xft:URWGothic-Book 11
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec terminal
-bindsym $mod+Shift+Return exec terminal-split
+bindsym $mod+Return exec --no-startup-id terminal
+bindsym $mod+Shift+Return exec --no-startup-id terminal-split
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -79,7 +79,6 @@ bindsym $mod+Ctrl+Print exec --no-startup-id peek
 bindsym $mod+n exec --no-startup-id nemo .
 bindsym XF86Calculator exec --no-startup-id galculator
 bindsym Ctrl+XF86Calculator exec --no-startup-id code
-#bindsym $alt+Shift+l exec --no-startup-id $HOME/.bin/lorem -w
 
 # bindsym $mod+Ctrl+b exec terminal -e 'bmenu'
 # bindsym $mod+F3 exec pcmanfm
