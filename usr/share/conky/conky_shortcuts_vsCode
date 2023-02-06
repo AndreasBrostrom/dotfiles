@@ -1,0 +1,23 @@
+conky.config = {
+	alignment = 'bottom_right',
+	background = false,
+	color2 = '3cdec3',
+	cpu_avg_samples = 2,
+	default_color = 'F9FAF9',
+	double_buffer = true,
+	font = 'Bitstream Vera Sans:size=9',
+	draw_shades = false,
+	gap_x = 25,
+	gap_y = 45,
+	minimum_width = 200,
+	no_buffers = true,
+	own_window = true,
+	own_window_type = 'override',
+	own_window_transparent = true,
+	update_interval = 2.0,
+	use_xft = true,
+}
+conky.text = [[
+${color2}${font Bitstream Vera Sans:size=16}VS Code$font$hr
+${color2}Select wider range - ${color}shift+alt+left/right
+]]
