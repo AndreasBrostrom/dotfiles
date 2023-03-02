@@ -76,9 +76,12 @@ bindsym $mod+Shift+Print --release exec --no-startup-id e-scrot -sc
 bindsym $mod+Ctrl+Print exec --no-startup-id peek
 
 # Start Applications
-bindsym $mod+n exec --no-startup-id nemo .
+# Start Applications
 bindsym XF86Calculator exec --no-startup-id galculator
 bindsym Ctrl+XF86Calculator exec --no-startup-id code
+bindsym $mod+XF86Calculator exec --no-startup-id spotify
+
+bindsym $mod+n exec --no-startup-id nemo .
 
 # bindsym $mod+Ctrl+b exec terminal -e 'bmenu'
 # bindsym $mod+F3 exec pcmanfm
