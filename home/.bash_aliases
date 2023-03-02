@@ -63,7 +63,6 @@ fi
 
 # Programs
 [[ "$(which nvim 1>/dev/null 2>&1; echo $?)" == "0"          ]] && alias vim='nvim'
-[[ "$(which emulator 1>/dev/null 2>&1; echo $?)" == "0"      ]] && alias emulator='~/.bin/emulator_proxy'
 
 # ADB
 if [[ "$(which adb 1>/dev/null 2>&1; echo $?)" == "0" ]]; then

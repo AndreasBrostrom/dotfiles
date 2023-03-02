@@ -99,7 +99,6 @@ alias python='python3'
 
 # Programs
 alias vim='nvim'
-alias emulator='~/.bin/emulator_proxy'
 
 # ADB
 alias adb-reverse='adb reverse tcp:8081 tcp:8081'
