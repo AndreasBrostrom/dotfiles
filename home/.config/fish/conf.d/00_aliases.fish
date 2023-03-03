@@ -22,10 +22,11 @@ alias ifconfig='ip addr'
 function cdls
     cd $argv; ls
 end
-
+alias cdd='cdls'
 function cdll
     cd $argv; ll
 end
+alias cdl='cdll'
 
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
