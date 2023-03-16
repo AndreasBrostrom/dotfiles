@@ -1,10 +1,6 @@
 #!/bin/sh
-terminal=terminator
 
-$terminal $@
-if [ $? -eq 2 ]; then
-  $terminal --layout "split" $@
-fi
+terminal --layout "split" $@
 
 
 
