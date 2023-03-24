@@ -34,7 +34,37 @@
       type = Terminal
       parent = window0
       profile = default
-  [[split]]
+  [[split-v]]
+    [[[child0]]]
+      type = Window
+      parent = ""
+      order = 0
+      position = 1920:514
+      maximised = False
+      fullscreen = False
+      size = 1920, 1056
+      title = andre@b-station:~
+      last_active_term = c035ed72-8997-46f7-a679-ba1b2ffa486b
+      last_active_window = True
+    [[[child1]]]
+      type = HPaned
+      parent = child0
+      order = 0
+      position = 958
+      ratio = 0.5002610966057441
+    [[[terminal2]]]
+      type = Terminal
+      parent = child1
+      order = 0
+      profile = default
+      uuid = c035ed72-8997-46f7-a679-ba1b2ffa486b
+    [[[terminal3]]]
+      type = Terminal
+      parent = child1
+      order = 1
+      profile = default
+      uuid = 03bfa468-0082-45f7-aa08-176f6e5b5156
+  [[split-h]]
     [[[child0]]]
       type = Window
       parent = ""
