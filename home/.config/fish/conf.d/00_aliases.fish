@@ -161,5 +161,3 @@ alias gprm='gpr merge'
 alias lock='blurlock'
 alias disable-lock='pkill -9 -f xautolock'
 alias disable-autolock='disable-lock'
-
-
