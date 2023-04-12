@@ -151,8 +151,11 @@ alias gccs='git ccs'
 
 # GitHub-Cli
 alias ghc='gcpr'
-alias ghr='gh pr review'
-alias ghm='gh pr merge'
+alias gpr='gh pr'
+alias gprl='gpr list'
+alias gprr='gpr review'
+alias gprm='gpr merge'
+
 
 # Arch
 alias lock='blurlock'
