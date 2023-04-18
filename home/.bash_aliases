@@ -74,9 +74,9 @@ if [[ "$(which adb 1>/dev/null 2>&1; echo $?)" == "0" ]]; then
     alias adb-reload='adb-key -r'
     alias adb-re='adb-reload'
     
-    alias logcat='adb logcat'
-
     alias adb-url='adb shell am start -a android.intent.action.VIEW -d '
+
+    alias logcat='adb logcat'
 fi
 
 #Git

@@ -110,6 +110,8 @@ alias adb-p='adb-push'
 alias adb-reload='adb-key -r'
 alias adb-re='adb-reload'
     
+alias adb-url='adb shell am start -a android.intent.action.VIEW -d '
+
 alias logcat='adb logcat'
 
 # git
