@@ -205,10 +205,6 @@ bindsym $mod+Shift+7 move container to workspace $ws7; workspace $ws7
 bindsym $mod+Shift+8 move container to workspace $ws8; workspace $ws8
 
 
-# Open applications on specific workspaces
-assign [class="discord"] $ws3
-assign [title="Logscreen"] $ws3
-
 # Open specific applications in floating mode
 for_window [title="alsamixer"] floating enable border pixel 1
 for_window [class="calamares"] floating enable border normal
@@ -245,6 +241,10 @@ for_window [class="jetbrains-studio" title="win0"] floating enable
 for_window [class="jetbrains-studio" title="Settings"] floating enable
 for_window [class="(?i)terminator" title="Terminator Preferences"] floating enable
 for_window [title="Emulator"] floating enable, resize set 341px 731px
+
+# Open applications on specific workspaces
+# assign [class="discord"] $ws3
+# assign [title="Logscreen"] $ws3
 
 
 # switch to workspace with urgent window automatically
