@@ -241,6 +241,7 @@ for_window [class="jetbrains-studio" title="win0"] floating enable
 for_window [class="jetbrains-studio" title="Settings"] floating enable
 for_window [class="(?i)terminator" title="Terminator Preferences"] floating enable
 for_window [title="(?i)android emulator - "] floating enable, resize set 341px 731px
+for_window [class="Pick-colour-picker" title="Pick"] floating enable
 
 # Open applications on specific workspaces
 # assign [class="discord"] $ws3
