@@ -1,3 +1,5 @@
+language en_US
+
 " typo fixer 
 command! WQ wq
 command! Wq wq
