@@ -1,4 +1,4 @@
-language en_US
+language en_US.utf8
 
 " typo fixer 
 command! WQ wq
