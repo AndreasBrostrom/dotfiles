@@ -44,6 +44,11 @@ if [ -d $SCRIPT_DIR/bin ]; then
     done
 fi
 
+# Install /etc files
+echo -e "\033[1mSetting etc files\033[0m"
+cd $SCRIPT_DIR/etc/X11/
+sudo cp -f "00-keyboard.conf" "/etc/X11/xorg.conf.d/00-keyboard.conf"
+
 
 echo -e "\033[1mSetting up aliases\033[0m"
 cd /usr/bin/
