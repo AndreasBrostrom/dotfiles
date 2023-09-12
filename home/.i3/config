@@ -402,5 +402,5 @@ bar {
 
 
 # keyboard rebinding
-exec --no-startup-id setxkbmap -option caps:escape
+#exec --no-startup-id setxkbmap -option caps:escape # In xConfig
 exec_always --no-startup-id numlockx on
