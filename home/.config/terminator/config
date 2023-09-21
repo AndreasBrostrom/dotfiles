@@ -8,6 +8,7 @@
   rotate_ccw = ""
   close_term = <Primary><Shift>d
   close_window = ""
+  hide_window = ""
   group_all = ""
   group_tab = ""
   help = ""
