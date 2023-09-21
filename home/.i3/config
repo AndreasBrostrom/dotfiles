@@ -76,7 +76,6 @@ bindsym $mod+Shift+Print --release exec --no-startup-id e-scrot -sc
 bindsym $mod+Ctrl+Print exec --no-startup-id peek
 
 # Start Applications
-# Start Applications
 bindsym XF86Calculator exec --no-startup-id galculator
 bindsym Ctrl+XF86Calculator exec --no-startup-id code
 bindsym $mod+XF86Calculator exec --no-startup-id spotify
@@ -243,13 +242,13 @@ for_window [class="(?i)terminator" title="Terminator Preferences"] floating enab
 for_window [title="(?i)android emulator - "] floating enable, resize set 341px 731px
 for_window [class="Pick-colour-picker" title="Pick"] floating enable
 
+
 # Open applications on specific workspaces
-# assign [class="discord"] $ws3
-# assign [title="Logscreen"] $ws3
+#assign [class="discord"] $ws3
 
 
 # switch to workspace with urgent window automatically
-for_window [urgent=latest] focus
+# for_window [urgent=latest] focus
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -404,3 +403,7 @@ bar {
 # keyboard rebinding
 #exec --no-startup-id setxkbmap -option caps:escape # In xConfig
 exec_always --no-startup-id numlockx on
+
+
+# Include office config
+include ~/.i3/config_office
