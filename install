@@ -46,16 +46,18 @@ fi
 
 # Install /etc files
 echo -e "\033[1mSetting etc files\033[0m"
-cd $SCRIPT_DIR/etc/X11/xorg.conf.d/00-keyboard.conf
+cd $SCRIPT_DIR/etc/X11/xorg.conf.d/
+echo -e " \033[2mCopying 00-keyboard.conf\033[0m"
 sudo cp -f "00-keyboard.conf" "/etc/X11/xorg.conf.d/00-keyboard.conf"
 
 
-echo -e "\033[1mSetting up aliases\033[0m"
+echo -e "\033[1mSetting up terminal aliases\033[0m"
 cd /usr/bin/
-sudo ln -sf terminal term
-sudo ln -sf terminal gnome-terminal
-sudo ln -sf terminal default-terminal
-sudo ln -sf terminal TerminalEmulator
+for TERM in term gnome-terminal default-terminal TerminalEmulator; do
+    echo -e " \033[2mCreating softlink for $TERM => terminal\033[0m"
+    sudo ln -sf terminal $TERM
+done
+
 
 echo -e "\033[1mAdding custom conky\033[0m"
 [ ! -d "/usr/share/conky/" ] && sudo mkdir -p /usr/share/conky/
