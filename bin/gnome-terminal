@@ -1,5 +1,5 @@
 #!/bin/sh
-terminal=$SHELL
+terminal=terminal
 
 $terminal $@
 if [ $? -eq 2 ]; then
