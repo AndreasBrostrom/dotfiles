@@ -46,7 +46,7 @@ fi
 
 # Install /etc files
 echo -e "\033[1mSetting etc files\033[0m"
-cd $SCRIPT_DIR/etc/X11/
+cd $SCRIPT_DIR/etc/X11/xorg.conf.d/00-keyboard.conf
 sudo cp -f "00-keyboard.conf" "/etc/X11/xorg.conf.d/00-keyboard.conf"
 
 
