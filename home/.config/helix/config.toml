@@ -1,2 +1,8 @@
 
 theme = "nord"
+
+[commands]
+"WQ" = [":write", ":quit"]
+"Wq" = [":write", ":quit"]
+"W"  = [":write"]
+"Q"  = [":write"]
