@@ -17,3 +17,6 @@ fish_add_path -Pa $ANDROID_HOME/platform-tools
 
 fish_add_path -Pa $HOME/.yarn/bin
 fish_add_path -Pa $HOME/.cargo/bin
+
+# Manager
+fish_add_path -Pa $HOME/Repositories/Manager/bin
