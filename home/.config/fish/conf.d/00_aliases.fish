@@ -33,7 +33,7 @@ alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
 alias clr='clear'
-alias cp='cp -i'
+#alias cp='cp -i'
 alias df='df -h'
 alias free='free -m'
 
