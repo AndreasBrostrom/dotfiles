@@ -400,7 +400,7 @@ bar {
 # keyboard rebinding
 #exec --no-startup-id setxkbmap -option caps:escape # In xConfig
 exec_always --no-startup-id numlockx on
-
+exec --no-startup-id xmodmap -e "keycode 91 = KP_Separator period KP_Delete KP_Separator"
 
 # Include office config
 include ~/.i3/config_office
