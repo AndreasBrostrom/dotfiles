@@ -71,7 +71,7 @@ if [ ! -d $SCRIPT_DIR/../Tools ]; then
 fi
 if [ -d $SCRIPT_DIR/../Tools ]; then
     echo -e "\033[1mFetching scripts from Tools\033[0m"
-    $SCRIPT_DIR/../Tools/installScripts
+    $SCRIPT_DIR/../Tools/installScripts ln
 fi
 
 
