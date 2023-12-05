@@ -72,7 +72,7 @@ bindsym $alt+F4 kill
 
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id dmenu_run
+bindsym $mod+d exec --no-startup-id dmenu_recent
 # A more modern dmenu replacement is rofi:
 # bindcode $mod+40 exec "rofi -modi drun,run -show drun"
 # There also is i3-dmenu-desktop which only displays applications shipping a
@@ -91,7 +91,7 @@ bindsym $mod+Ctrl+Print exec --no-startup-id peek
 
 
 # Start Applications
-bindsym XF86Calculator exec --no-startup-id galculator
+bindsym XF86Calculator exec --no-startup-id gnome-calculator
 bindsym Ctrl+XF86Calculator exec --no-startup-id code
 bindsym $mod+XF86Calculator exec --no-startup-id spotify
 
@@ -213,10 +213,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 5 px or 5 ppt
-        bindsym k resize grow height 5 px or 5 ppt
-        bindsym l resize shrink height 5 px or 5 ppt
-        bindsym odiaeresis resize grow width 5 px or 5 ppt
+        #bindsym j resize shrink width 5 px or 5 ppt
+        #bindsym k resize grow height 5 px or 5 ppt
+        #bindsym l resize shrink height 5 px or 5 ppt
+        #bindsym odiaeresis resize grow width 5 px or 5 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
@@ -229,7 +229,6 @@ mode "resize" {
         bindsym Escape mode "default"
         bindsym $mod+r mode "default"
 }
-
 bindsym $mod+r mode "resize"
 
 
@@ -260,7 +259,7 @@ bar {
         statusline #F9FAF9
         separator  #454947
 
-#                      border  backgr. text
+#                          border  backgr. text
         focused_workspace  #F9FAF9 #16a085 #292F34
         active_workspace   #595B5B #353836 #FDF6E3
         inactive_workspace #595B5B #222D31 #EEE8D5
