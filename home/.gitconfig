@@ -5,7 +5,6 @@
 [user]
 	name = AndreasBrostrom
 	email = andreas.brostrom.ce@gmail.com
-	signingkey = 174A7636218AC9E8
 [alias]
 	root = rev-parse --show-toplevel
 	ccl = rev-parse --verify HEAD
@@ -17,5 +16,3 @@
 	defaultRemote = origin
 [pull]
 	rebase = true
-[commit]
-	gpgsign = true
