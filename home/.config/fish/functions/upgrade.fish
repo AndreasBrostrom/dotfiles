@@ -17,6 +17,19 @@ function upgrade
 
     # Arch
     # pacman yay
+    if exist paru
+        sudo -v
+        echo -e '\033[1mFully upgrading system and packages...\033[0m'
+        echo -e '\033[1;32mparu\033[0m'
+        paru -Syyu --sudoloop --noconfirm --color=always
+        exist flatpak && _fn_upgrade_flatpak
+        exist snap && _fn_upgrade_snap
+        notify-send 'yay' '<i>System upgrade is complet.</i>' --urgency=normal
+        sudo --reset-timestamp
+        echo -e '\033[1mFull upgrade completed\033[0m'
+        _fn_upgrade_deconstructor
+        return
+    end
     if exist yay
         sudo -v
         echo -e '\033[1mFully upgrading system and packages...\033[0m'
