@@ -24,7 +24,7 @@ function upgrade
         paru -Syyu --sudoloop --noconfirm --color=always
         exist flatpak && _fn_upgrade_flatpak
         exist snap && _fn_upgrade_snap
-        notify-send 'yay' '<i>System upgrade is complet.</i>' --urgency=normal
+        exist notify-send && notify-send 'yay' '<i>System upgrade is complet.</i>' --urgency=normal >/dev/null 2>/dev/null
         sudo --reset-timestamp
         echo -e '\033[1mFull upgrade completed\033[0m'
         _fn_upgrade_deconstructor
@@ -37,7 +37,7 @@ function upgrade
         yay -Syyu --sudoloop --noconfirm --color=always
         exist flatpak && _fn_upgrade_flatpak
         exist snap && _fn_upgrade_snap
-        notify-send 'yay' '<i>System upgrade is complet.</i>' --urgency=normal
+        exist notify-send && notify-send 'yay' '<i>System upgrade is complet.</i>' --urgency=normal >/dev/null 2>/dev/null
         sudo --reset-timestamp
         echo -e '\033[1mFull upgrade completed\033[0m'
         _fn_upgrade_deconstructor
@@ -51,7 +51,7 @@ function upgrade
         sudo pacman -Syyu --noconfirm --color=always
         exist flatpak && _fn_upgrade_flatpak
         exist snap && _fn_upgrade_snap
-        notify-send 'pacman' '<i>System upgrade is complet.</i>' --urgency=normal
+        exist notify-send && notify-send 'pacman' '<i>System upgrade is complet.</i>' --urgency=normal >/dev/null 2>/dev/null
         sudo --reset-timestamp
         echo -e '\033[1mFull upgrade completed\033[0m'
         _fn_upgrade_deconstructor
@@ -65,7 +65,7 @@ function upgrade
         echo -e '\033[1;32mpkg\033[0m'
         pkg upgrade -y
         pkg autoclean
-        exist termux-notification && termux-notification -i "tuUpdatePKG" -t "Termux PKG" -c "System upgrade is complet." --led-color AAFF00
+        exist termux-notification && termux-notification -i "tuUpdatePKG" -t "Termux PKG" -c "System upgrade is complet." --led-color AAFF00 >/dev/null 2>/dev/null
         echo -e '\033[1mFull upgrade completed\033[0m'
         _fn_upgrade_deconstructor
         return
@@ -80,7 +80,7 @@ function upgrade
         sudo apt autoremove -y
         exist flatpak && _fn_upgrade_flatpak
         exist snap && _fn_upgrade_snap
-        notify-send 'apt' '<i>System upgrade is complet.</i>' --urgency=normal
+        notify-send 'apt' '<i>System upgrade is complet.</i>' --urgency=normal >/dev/null 2>/dev/null
         echo -e "\033[1mAll updates are completed.\033[0m"
         _fn_upgrade_deconstructor
         return
