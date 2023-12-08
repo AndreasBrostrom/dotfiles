@@ -95,7 +95,7 @@ bindsym XF86Calculator exec --no-startup-id gnome-calculator
 bindsym Ctrl+XF86Calculator exec --no-startup-id code
 bindsym $mod+XF86Calculator exec --no-startup-id spotify
 
-bindsym $mod+n exec --no-startup-id nemo .
+bindsym $mod+n exec --no-startup-id thunar .
 
 
 # change focus
