@@ -1,0 +1,6 @@
+#!/bin/sh
+
+terminal $@
+if [ $? -eq 2 ]; then
+  terminal $@
+fi
