@@ -285,4 +285,4 @@ exec_always --no-startup-id feh --bg-fill ~/Pictures/Background/jonas-de-ro-prac
 
 
 # Include office config
-include ~/.i3/config_office
+include ~/.config/i3/config_office
