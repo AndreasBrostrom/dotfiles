@@ -38,10 +38,8 @@ alias df='df -h'
 alias free='free -m'
 
 
-# Python
-alias py='python'
-
 # Programs
+alias py='python'
 alias vim='nvim'
 
 # ADB
