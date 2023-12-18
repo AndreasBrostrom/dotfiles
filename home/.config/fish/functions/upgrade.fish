@@ -1,4 +1,3 @@
-
 function upgrade
     function _fn_upgrade_deconstructor
         functions -e _fn_upgrade_flatpak

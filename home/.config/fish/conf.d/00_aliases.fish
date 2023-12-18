@@ -39,9 +39,7 @@ alias free='free -m'
 
 
 # Python
-alias pip='pip3'
-alias py='python3'
-alias python='python3'
+alias py='python'
 
 # Programs
 alias vim='nvim'
