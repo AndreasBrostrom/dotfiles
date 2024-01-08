@@ -55,6 +55,10 @@ cd $SCRIPT_DIR/etc/lightdm/
 sudo cp -f "lightdm-webkit2-greeter.conf"   "/etc/lightdm/lightdm-webkit2-greeter.conf"
 sudo cp -f "lightdm.conf"                   "/etc/lightdm/lightdm.conf"
 
+echo -e " \033[2mCopying modprobe.d configs\033[0m"
+cd $SCRIPT_DIR/etc/modprobe.d/
+sudo cp -f "nobeep.conf"                    "/etc/modprobe.d/nobeep.conf"
+
 
 echo -e "\033[1mSetting up terminal aliases\033[0m"
 cd /usr/bin/
