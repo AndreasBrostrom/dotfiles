@@ -233,6 +233,7 @@ exec --no-startup-id xautolock -time 10 -locker blurlock
 exec --no-startup-id pa-applet
 exec --no-startup-id nm-applet
 exec --no-startup-id thunar --daemon
+exec --no-startup-id picom --daemon
 
 # keyboard rebinding
 exec --no-startup-id setxkbmap -option caps:escape # In xconfig as well
