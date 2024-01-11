@@ -76,7 +76,7 @@ bindsym $mod+d exec --no-startup-id dmenu_recent
 # bindcode $mod+40 exec --no-startup-id i3-dmenu-desktop
 
 # start morc_menu (launch categorized menu)
-bindsym $mod+z exec --no-startup-id morc_menu
+#bindsym $mod+z exec --no-startup-id morc_menu
 
 
 # Screenshots
@@ -234,6 +234,9 @@ exec --no-startup-id pa-applet
 exec --no-startup-id nm-applet
 exec --no-startup-id thunar --daemon
 exec --no-startup-id picom --daemon
+
+exec --no-startup-id i3status_monitor_androidDevice
+exec --no-startup-id i3status_monitor_dotfilestatus
 
 # keyboard rebinding
 exec --no-startup-id setxkbmap -option caps:escape # In xconfig as well
