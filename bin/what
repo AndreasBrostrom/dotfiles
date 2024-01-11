@@ -4,5 +4,9 @@ if [ $# -eq 0 ]; then
   echo "No arguments provided"
   exit 1
 fi
-type $*
+
+type -a$* 2>/dev/null
+[[ $? == 1 ]] && echo "what: no '$*' in ($PATH)" && exit 2
 which -a $*
+echo
+whereis $*
