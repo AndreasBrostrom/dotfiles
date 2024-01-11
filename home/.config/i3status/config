@@ -9,7 +9,7 @@ general {
 }
 
 order += "read_file dotfiles"
-order += "read_file android"
+order += "read_file phone"
 order += "battery all"
 # order += "ipv6"
 order += "disk /"

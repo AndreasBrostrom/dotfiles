@@ -235,8 +235,8 @@ exec --no-startup-id nm-applet
 exec --no-startup-id thunar --daemon
 exec --no-startup-id picom --daemon
 
-exec --no-startup-id i3status_monitor_androidDevice
-exec --no-startup-id i3status_monitor_dotfilestatus
+exec --no-startup-id ~/.bin/i3status_monitor_androidDevice
+exec --no-startup-id ~/.bin/i3status_monitor_dotfilestatus
 
 # keyboard rebinding
 exec --no-startup-id setxkbmap -option caps:escape # In xconfig as well
