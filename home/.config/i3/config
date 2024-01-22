@@ -181,12 +181,12 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 
 
 # Open specific applications in floating mode
-for_window [class="scrcpy"] floating enable
-for_window [class="Pavucontrol"] floating enable
-for_window [class="Galculator"] floating enable border pixel 1
+for_window [class="scrcpy"] floating enable border pixel 1
+for_window [class="(?i)Pavucontrol"] floating enable border pixel 1
+for_window [class="(?i)Galculator"] floating enable border pixel 1
+for_window [class="(?i)Calculator"] floating enable border pixel 1
 for_window [class="(?i)Gnome-disks"] floating enable
-for_window [class="GParted"] floating enable border normal
-
+for_window [class="(?i)GParted"] floating enable border normal
 
 # Open applications on specific workspaces
 #assign [class="discord"] $ws3
