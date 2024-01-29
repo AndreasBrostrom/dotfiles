@@ -1,0 +1,27 @@
+#!/bin/bash
+
+root_dir=$PWD
+
+#args
+ARG_CLEAR=$(if [[ $* == *"-C"* ]] || [[ $* == *"--clear"* ]]; then echo "TRUE"; else echo "FALSE"; fi)
+
+folders=$(find -name "package.json" -not -path "*/node_modules/*")
+
+[[ -z $folders ]] && echo -e "\033[031mNothing to do...\033[0m" && exit 1
+
+for package in $folders; do
+    package_path="$(dirname $package)"
+    echo -e "\033[1mChecking folder '$package_path'\033[0m"
+    
+    cd $package_path
+    
+    [[ $ARG_CLEAR == "TRUE" ]] &&
+        echo -e "\033[2mClearing 'node_modules'\033[0m" &&
+        rm -rf node_modules
+
+    echo -e "\033[2mRunning yarn in '$package_path'\033[0m"
+    yarn
+    
+    cd $root_dir
+    echo
+done
