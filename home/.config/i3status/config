@@ -80,7 +80,7 @@ memory {
 }
 
 tztime local {
-        format = " 1%Y-%m-%d (w%W) %H:%M "
+        format = "%a, 1%Y-%m-%d (w%W) %H:%M"
 }
 
 read_file dotfiles {
