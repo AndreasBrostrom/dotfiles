@@ -234,6 +234,7 @@ exec --no-startup-id pa-applet
 exec --no-startup-id nm-applet
 exec --no-startup-id thunar --daemon
 exec --no-startup-id picom --daemon
+exec --no-startup-id lxpolkit
 
 exec --no-startup-id ~/.bin/i3status_monitor_androidDevice
 exec --no-startup-id ~/.bin/i3status_monitor_dotfilestatus
