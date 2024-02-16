@@ -1,6 +1,8 @@
 # Globlas
-$ENV:USERPROFILE = "$HOME"
-$ENV:LOCALAPPDATA = "$ENV:USERPROFILE/.config"
+$ENV:USERNAME = $ENV:USER
+$ENV:USERPROFILE = $(Get-Variable HOME -valueOnly)              # assume homefolder folder
+$ENV:LOCALAPPDATA = "$(Get-Variable HOME -valueOnly)/.config"   # assume config folder
+
 
 # RC if one exist
 if (Test-Path "$ENV:USERPROFILE/.pwshrc.ps1" -PathType leaf) {
@@ -12,6 +14,3 @@ if (Test-Path "$ENV:LOCALAPPDATA/powershell/rc.ps1" -PathType leaf) {
 if (Test-Path "$ENV:LOCALAPPDATA/powershell/aliases.ps1" -PathType leaf) {
     . "$ENV:LOCALAPPDATA/powershell/aliases.ps1"
 }
-
-$ENV:STARSHIP_CONFIG = "$ENV:LOCALAPPDATA/starship_pwsh.toml"
-Invoke-Expression (&starship init powershell)
