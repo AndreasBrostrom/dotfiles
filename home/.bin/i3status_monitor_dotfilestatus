@@ -17,22 +17,35 @@ while true; do
     sleep 10
 
     [ ! -d "$_path" ] && mkdir -p $_path
+    if [[ -d ~/Repositories/dotfiles ]]; then
+        if [[ ! $(git -C ~/Repositories/dotfiles status | grep nothin) || $(git -C ~/Repositories/dotfiles status | grep Untracked) ]]; then
+            echo "Changes detected (dotfiles)"
+            echo "$_symbol"  > $_path/$_file
+            continue
+        fi
+    fi
+    if [[ -d ~/Repositories/dotfiles_private ]]; then
+        if [[ ! $(git -C ~/Repositories/dotfiles_private status | grep nothin) || $(git -C ~/Repositories/dotfiles_private status | grep Untracked) ]]; then
+            echo "Changes detected (dotfiles_private)"
+            echo "$_symbol"  > $_path/$_file
+            continue
+        fi
+    fi
+    if [[ -d ~/Repositories/Tools ]]; then
+        if [[ ! $(git -C ~/Repositories/Tools status | grep nothin) || $(git -C ~/Repositories/Tools status | grep Untracked) ]]; then
+            echo "Changes detected (Tools)"
+            echo "$_symbol"  > $_path/$_file
+            continue
+        fi
+    fi
+    if [[ -d ~/Repositories/wdotfiles ]]; then
+        if [[ ! $(git -C ~/Repositories/wdotfiles status | grep nothin) || $(git -C ~/Repositories/wdotfiles status | grep Untracked) ]]; then
+            echo "Changes detected (wdotfiles)"
+            echo "$_symbol"  > $_path/$_file
+            continue
+        fi
+    fi
 
-    if [[ ! $(git -C ~/Repositories/dotfiles status | grep nothin) || $(git -C ~/Repositories/dotfiles status | grep Untracked) ]]; then
-        echo "Changes detected (dotfiles)"
-        echo "$_symbol"  > $_path/$_file
-        continue
-    fi
-    if [[ ! $(git -C ~/Repositories/dotfiles_private status | grep nothin) || $(git -C ~/Repositories/dotfiles_private status | grep Untracked) ]]; then
-        echo "Changes detected (dotfiles_private)"
-        echo "$_symbol"  > $_path/$_file
-        continue
-    fi
-    if [[ ! $(git -C ~/Repositories/Tools status | grep nothin) || $(git -C ~/Repositories/Tools status | grep Untracked) ]]; then
-        echo "Changes detected (Tools)"
-        echo "$_symbol"  > $_path/$_file
-        continue
-    fi
     echo "No Changed detected"
     echo "" > $_path/$_file
 done
