@@ -6,8 +6,8 @@
 #               format_bad = ""
 #       }
 
-_device="device:OnePlusNordCE"
 _symbol="✆"
+_device="device:OnePlusNordCE"
 
 _file="phone"
 _path="$HOME/.cache/i3status_monitor"
