@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo -e "\e[1mPATH VARIABLE\e[0m"
+for path in $(echo $PATH | tr ":" "\n"); do
+  echo " > $path"
+done
