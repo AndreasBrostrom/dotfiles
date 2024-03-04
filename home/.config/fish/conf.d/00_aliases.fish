@@ -15,6 +15,8 @@ alias dir='dir --color=auto'
 alias dir='ls -l'
 alias vdir='vdir --color=auto'
 
+alias ccat='bat'
+
 # cd with ls
 function cdls
     cd $argv; ls

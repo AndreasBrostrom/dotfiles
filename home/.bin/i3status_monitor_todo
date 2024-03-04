@@ -16,7 +16,7 @@ while true; do
 
     [ ! -d "$_path" ] && mkdir -p $_path
 
-    todos=$(wc -l ~/todo | xargs -n 1 2>&1 | head -n 1)
+    todos=$(grep -cve '^\s*$' ~/todo)
 
     if [[ $todos -gt 0 ]]; then
         echo "$todos todos detected"
