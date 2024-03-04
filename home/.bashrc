@@ -63,6 +63,8 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
+alias ccat='bat'
+
 # System alias
 alias clr='clear'
 alias more=less
@@ -70,6 +72,7 @@ alias more=less
 alias df='df -h'
 alias free='free -m'
 alias np='vim PKGBUILD'
+
 
 alias ..='cd ..'
 
