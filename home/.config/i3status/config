@@ -10,6 +10,7 @@ general {
 
 order += "read_file dotfiles"
 order += "read_file phone"
+order += "read_file todo"
 order += "battery all"
 # order += "ipv6"
 order += "disk /"
@@ -83,6 +84,13 @@ tztime local {
         format = "%a, 1%Y-%m-%d (w%W) %H:%M"
 }
 
+read_file todo {
+        path = "/home/andre/.cache/i3status_monitor/todo"
+        format = "Todo: %content"
+        format_bad = ""
+        color_good = "#586E75"
+}
+
 read_file dotfiles {
         path = "/home/andre/.cache/i3status_monitor/dotfiles"
         format = "%content"
@@ -90,6 +98,7 @@ read_file dotfiles {
         color_good = "#DC322F"
         color_bad = "#DC322F"
 }
+
 read_file phone {
         path = "/home/andre/.cache/i3status_monitor/phone"
         format = "%content"
