@@ -86,7 +86,7 @@ tztime local {
 
 read_file todo {
         path = "/home/andre/.cache/i3status_monitor/todo"
-        format = "Todo: %content"
+        format = "%content"
         format_bad = ""
         color_good = "#586E75"
 }

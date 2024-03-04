@@ -2,7 +2,7 @@
 # .config/i3status/config
 #   read_file todo {
 #       path = "/home/andre/.cache/i3status_monitor/todo"
-#       format = "Todo: %content"
+#       format = "%content"
 #       format_bad = ""
 #       color_good = "#586E75"
 #   }
@@ -20,7 +20,7 @@ while true; do
 
     if [[ $todos -gt 0 ]]; then
         echo "$todos todos detected"
-        echo "$todos" > $_path/$_file
+        echo "Todo: $todos" > $_path/$_file
     else
         echo "No todos detected"
         echo "" > $_path/$_file
