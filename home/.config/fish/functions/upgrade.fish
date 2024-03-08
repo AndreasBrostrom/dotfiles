@@ -84,7 +84,7 @@ function upgrade
         sudo apt autoremove -y
         _fn_upgrade_flatpak
         _fn_upgrade_snap
-        notify-send 'apt' '<i>System upgrade is complet.</i>' --urgency=normal >/dev/null 2>/dev/null
+        exist notify-send && notify-send 'apt' '<i>System upgrade is complet.</i>' --urgency=normal >/dev/null 2>/dev/null
         echo -e "\033[1mAll updates are completed.\033[0m"
         _fn_upgrade_deconstructor
         return
