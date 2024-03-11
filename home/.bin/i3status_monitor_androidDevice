@@ -7,7 +7,7 @@
 #       }
 
 _symbol="✆"
-_device="device:OnePlusNordCE"
+_device="3A271JEHN06791"
 
 _file="phone"
 _path="$HOME/.cache/i3status_monitor"
