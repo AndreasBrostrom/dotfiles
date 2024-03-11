@@ -68,9 +68,15 @@ for TERM in term gnome-terminal default-terminal TerminalEmulator; do
 done
 
 
-echo -e "\033[1mAdding custom conky\033[0m"
+echo -e "\033[1mSetting usr files\033[0m"
+
+echo -e "\033[1mAdding conky\033[0m"
 [ ! -d "/usr/share/conky/" ] && sudo mkdir -p /usr/share/conky/
 sudo cp -rf $SCRIPT_DIR/usr/share/conky/* /usr/share/conky/.
+
+echo -e "\033[1mAdding services\033[0m"
+[ ! -d "/usr/share/dbus-1/services" ] && sudo mkdir -p /usr/share/dbus-1/services
+sudo cp -rf $SCRIPT_DIR/usr/share/dbus-1/services/* /usr/share/dbus-1/services/.
 
 
 # Get tools folder if non exist
