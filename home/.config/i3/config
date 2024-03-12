@@ -241,7 +241,7 @@ exec --no-startup-id ~/.bin/i3status_monitor_androidDevice
 
 # keyboard rebinding
 exec --no-startup-id setxkbmap -option caps:escape # In xconfig as well
-exec_always --no-startup-id numlockx on
+#exec_always --no-startup-id numlockx on
 exec --no-startup-id xmodmap -e "keycode 91 = KP_Separator period KP_Delete KP_Separator"
 
 
