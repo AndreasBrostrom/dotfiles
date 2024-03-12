@@ -204,6 +204,7 @@ DOOR 01;35	                    # door
 .doc 00;32
 .docx 00;32
 .json 00;32
+.lock 00;32
 .log 00;32
 .md 00;32
 .odt 00;32
@@ -219,6 +220,7 @@ DOOR 01;35	                    # door
 # audio formats
 .aac 00;36
 .au 00;36
+.axa 00;36
 .flac 00;36
 .m4a 00;36
 .mid 00;36
@@ -226,25 +228,48 @@ DOOR 01;35	                    # door
 .mka 00;36
 .mp3 00;36
 .mpc 00;36
+.oga 00;36
 .ogg 00;36
 .ra 00;36
-.wav 00;36
-.axa 00;36
-.oga 00;36
 .spx 00;36
+.wav 00;36
 .xspf 00;36
 
-# modding and development
-.editorconfig 00;02
-.firebaserc 00;02
-.gitattributes 00;02
-.gitignore 00;02
-.prettierrc 00;02
-
+# script and programing files
+.bash 00;32
+.c 00;32
+.code-workspace 00;32
+.fish 00;32
 .js 00;32
 .jsx 00;32
-.lock 00;32
 .rules 00;32
+.sh 00;32
 .sqf 00;32
 .ts 00;32
 .tsx 00;32
+
+# config and history
+.actrc 00;02
+.bash_aliases 00;02
+.bash_logout 00;02
+.bash_office 00;02
+.bash_path 00;02
+.bash_profile 00;02
+.bashrc 00;02
+.dmrc 00;02
+.editorconfig 00;02
+.firebaserc 00;02
+.gitattributes 00;02
+.gitconfig 00;02
+.gitignore 00;02
+.prettierrc 00;02
+.profile 00;02
+.viminfo 00;02
+.Xauthority 00;02
+.Xresources 00;02
+.xsession-errors 00;02
+.xsession-errors.old 00;02
+.yarnrc 00;02
+.zshrc 00;02
+.bash_history 00;02
+.node_repl_history 00;02
