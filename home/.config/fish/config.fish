@@ -9,4 +9,4 @@ if status is-interactive
 end
 
 # set object colors for ls
-eval (dircolors -c ~/.dir_colors)
+eval (dircolors -c ~/.config/dir_colors)

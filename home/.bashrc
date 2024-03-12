@@ -29,7 +29,7 @@ if [ -f ~/.bash_path ]; then
 fi
 
 # set object colors for ls
-eval "$(dircolors ~/.dir_colors)"
+eval "$(dircolors ~/.config/dir_colors)"
 
 # Windows Linux SubSytstem Terminal WSL
 if grep -iq 'microsoft' /proc/version &> /dev/null; then
