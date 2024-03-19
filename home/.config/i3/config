@@ -283,6 +283,7 @@ client.placeholder      #000000 #0c0c0c #ffffff #000000
 client.background       #2B2C2B
 
 exec_always --no-startup-id feh --bg-fill ~/Pictures/Background/jonas-de-ro-practice-gothic-city.jpg
+exec --no-startup-id /bin/start_conky_evul
 
 
 # Include office config
