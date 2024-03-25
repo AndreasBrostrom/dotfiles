@@ -1,8 +1,12 @@
+set --export GTK_THEME Adwaita:dark 
+set --export TERMINAL terminator
+set --export TERM $TERMINAL
 
 set --export EDITOR nvim
 set --export GIT_EDITOR nvim
 set --export DISPLAY :0
 
+# Paths
 fish_add_path -Pp $HOME/Programs/bin
 fish_add_path -Pa $HOME/.bin
 
