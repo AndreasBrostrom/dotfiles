@@ -6,6 +6,17 @@ command! Wq wq
 command! W w
 command! Q q
 
+function SudoWriteQuit()
+  w !pkexec tee %
+  q!
+endfunction
+
+cnoreabbrev w!! w !pkexec tee %
+cnoreabbrev wq!! call SudoWriteQuit()
+cnoreabbrev W!! w !pkexec tee %
+cnoreabbrev Wq!! call SudoWriteQuit()
+cnoreabbrev WQ!! call SudoWriteQuit()
+
 " scrolling
 set mouse=a
 map <ScrollWheelUp> <C-Y>
