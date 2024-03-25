@@ -31,8 +31,9 @@ function upgrade
             _fn_upgrade_flatpak
             _fn_upgrade_snap
             exist notify-send && notify-send 'yay' '<i>System upgrade is complet.</i>' --urgency=normal >/dev/null 2>/dev/null
-            sudo --reset-timestamp
             echo -e '\033[1mFull upgrade completed\033[0m'
+            paru -Qtdq
+            sudo --reset-timestamp
             _fn_upgrade_deconstructor
             return
         end
@@ -45,8 +46,9 @@ function upgrade
             exist flatpak && _fn_upgrade_flatpak
             exist snap && _fn_upgrade_snap
             exist notify-send && notify-send 'yay' '<i>System upgrade is complet.</i>' --urgency=normal >/dev/null 2>/dev/null
-            sudo --reset-timestamp
             echo -e '\033[1mFull upgrade completed\033[0m'
+            yay -Qtdq
+            sudo --reset-timestamp
             _fn_upgrade_deconstructor
             return
         end
@@ -57,8 +59,9 @@ function upgrade
         _fn_upgrade_flatpak
         _fn_upgrade_snap
         exist notify-send && notify-send 'pacman' '<i>System upgrade is complet.</i>' --urgency=normal >/dev/null 2>/dev/null
-        sudo --reset-timestamp
         echo -e '\033[1mFull upgrade completed\033[0m'
+        sudo pacman -Qtdq
+        sudo --reset-timestamp
         _fn_upgrade_deconstructor
         return
     end
