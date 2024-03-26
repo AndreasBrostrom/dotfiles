@@ -32,7 +32,12 @@ function upgrade
             _fn_upgrade_snap
             exist notify-send && notify-send 'yay' '<i>System upgrade is complet.</i>' --urgency=normal >/dev/null 2>/dev/null
             echo -e '\033[1mFull upgrade completed\033[0m'
-            paru -Qtdq
+            set orphan (paru -Qtdq)
+            if ! test (count $orphan) -eq 0
+                echo -e '\033[1mOrphan package dependencies:\033[0m'
+                for i in $orphan; echo " $i"; end
+                echo -e '\033[2mManually run: paru -Rc $(paru -Qtdq)\033[0m'
+            end
             sudo --reset-timestamp
             _fn_upgrade_deconstructor
             return
@@ -47,20 +52,30 @@ function upgrade
             exist snap && _fn_upgrade_snap
             exist notify-send && notify-send 'yay' '<i>System upgrade is complet.</i>' --urgency=normal >/dev/null 2>/dev/null
             echo -e '\033[1mFull upgrade completed\033[0m'
-            yay -Qtdq
+            set orphan (yay -Qtdq)
+            if ! test (count $orphan) -eq 0
+                echo -e '\033[1mOrphan package dependencies:\033[0m'
+                for i in $orphan; echo " $i"; end
+                echo -e '\033[2mManually run: yay -Rc $(yay -Qtdq)\033[0m'
+            end
             sudo --reset-timestamp
             _fn_upgrade_deconstructor
             return
         end
 
         # pacman (default)
-        echo -e '\033[1;32myay\033[0m'
+        echo -e '\033[1;32mpacman\033[0m'
         sudo pacman -Syyu --noconfirm --color=always
         _fn_upgrade_flatpak
         _fn_upgrade_snap
         exist notify-send && notify-send 'pacman' '<i>System upgrade is complet.</i>' --urgency=normal >/dev/null 2>/dev/null
         echo -e '\033[1mFull upgrade completed\033[0m'
-        sudo pacman -Qtdq
+        set orphan (pacman -Qtdq)
+        if ! test (count $orphan) -eq 0
+            echo -e '\033[1mOrphan package dependencies:\033[0m'
+            for i in $orphan; echo " $i"; end
+            echo -e '\033[2mManually run: sudo pacman -Rc $(pacman -Qtdq)\033[0m'
+        end
         sudo --reset-timestamp
         _fn_upgrade_deconstructor
         return
