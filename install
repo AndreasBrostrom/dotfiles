@@ -57,7 +57,11 @@ sudo cp -f "lightdm.conf"                   "/etc/lightdm/lightdm.conf"
 
 echo -e " \033[2mCopying modprobe.d configs\033[0m"
 cd $SCRIPT_DIR/etc/modprobe.d/
-sudo cp -f "nobeep.conf"                    "/etc/modprobe.d/nobeep.conf"
+sudo cp -f "nobeep.conf" "/etc/modprobe.d/nobeep.conf"
+
+echo -e " \033[2mCopying pacman.conf\033[0m"
+cd $SCRIPT_DIR/etc/
+sudo cp -f "pacman.conf" "/etc/pacman.conf"
 
 
 echo -e "\033[1mSetting up terminal aliases\033[0m"
