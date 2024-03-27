@@ -66,6 +66,10 @@ bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Shift+q kill
 bindsym $alt+F4 kill
 
+# Scratchpad
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
+
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec --no-startup-id dmenu_recent -fn "Roboto-13.5" -nb "#222D31" -nf "#D8DEE9" -sb "#16A085" -sf "#292F34"
