@@ -34,7 +34,7 @@ function upgrade
             echo -e '\033[1mFull upgrade completed\033[0m'
             set orphan (paru -Qtdq)
             if ! test (count $orphan) -eq 0
-                echo -e '\033[1mOrphan package dependencies:\033[0m'
+                echo -e '\n\033[1mOrphan package dependencies:\033[0m'
                 for i in $orphan; echo " $i"; end
                 echo -e '\033[2mManually run: paru -Rc $(paru -Qtdq)\033[0m'
             end
@@ -54,7 +54,7 @@ function upgrade
             echo -e '\033[1mFull upgrade completed\033[0m'
             set orphan (yay -Qtdq)
             if ! test (count $orphan) -eq 0
-                echo -e '\033[1mOrphan package dependencies:\033[0m'
+                echo -e '\n\033[1mOrphan package dependencies:\033[0m'
                 for i in $orphan; echo " $i"; end
                 echo -e '\033[2mManually run: yay -Rc $(yay -Qtdq)\033[0m'
             end
@@ -72,7 +72,7 @@ function upgrade
         echo -e '\033[1mFull upgrade completed\033[0m'
         set orphan (pacman -Qtdq)
         if ! test (count $orphan) -eq 0
-            echo -e '\033[1mOrphan package dependencies:\033[0m'
+            echo -e '\n\033[1mOrphan package dependencies:\033[0m'
             for i in $orphan; echo " $i"; end
             echo -e '\033[2mManually run: sudo pacman -Rc $(pacman -Qtdq)\033[0m'
         end
