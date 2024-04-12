@@ -5,6 +5,8 @@ function ex
                 tar xjf $argv[1]
             case '*.tar.gz'
                 tar xzf $argv[1]
+            case '*.tar.xz'
+                tar xf $argv[1]
             case '*.bz2'
                 bunzip2 $argv[1]
             case '*.rar'
