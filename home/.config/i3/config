@@ -191,6 +191,9 @@ for_window [class="(?i)Galculator"] floating enable border pixel 1
 for_window [class="(?i)Calculator"] floating enable border pixel 1
 for_window [class="(?i)Gnome-disks"] floating enable
 for_window [class="(?i)GParted"] floating enable border normal
+for_window [class="(?i)VirtualBox"] floating enable border normal
+for_window [class="(?i)VirtualBox Machine"] floating toggle border normal
+
 
 # Open applications on specific workspaces
 #assign [class="discord"] $ws3
