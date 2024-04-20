@@ -12,7 +12,7 @@ bash <(curl -s https://raw.githubusercontent.com/AndreasBrostrom/Tools/master/Se
 ```
 #### Arch i3
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/AndreasBrostrom/Tools/master/SetupScripts/setupAndroidTermux.sh)
+bash <(curl -s https://raw.githubusercontent.com/AndreasBrostrom/Tools/master/SetupScripts/setupArchI3.sh)
 ```
 
 #### Configs
