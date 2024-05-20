@@ -10,7 +10,7 @@
 	ccl = rev-parse --verify HEAD
 	ccs = rev-parse --short HEAD
 	checkout-pr = "!bash github_checkout_pr"
-	squash = "!bash git reset $(git merge-base main $(git branch --show-current))"
+	squash = "!bash git_squash"
 [init]
 	defaultBranch = main
 [checkout]
