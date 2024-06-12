@@ -1,12 +1,12 @@
 
 # ls
 alias ls='ls --color=auto'
-alias ll='ls -alF'
-alias lsl='ls -lF'
+alias ll='ls -alF --group-directories-first'
+alias lsl='ls -lF --group-directories-first'
 alias la='ls -A'
 alias lsa='la'
-alias lsla='ls -la'
-alias lslA='ls -lA'
+alias lsla='ls -la --group-directories-first'
+alias lslA='ls -lA --group-directories-first'
 alias l='ls -CF'
 alias lr='ls -ltrh'
 alias lra='ls -ltrha'
