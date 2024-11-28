@@ -30,6 +30,11 @@ ${color2}toggle floating - ${color}mod+Shift+Space
 
 ${color2}thunar - ${color}mod+n
 
+${color2}screenshot - ${color}PrtSc
+${color2}screenshot Window - ${color}mod+PrtSc
+${color2}screenshot Select - ${color}mod+PrtSc
+${color2}screenshot Record - ${color}mod+Ctrl+PrtSc
+
 ${color2}lock - ${color}mod+l
 ${color2}logout - ${color}mod+ctrl+l
 ]]
