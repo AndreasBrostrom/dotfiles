@@ -30,7 +30,7 @@ function upgrade
             paru -Syyu --sudoloop --noconfirm --color=always
             _fn_upgrade_flatpak
             _fn_upgrade_snap
-            exist notify-send && notify-send 'yay' '<i>System upgrade is complet.</i>' --urgency=normal >/dev/null 2>/dev/null
+            exist notify-send && notify-send 'paru' '<i>System upgrade is complet.</i>' --urgency=normal >/dev/null 2>/dev/null
             echo -e '\033[1mFull upgrade completed\033[0m'
             set orphan (paru -Qtdq)
             if ! test (count $orphan) -eq 0
