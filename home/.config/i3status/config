@@ -61,15 +61,19 @@ battery all {
         format_down = ""
         last_full_capacity = true
         integer_battery_capacity = true
+        status_chr = "CHAR"
+        status_bat = "BAT"
+        status_unk = "?"
+        status_full = ""
         # status_chr = ""
-        status_chr = "⚡"
+        # status_chr = "⚡"
         # status_bat = "bat"
         # status_bat = "☉"
-        status_bat = ""
+        # status_bat = ""
         # status_unk = "?"
-        status_unk = ""
+        # status_unk = ""
         # status_full = ""
-        status_full = "☻"
+        # status_full = "☻"
         low_threshold = 15
         threshold_type = time
 }
