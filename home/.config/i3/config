@@ -186,6 +186,7 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 
 # Open specific applications in floating mode
 for_window [class="scrcpy"] floating enable border pixel 1
+for_window [class="Arandr"] floating enable border pixel 1
 for_window [class="(?i)Pavucontrol"] floating enable border pixel 1
 for_window [class="(?i)Galculator"] floating enable border pixel 1
 for_window [class="(?i)Calculator"] floating enable border pixel 1
@@ -193,7 +194,6 @@ for_window [class="(?i)Gnome-disks"] floating enable
 for_window [class="(?i)GParted"] floating enable border normal
 for_window [class="(?i)VirtualBox"] floating enable border normal
 for_window [class="(?i)VirtualBox Machine"] floating toggle border normal
-
 
 # Open applications on specific workspaces
 #assign [class="discord"] $ws3
@@ -206,6 +206,18 @@ bindsym $mod+Shift+r restart
 
 bindsym $mod+l exec --no-startup-id i3exit lock
 bindsym $mod+Ctrl+l exec --no-startup-id i3exit logout
+
+# Display manager
+set $displayManager [Return] arandr, [H] auto
+mode "$displayManager" {
+        bindsym h exec --no-startup-id xrandr --output "eDP" --auto --primary; mode "default"
+        bindsym Return exec --no-startup-id arandr;  mode "default"
+ 
+        # back to normal: Enter or Escape or $mod+r
+        bindsym Escape mode "default"
+        bindsym $mod+p mode "default"
+}
+bindsym $mod+p mode "$displayManager"
 
 
 # resize window (you can also use the mouse for that)
@@ -236,7 +248,7 @@ bindsym $mod+r mode "resize"
 
 
 # Autostart applications
-exec --no-startup-id xautolock -time 10 -locker blurlock
+exec --no-startup-id xautolock -time 10 -locker i3exit lock
 exec --no-startup-id pasystray
 exec --no-startup-id thunar --daemon
 exec --no-startup-id picom --daemon
