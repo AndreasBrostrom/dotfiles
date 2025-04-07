@@ -85,7 +85,7 @@ memory {
 }
 
 tztime local {
-        format = "%a, 1%Y-%m-%d (w%W) %H:%M"
+        format = "%a, %Y-%m-%d (w%V) %H:%M"
 }
 
 read_file todo {
