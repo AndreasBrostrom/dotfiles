@@ -8,14 +8,26 @@ _arg_commit="false"
 _error="false"
 
 # Handle Arguments
-case "$1" in
-    --upgrade|-u|--pull|-p)
-        _arg_update="true"
-        ;;
-    --commit|-c|--push|-P)
-        _arg_commit="true"
-        ;;
-esac
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --upgrade|-u|--pull|-p)
+            _arg_update="true"
+            ;;
+        --commit|-c|--push|-P)
+            _arg_commit="true"
+            ;;
+        -h|--help)
+            echo "Usage: $0 [OPTIONS]"
+            echo ""
+            echo "Options:"
+            echo "  --upgrade, -u, --pull, -p    Update repositories if no changes are found"
+            echo "  --commit, -c, --push, -P     Commit and push changes to repositories"
+            echo "  -h, --help                   Show this help message"
+            exit 0
+            ;;
+    esac
+    shift
+done
 
 echo -e "\e[1mChecking dotfile repo status\e[0m"
 if [[ ! -d "$_repoDir" ]]; then
