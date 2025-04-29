@@ -45,6 +45,7 @@ _dotfiles=(
     "secure"
     "Tools"
     "scripts"
+    "win-upgrade"
 )
 for _path in "${_dotfiles[@]}"; do
     [[ ! -d "$_path" ]] && continue
