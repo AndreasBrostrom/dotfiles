@@ -49,7 +49,10 @@ _dotfiles=(
 for _path in "${_dotfiles[@]}"; do
     [[ ! -d "$_path" ]] && continue
 
+    # Check we have any changes
     if [[ ! $(git -C $_repoDir/$_path status | grep nothin) || $(git -C $_repoDir/$_path status | grep Untracked) ]]; then
+
+        # if we have changes and want to commit them run the commit else just show the status
         if [[ "$_arg_commit" == "true" ]]; then
             _gitStatus="\e[2m$(git -C "$_repoDir/$_path" status --porcelain)\e[0m"
             git -C "$_repoDir/$_path" commit --all --quiet
@@ -73,6 +76,8 @@ for _path in "${_dotfiles[@]}"; do
         fi
         continue
     fi
+
+    # Run updates if no changes are found
     if [[ "$_arg_update" == "true" ]]; then
         _gitPull="$(git -C "$_repoDir/$_path" pull)"
         [[ $(echo $_gitPull | grep -q Already) ]] && continue
