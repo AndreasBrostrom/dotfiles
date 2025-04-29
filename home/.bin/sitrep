@@ -1,6 +1,4 @@
 #!/bin/bash
-
-_mainPwd="$PWD"
 _repoDir="$HOME/Repositories"
 
 _status=()
@@ -91,5 +89,3 @@ else
     echo -e "\n\e[1mCurrent status:\e[0m"
     echo "All good"
 fi
-
-cd $_mainPwd
