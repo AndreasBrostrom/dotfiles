@@ -7,6 +7,7 @@ _arg_update="false"
 _arg_commit="false"
 _error="false"
 
+# Handle Arguments
 case "$1" in
     --upgrade|-u|--pull|-p)
         _arg_update="true"
