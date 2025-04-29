@@ -16,7 +16,6 @@ case "$1" in
         ;;
 esac
 
-# Messages
 echo -e "\e[1mChecking dotfile repo status\e[0m"
 if [[ ! -d "$_repoDir" ]]; then
     echo "Repositories directory not found..."
@@ -74,10 +73,10 @@ for _path in "${_dotfiles[@]}"; do
         continue
     fi
     if [[ "$_arg_update" == "true" ]]; then
-        git -C "$_repoDir/$_path" pull --quiet
+        _gitPull="$(git -C "$_repoDir/$_path" pull)"
         [[ $(echo $_gitPull | grep Already) ]] && continue
         _gitChanges=$(git -C "$_repoDir/$_path" diff --name-only HEAD@{1})
-        _status+=("\e]8;;$_repoDir/$_path\a$_path\e]8;;\a\e[0m: updated")
+        _status+=("\e]8;;$_repoDir/$_path\a$_path\e]8;;\a\e[0m: repository updated")
         _status+=("$_gitChanges")
     fi
 done
