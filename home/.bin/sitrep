@@ -57,6 +57,7 @@ for _path in "${_dotfiles[@]}"; do
         # if we have changes and want to commit them run the commit else just show the status
         if [[ "$_arg_commit" == "true" ]]; then
             _gitStatus="\e[2m$(git -C "$_repoDir/$_path" status --porcelain)\e[0m"
+            git -C "$_repoDir/$_path" add --all
             git -C "$_repoDir/$_path" commit --all --quiet
             # check if successful
             if [[ $? -ne 0 ]]; then
