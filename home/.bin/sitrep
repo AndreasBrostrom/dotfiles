@@ -6,49 +6,88 @@ _repoDir="$HOME/Repositories"
 _status=()
 
 _arg_update="false"
-[[ ! -z "$1" ]] && [[ "$1" == "update" ]]    && _arg_update="true"
-[[ ! -z "$1" ]] && [[ "$1" == "upgrade" ]]   && _arg_update="true"
-[[ ! -z "$1" ]] && [[ "$1" == "u" ]]         && _arg_update="true"
-[[ ! -z "$1" ]] && [[ "$1" == "U" ]]         && _arg_update="true"
-[[ ! -z "$1" ]] && [[ "$1" == "-u" ]]        && _arg_update="true"
-[[ ! -z "$1" ]] && [[ "$1" == "-U" ]]        && _arg_update="true"
+_arg_commit="false"
+_error="false"
 
-echo -e "\e[2mChecking dotfile repo status\e[0m"
-if [[ "$_arg_update" == "true" ]]; then
-    echo -e "\e[2mUpdating repos if no changes are found\e[0m"
-fi
+case "$1" in
+    --upgrade|-u|--pull|-p)
+        _arg_update="true"
+        ;;
+    --commit|-c|--push|-P)
+        _arg_commit="true"
+        ;;
+esac
 
+echo -e "\e[1mChecking dotfile repo status\e[0m"
 if [[ ! -d "$_repoDir" ]]; then
     echo "Repositories directory not found..."
     exit 1
+else
+    pathString=("\e]8;;$_repoDir\a$_repoDir\e]8;;\a\e[0m")
+    echo -e "\e[2mRepo path: $pathString\e[0m"
 fi
+
+if [[ "$_arg_update" == "true" ]]; then
+    echo -e "\e[2mUpdating repositories if no changes are found\e[0m"
+fi
+
+if [[ "$_arg_status" == "true" ]]; then
+    echo -e "\e[2mShowing git status for each repository\e[0m"
+fi
+
 
 # Collect issues
 cd $_repoDir
-_dotfiles=("$_repoDir/dotfiles" "$_repoDir/dotfiles_private" "$_repoDir/wdotfiles" "$_repoDir/secure" "$_repoDir/Tools")
+_dotfiles=(
+    "dotfiles"
+    "dotfiles_private"
+    "wdotfiles"
+    "secure"
+    "Tools"
+    "scripts"
+)
 for _path in "${_dotfiles[@]}"; do
     [[ ! -d "$_path" ]] && continue
-    if [[ ! $(git -C $_path status | grep nothin) || $(git -C $_path status | grep Untracked) ]]; then
-        _status+=("\e]8;;$_path\a$(basename $_path)\e]8;;\a\e[0m: uncommitted changes")
+
+    if [[ ! $(git -C $_repoDir/$_path status | grep nothin) || $(git -C $_repoDir/$_path status | grep Untracked) ]]; then
+        if [[ "$_arg_commit" == "true" ]]; then
+            _gitStatus="\e[2m$(git -C "$_repoDir/$_path" status --porcelain)\e[0m"
+            git -C "$_repoDir/$_path" commit --all --quiet
+            if [[ $? -ne 0 ]]; then
+                _error="true"
+                _status+=("\e]8;;$_repoDir/$_path\a$_path\e]8;;\a\e[0m: \e[31mFailed to committing changes\e[0m")
+            else
+                git -C "$_repoDir/$_path" push --quiet
+                if [[ $? -ne 0 ]]; then
+                    _error="true"
+                    _status+=("\e]8;;$_repoDir/$_path\a$_path\e]8;;\a\e[0m: \e[31mFailed to push changes\e[0m")
+                else 
+                    _status+=("\e]8;;$_repoDir/$_path\a$_path\e]8;;\a\e[0m: committed and pushed changes")
+                fi
+            fi
+            _status+=("$_gitStatus")
+        else 
+            _status+=("\e]8;;$_repoDir/$_path\a$_path\e]8;;\a\e[0m: uncommitted changes")
+            _gitStatus="\e[2m$(git -C "$_repoDir/$_path" status --porcelain)\e[0m"
+            _status+=("$_gitStatus")
+        fi
         continue
     fi
     if [[ "$_arg_update" == "true" ]]; then
-        cd $_path
-        _gitPull="$(git pull)"
-        cd $_repoDir
+        _gitPull="$(git -C "$_repoDir/$_path" pull)"
         [[ $(echo $_gitPull | grep Already) ]] && continue
-        _status+=("\e]8;;$_path\a$(basename $_path)\e]8;;\a\e[0m: $_gitPull")
+        _status+=("\e]8;;$_repoDir/$_path\a$_path\e]8;;\a\e[0m: $_gitPull")
     fi
 done
 
 # Print sitrep
 if [ ${#_status[@]} -gt 0 ]; then
-    echo -e "\nCurrent status:"
+    echo -e "\n\e[1mCurrent status:\e[0m"
     for _sitrep in "${_status[@]}"; do
-        echo -e " - $_sitrep"
+        echo -e "$_sitrep"
     done
 else
-    echo "All good"
+    echo "\n\e[1mAll good\e[0m"
 fi
 
 cd $_mainPwd
