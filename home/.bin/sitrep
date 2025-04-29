@@ -16,6 +16,7 @@ case "$1" in
         ;;
 esac
 
+# Messages
 echo -e "\e[1mChecking dotfile repo status\e[0m"
 if [[ ! -d "$_repoDir" ]]; then
     echo "Repositories directory not found..."
