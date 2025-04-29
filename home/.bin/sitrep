@@ -63,6 +63,7 @@ for _path in "${_dotfiles[@]}"; do
             if [[ $? -ne 0 ]]; then
                 _error="true"
                 _status+=("\e]8;;$_repoDir/$_path\a$_path\e]8;;\a\e[0m: \e[31mfailed to committing changes\e[0m")
+                git -C "$_repoDir/$_path" reset --quiet
             else
                 git -C "$_repoDir/$_path" push --quiet
                 if [[ $? -ne 0 ]]; then
