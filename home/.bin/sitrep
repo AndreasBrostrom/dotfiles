@@ -16,7 +16,7 @@ while [[ $# -gt 0 ]]; do
         --commit|-c|--push|-P)
             _arg_commit="true"
             ;;
-        -h|--help)
+        --help)
             echo "Usage: $0 [OPTIONS]"
             echo ""
             echo "Options:"
@@ -35,11 +35,11 @@ if [[ ! -d "$_repoDir" ]]; then
     exit 1
 else
     pathString=("\e]8;;$_repoDir\a$_repoDir\e]8;;\a\e[0m")
-    echo -e "\e[2mRepo path: $pathString\e[0m"
+    echo -e "Repo path: $pathString"
 fi
 
 if [[ "$_arg_update" == "true" ]]; then
-    echo -e "\e[2mUpdating repositories if no changes are found\e[0m"
+    echo -e "Updating repositories if no changes are found"
 fi
 
 if [[ "$_arg_status" == "true" ]]; then
@@ -96,6 +96,7 @@ for _path in "${_dotfiles[@]}"; do
 
     # Run updates if no changes are found
     if [[ "$_arg_update" == "true" ]]; then
+        echo -e "\e[2mPulling updates for $_path\e[0m"
         _gitPull="$(git -C "$_repoDir/$_path" pull)"
         [[ $(echo $_gitPull | grep Already) ]] && continue
         _gitChanges="\e[2m$(git -C "$_repoDir/$_path" diff --name-only HEAD@{1})\e[0m"
