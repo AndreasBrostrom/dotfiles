@@ -88,7 +88,8 @@ if [ ${#_status[@]} -gt 0 ]; then
         echo -e "$_sitrep"
     done
 else
-    echo "\n\e[1mAll good\e[0m"
+    echo -e "\n\e[1mCurrent status:\e[0m"
+    echo "All good"
 fi
 
 cd $_mainPwd
