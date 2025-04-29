@@ -54,12 +54,12 @@ for _path in "${_dotfiles[@]}"; do
             git -C "$_repoDir/$_path" commit --all --quiet
             if [[ $? -ne 0 ]]; then
                 _error="true"
-                _status+=("\e]8;;$_repoDir/$_path\a$_path\e]8;;\a\e[0m: \e[31mFailed to committing changes\e[0m")
+                _status+=("\e]8;;$_repoDir/$_path\a$_path\e]8;;\a\e[0m: \e[31mfailed to committing changes\e[0m")
             else
                 git -C "$_repoDir/$_path" push --quiet
                 if [[ $? -ne 0 ]]; then
                     _error="true"
-                    _status+=("\e]8;;$_repoDir/$_path\a$_path\e]8;;\a\e[0m: \e[31mFailed to push changes\e[0m")
+                    _status+=("\e]8;;$_repoDir/$_path\a$_path\e]8;;\a\e[0m: \e[31mfailed to push changes\e[0m")
                 else 
                     _status+=("\e]8;;$_repoDir/$_path\a$_path\e]8;;\a\e[0m: committed and pushed changes")
                 fi
@@ -73,9 +73,11 @@ for _path in "${_dotfiles[@]}"; do
         continue
     fi
     if [[ "$_arg_update" == "true" ]]; then
-        _gitPull="$(git -C "$_repoDir/$_path" pull)"
+        git -C "$_repoDir/$_path" pull --quiet
         [[ $(echo $_gitPull | grep Already) ]] && continue
-        _status+=("\e]8;;$_repoDir/$_path\a$_path\e]8;;\a\e[0m: $_gitPull")
+        _gitChanges=$(git -C "$_repoDir/$_path" diff --name-only HEAD@{1})
+        _status+=("\e]8;;$_repoDir/$_path\a$_path\e]8;;\a\e[0m: updated")
+        _status+=("$_gitChanges")
     fi
 done
 
