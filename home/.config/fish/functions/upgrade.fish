@@ -17,6 +17,12 @@ function upgrade
             sudo snap refresh
         end
     end
+    function _fn_upgrade_sitrep
+        if exist sitrep
+            echo -e "\033[32msitrep\033[0m"
+            sitrep -u
+        end
+    end
 
     echo -e '\033[1mFully upgrading system and packages...\033[0m'
 
@@ -38,6 +44,7 @@ function upgrade
                 for i in $orphan; echo " $i"; end
                 echo -e '\033[2mManually run: paru -Rc $(paru -Qtdq)\033[0m'
             end
+            _fn_upgrade_sitrep
             sudo --reset-timestamp
             _fn_upgrade_deconstructor
             return
@@ -58,6 +65,7 @@ function upgrade
                 for i in $orphan; echo " $i"; end
                 echo -e '\033[2mManually run: yay -Rc $(yay -Qtdq)\033[0m'
             end
+            _fn_upgrade_sitrep
             sudo --reset-timestamp
             _fn_upgrade_deconstructor
             return
@@ -76,6 +84,7 @@ function upgrade
             for i in $orphan; echo " $i"; end
             echo -e '\033[2mManually run: sudo pacman -Rc $(pacman -Qtdq)\033[0m'
         end
+        _fn_upgrade_sitrep
         sudo --reset-timestamp
         _fn_upgrade_deconstructor
         return
@@ -88,6 +97,7 @@ function upgrade
             echo -e '\033[1;32mpkg\033[0m'
             pkg upgrade -y
             pkg autoclean
+            _fn_upgrade_sitrep
             exist termux-notification && termux-notification -i "tuUpdatePKG" -t "Termux PKG" -c "System upgrade is complet." --led-color AAFF00 >/dev/null 2>/dev/null
             echo -e '\033[1mFull upgrade completed\033[0m'
             _fn_upgrade_deconstructor
@@ -102,6 +112,7 @@ function upgrade
         sudo apt autoremove -y
         _fn_upgrade_flatpak
         _fn_upgrade_snap
+        _fn_upgrade_sitrep
         exist notify-send && notify-send 'apt' '<i>System upgrade is complet.</i>' --urgency=normal >/dev/null 2>/dev/null
         echo -e "\033[1mAll updates are completed.\033[0m"
         _fn_upgrade_deconstructor
