@@ -48,10 +48,12 @@ alias egrep='egrep --color=auto'
 
 alias clr='clear'
 #alias cp='cp -i'
-alias df='df -h'
-alias free='free -m'
 
-# Arch
+# status
+alias df='df -h'
+alias free='free -mh'
+
+# Arch i3
 alias lock='blurlock'
 alias disable-lock='pkill -9 -f xautolock'
 alias disable-autolock='disable-lock'
