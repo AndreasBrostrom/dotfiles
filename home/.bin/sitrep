@@ -13,7 +13,7 @@ while [[ $# -gt 0 ]]; do
         --upgrade|-u|--pull|-p)
             _arg_update="true"
             ;;
-        --commit|-c|--push|-P)
+        --commit|-c|--push|-pu)
             _arg_commit="true"
             ;;
         --help)
@@ -21,7 +21,7 @@ while [[ $# -gt 0 ]]; do
             echo ""
             echo "Options:"
             echo "  --upgrade, -u, --pull, -p    Update repositories if no changes are found"
-            echo "  --commit, -c, --push, -P     Commit and push changes to repositories"
+            echo "  --commit, -c, --push, -pu    Commit and push changes to repositories"
             echo "  -h, --help                   Show this help message"
             exit 0
             ;;
@@ -39,7 +39,7 @@ else
 fi
 
 if [[ "$_arg_update" == "true" ]]; then
-    echo -e "Updating repositories if no changes are found"
+    echo -e "Updating repositories"
 fi
 
 if [[ "$_arg_status" == "true" ]]; then
