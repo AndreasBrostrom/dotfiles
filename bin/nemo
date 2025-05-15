@@ -1,8 +1,0 @@
-#!/bin/sh
-program=thunar
-
-$program $@
-if [ $? -eq 2 ]; then
-  $program $@
-fi
-
