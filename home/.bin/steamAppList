@@ -42,28 +42,29 @@ while IFS= read -r file; do
 
     appPath="$STEAM_DIR/common/$appDir"
     workshopPath="$STEAM_DIR/workshop/content/$appid"
-    
     protonPath="$STEAM_DIR/compatdata/$appid"
-    
+
     RESET='\033[0m'
     BOLD='\033[1m'
-
     appName=$(echo -e "\033[1;32m$name\033[0m")
-    appPathLink=$(echo -e "\033]8;;$appPath\033\\$appPath\033]8;;\033\\")
-    workshopLink=$(echo -e "\033]8;;$workshopPath\033\\$workshopPath\033]8;;\033\\")
-    protonLink=$(echo -e "\033]8;;$protonPath\033\\$protonPath\033]8;;\033\\")
+    appPathLink=$(echo -e "\033]8;;file:$appPath\033\\$appPath\033]8;;\033\\")
+    
+    # Prepare optional fields
+    workshopField=""
+    protonField=""
+
+    if [[ -d "$workshopPath" ]]; then
+        workshopLink=$(echo -e "\033]8;;file:$workshopPath\033\\$workshopPath\033]8;;\033\\")
+        workshopField="|||  $(printf '%-18s' "Workshop:")$workshopLink"
+    fi
 
     if [[ -d "$protonPath" ]]; then
-        echo -e "Proton path found: $protonPath"
-        isProton=1
+        protonLink=$(echo -e "\033]8;;file:$protonPath\033\\$protonPath\033]8;;\033\\")
+        protonField="|||  $(printf '%-18s' "Proton:")$protonLink"
     fi
 
     if [[ $SHOW_PATHS -eq 1 ]]; then
-        if [[ $isProton -eq 1 ]]; then
-            OUTPUT+=("AppID: $(printf '%-12s' "$appid") $(printf '%-42s' "$appName")|||  $(printf '%-18s' "Path:")$appPathLink|||  $(printf '%-18s' "Workshop:")$workshopLink|||  $(printf '%-18s' "Proton:")$protonLink")
-        else
-            OUTPUT+=("AppID: $(printf '%-12s' "$appid") $(printf '%-42s' "$appName")|||  $(printf '%-18s' "Path:")$appPathLink|||  $(printf '%-18s' "Workshop:")$workshopLink")
-        fi
+        OUTPUT+=("AppID: $(printf '%-12s' "$appid") $(printf '%-42s' "$appName")|||  $(printf '%-18s' "Path:")$appPathLink$protonField$workshopField")
     else
         OUTPUT+=("AppID: $(printf '%-12s' "$appid") $(printf '%-42s' "$appName")")
     fi
