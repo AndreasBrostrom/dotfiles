@@ -2,6 +2,36 @@
 
 STEAM_DIR="$HOME/.steam/steam/steamapps"
 OUTPUT=()
+SHOW_PATHS=0
+
+_fn_help() {
+    echo "Usage: $(basename $0) [OPTIONS]"
+    echo "  -p, --path     Show game and workshop paths"
+    echo "  -h, --help     Show this help message"
+    exit 0
+}
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -p|--path)
+            SHOW_PATHS=1
+            shift
+            ;;
+        -h|--help)
+            _fn_help
+            ;;
+        *)
+            _fn_help
+            ;;
+    esac
+done
+
+# Check if Steam directory exists
+if [[ ! -d "$STEAM_DIR" ]]; then
+    echo "Steam directory not found: $STEAM_DIR"
+    exit 1
+fi
 
 # Find all .acf files and process them
 while IFS= read -r file; do
@@ -12,13 +42,20 @@ while IFS= read -r file; do
     appPath="$STEAM_DIR/common/$appDir"
     workshopPath="$STEAM_DIR/workshop/content/$appid"
 
-    appPathLink=$(echo -e "\033]8;;$appPath\033\\AppPath\033]8;;\033\\")
-    workshopLink=$(echo -e "\033]8;;$workshopPath\033\\Workshop\033]8;;\033\\")
+    RESET='\033[0m'
+    BOLD='\033[1m'
 
-    OUTPUT+=("AppID: $(printf '%-12s' "$appid") Name: $(printf '%-42s' "$name") Path: $appPathLink, $workshopLink")
+    appName=$(echo -e "\033[1m$name\033[0m")
+    appPathLink=$(echo -e "\033]8;;$appPath\033\\$appPath\033]8;;\033\\")
+    workshopLink=$(echo -e "\033]8;;$workshopPath\033\\$workshopPath\033]8;;\033\\")
+
+    if [[ $SHOW_PATHS -eq 1 ]]; then
+        OUTPUT+=("AppID: $(printf '%-12s' "$appid") $(printf '%-42s' "$appName")|||  $(printf '%-18s' "Path:")$appPathLink|||  $(printf '%-18s' "Workshop:")$workshopLink")
+    else
+        OUTPUT+=("AppID: $(printf '%-12s' "$appid") $(printf '%-42s' "$appName")")
+    fi
 
 done < <(find "$STEAM_DIR" -type f -name 'appmanifest_*.acf')
 
 # Sort and print
-printf "%s\n" "${OUTPUT[@]}" | sort -k3
-
+printf "%s\n" "${OUTPUT[@]}" | sort -k3 | sed 's/|||/\n/g'
