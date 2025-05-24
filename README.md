@@ -29,6 +29,7 @@ sudo cp etc/X11/xorg.conf.d/00-keyboard.conf           /etc/X11/xorg.conf.d/00-k
 sudo cp etc/X11/xorg.conf.d/30-touchpad-libinput.conf  /etc/X11/xorg.conf.d/30-touchpad.conf
 sudo cp etc/X11/xorg.conf.d/30-touchpad-synaptic.conf  /etc/X11/xorg.conf.d/30-touchpad.conf
 
+sudo cp etc/X11/xorg.conf.d/91-monitor-home.conf       /etc/X11/xorg.conf.d/91-monitor-home.conf
 sudo cp etc/X11/xorg.conf.d/91-monitor-office.conf     /etc/X11/xorg.conf.d/91-monitor-office.conf
 sudo cp etc/X11/xorg.conf.d/92-xpra-virtual.conf       /etc/X11/xorg.conf.d/92-xpra-virtual.conf
 
