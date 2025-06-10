@@ -1,0 +1,28 @@
+#!/bin/bash
+# filepath: /home/andre/Repositories/dotfiles_private/home/programs/src/monitor/ip_lan
+
+# Usage: ./ip_lan [iface]
+
+if [[ -n "$1" ]]; then
+    iface="$1"
+    # Check if the interface exists and has an IPv4 address
+    ipaddr=$(ip -4 addr show "$iface" 2>/dev/null | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+    if [[ -z "$ipaddr" ]]; then
+        echo "Unknown device '$iface'"
+        exit 1
+    fi
+else
+    iface=$(ip -4 addr show | awk '/inet / && $2 !~ /^127\./ {print $NF; exit}')
+    ipaddr=$(ip -4 addr show "$iface" | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+fi
+
+# Try to get speed using ethtool (wired) or iwconfig (wireless)
+raw_speed=$(ethtool "$iface" 2>/dev/null | awk -F': ' '/Speed:/ {print $2}')
+speed="unknown"
+if [[ "$raw_speed" =~ ([0-9]+)Mb/s ]]; then
+    speed="${BASH_REMATCH[1]} Mbit/s"
+elif [[ "$raw_speed" =~ ([0-9]+)Gb/s ]]; then
+    speed="$((BASH_REMATCH[1] * 1000)) Mbit/s"
+fi
+
+echo "$ipaddr ($speed)"

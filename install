@@ -78,9 +78,9 @@ echo -e " \033[2mAdding conky\033[0m"
 [ ! -d "/usr/share/conky/" ] && sudo mkdir -p /usr/share/conky/
 sudo cp -rf $SCRIPT_DIR/usr/share/conky/* /usr/share/conky/.
 
-echo -e " \033[2mAdding services\033[0m"
-[ ! -d "/usr/share/dbus-1/services" ] && sudo mkdir -p /usr/share/dbus-1/services
-sudo cp -rf $SCRIPT_DIR/usr/share/dbus-1/services/* /usr/share/dbus-1/services/.
+#echo -e " \033[2mAdding services\033[0m"
+#[ ! -d "/usr/share/dbus-1/services" ] && sudo mkdir -p /usr/share/dbus-1/services
+#sudo cp -rf $SCRIPT_DIR/usr/share/dbus-1/services/* /usr/share/dbus-1/services/.
 
 
 # Get tools folder if non exist

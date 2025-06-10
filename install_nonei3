@@ -120,6 +120,7 @@ rm -rf $HOME/.i3
 rm -rf $HOME/.config/i3status
 rm -rf $HOME/.config/i3-scrot.conf
 rm -rf $HOME/.config/morc_menu
+rm -rf $HOME/Programs/morc_menu
     
 sudo rm -f  /bin/start_conky_evul
 sudo rm -rf /usr/share/conky
