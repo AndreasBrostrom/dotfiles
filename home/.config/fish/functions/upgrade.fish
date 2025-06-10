@@ -17,7 +17,7 @@ function upgrade
     function _fn_upgrade_deconstructor
         functions -e _fn_upgrade_flatpak
         functions -e _fn_upgrade_snap
-        functions -e _fn_upgrade_sitrep
+        functions -e _fn_upgrade_dotfiles
         functions -e _fn_upgrade_deconstructor
     end
 
@@ -33,7 +33,7 @@ function upgrade
             sudo snap refresh
         end
     end
-    function _fn_upgrade_sitrep
+    function _fn_upgrade_dotfiles
         if exist sitrep
             echo -e '\033[1;32msitrep\033[0m'
             sitrep -u
@@ -51,15 +51,15 @@ function upgrade
             paru -Syyu --sudoloop --noconfirm --color=always
             _fn_upgrade_flatpak
             _fn_upgrade_snap
-            exist notify-send && notify-send 'paru' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
-            echo -e '\033[1mFull upgrade completed\033[0m'
             set orphan (paru -Qtdq)
             if ! test (count $orphan) -eq 0
                 echo -e '\n\033[1mOrphan package dependencies:\033[0m'
                 for i in $orphan; echo " $i"; end
                 echo -e '\033[2mManually run: paru -Rc $(paru -Qtdq)\033[0m'
             end
-            _fn_upgrade_sitrep
+            _fn_upgrade_dotfiles
+            exist notify-send && notify-send 'paru' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
+            echo -e '\033[1mFull upgrade completed\033[0m'
             sudo --reset-timestamp
             _fn_upgrade_deconstructor
             return
@@ -72,15 +72,15 @@ function upgrade
             yay -Syyu --sudoloop --noconfirm --color=always
             exist flatpak && _fn_upgrade_flatpak
             exist snap && _fn_upgrade_snap
-            exist notify-send && notify-send 'yay' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
-            echo -e '\033[1mFull upgrade completed\033[0m'
             set orphan (yay -Qtdq)
             if ! test (count $orphan) -eq 0
                 echo -e '\n\033[1mOrphan package dependencies:\033[0m'
                 for i in $orphan; echo " $i"; end
                 echo -e '\033[2mManually run: yay -Rc $(yay -Qtdq)\033[0m'
             end
-            _fn_upgrade_sitrep
+            _fn_upgrade_dotfiles
+            exist notify-send && notify-send 'yay' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
+            echo -e '\033[1mFull upgrade completed\033[0m'
             sudo --reset-timestamp
             _fn_upgrade_deconstructor
             return
@@ -91,15 +91,15 @@ function upgrade
         sudo pacman -Syyu --noconfirm --color=always
         _fn_upgrade_flatpak
         _fn_upgrade_snap
-        exist notify-send && notify-send 'pacman' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
-        echo -e '\033[1mFull upgrade completed\033[0m'
         set orphan (pacman -Qtdq)
         if ! test (count $orphan) -eq 0
             echo -e '\n\033[1mOrphan package dependencies:\033[0m'
             for i in $orphan; echo " $i"; end
             echo -e '\033[2mManually run: sudo pacman -Rc $(pacman -Qtdq)\033[0m'
         end
-        _fn_upgrade_sitrep
+        _fn_upgrade_dotfiles
+        exist notify-send && notify-send 'pacman' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
+        echo -e '\033[1mFull upgrade completed\033[0m'
         sudo --reset-timestamp
         _fn_upgrade_deconstructor
         return
@@ -112,7 +112,7 @@ function upgrade
             echo -e '\033[1;32mpkg\033[0m'
             pkg upgrade -y
             pkg autoclean
-            _fn_upgrade_sitrep
+            _fn_upgrade_dotfiles
             exist termux-notification && termux-notification -i "tuUpdatePKG" -t "Termux PKG" -c "System upgrade is complet." --led-color AAFF00 >/dev/null 2>/dev/null
             echo -e '\033[1mFull upgrade completed\033[0m'
             _fn_upgrade_deconstructor
@@ -127,7 +127,7 @@ function upgrade
         sudo apt autoremove -y
         _fn_upgrade_flatpak
         _fn_upgrade_snap
-        _fn_upgrade_sitrep
+        _fn_upgrade_dotfiles
         exist notify-send && notify-send 'apt' '<i>System upgrade is complet.</i>' --urgency=normal >/dev/null 2>/dev/null
         echo -e "\033[1mAll updates are completed.\033[0m"
         _fn_upgrade_deconstructor
@@ -143,7 +143,7 @@ function upgrade
 
         _fn_upgrade_flatpak
         _fn_upgrade_snap
-        _fn_upgrade_sitrep
+        _fn_upgrade_dotfiles
         exist notify-send && notify-send 'dfn' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
         echo -e "\033[1mAll updates are completed.\033[0m"
         _fn_upgrade_deconstructor
