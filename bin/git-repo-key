@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [[ "$1" == "--clear" ]]; then
+    git config --local --unset core.sshCommand
+    echo "Removed core.sshCommand from local git config."
+elif [[ "$1" == "--list" ]]; then
+    echo "Available private SSH keys in ~/.ssh:"
+    find ~/.ssh -type f -name "*" ! -name "*.pub" ! -name "*.crt" ! -name "*.pem" ! -name "config" ! -name "known_hosts" ! -name "known_hosts.old" ! -name "authorized_keys" -exec basename {} \;
+elif [[ -n "$1" ]]; then
+    git config --local --add core.sshCommand "ssh -i ~/.ssh/$1"
+    echo "Set core.sshCommand to use ~/.ssh/$1."
+else
+    echo "Usage: $0 <keyfile> | --clear | --list"
+    exit 1
+fi
