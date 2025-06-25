@@ -4,14 +4,48 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 cd $SCRIPT_DIR
 echo -e "\033[34;1mInstalling $(basename $SCRIPT_DIR)...\033[0m"
 
+# Argument flags
+ARG_NONE_I3=0
+ARG_SUDO=0
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --none-i3)
+            ARG_NONE_I3=1
+            shift
+            ;;
+        --no-sudo)
+            ARG_SUDO=0
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
+    esac
+done
+
 function isProtected () {
-    # isProtected "$HOME/$FILE" && echo -e " \033[31m$FILE is protected\033[0m" && continue
     [[ ! -f "$SCRIPT_DIR/../.protected" ]] && return 1
     mapfile -t < $SCRIPT_DIR/../.protected
     protectedFiles="${MAPFILE[@]}"
     for ProtectedFile in $protectedFiles; do
         [[ "$ProtectedFile" == "$*" ]] && return 0
     done
+    return 1
+}
+function isNoneI3() {
+    if [[ $ARG_NONE_I3 == 1 ]]; then
+        local file="$1"
+        local config="$SCRIPT_DIR/install_config.sh"
+        [[ ! -f "$config" ]] && return 1
+        source "$config"
+        for uniq in "${i3[@]}"; do
+            [[ "$file" == "$uniq" ]] && return 0
+        done
+        return 1
+    fi
     return 1
 }
 
@@ -21,6 +55,8 @@ if [ -d $SCRIPT_DIR/home ]; then
     cd $SCRIPT_DIR/home
     for FILE in $(rg --files --hidden); do
         isProtected "$HOME/$FILE" && echo -e " \033[31m$FILE is protected\033[0m" && continue
+        isNoneI3 "$FILE" && echo -e " \033[33m$FILE is i3 specific, skipping\033[0m" && continue
+
         # handle SSH files
         [[ $(dirname "$HOME/$FILE") == "$HOME/.ssh" ]] &&
             echo -e " \033[2mCopying $FILE\033[0m" &&
@@ -39,6 +75,8 @@ if [ -d $SCRIPT_DIR/bin ]; then
     cd $SCRIPT_DIR/bin
     for FILE in $(rg --files --hidden); do
         isProtected "/usr/bin/$FILE" && echo -e " \033[31m$FILE is protected\033[0m" && continue
+        isNoneI3 "$FILE" && echo -e " \033[33m$FILE is i3 specific, skipping\033[0m" && continue
+        
         echo -e " \033[2mCopying $FILE\033[0m"
         sudo cp -f $FILE /usr/bin/$FILE
     done

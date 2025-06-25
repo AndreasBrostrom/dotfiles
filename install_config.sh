@@ -1,0 +1,12 @@
+i3=(
+  "e-scrot"
+  "dmenu_recent"
+  "kill-lock"
+  ".config/i3/config"
+  ".config/i3-scrot.conf"
+  ".config/morc_menu/morc_menu_v1.conf"
+  "Programs/src/monitor/i3status_androidDevice"
+  "Programs/src/monitor/i3status_dotfilestatus"
+  "usr/share/conky/conky_evul"
+  "usr/share/conky/conky_shortcuts_evul"
+)
