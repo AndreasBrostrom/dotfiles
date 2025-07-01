@@ -120,9 +120,13 @@ if [ -f "/etc/os-release" ] && [ "$(cat /etc/os-release | grep ID_LIKE | cut -f 
     alias route='echo "$ ip route"; ip route'
     alias ifconfig='echo "$ ip addr"; ip addr'
 
-    alias lock='blurlock'
-    alias disable-lock='pkill -9 -f xautolock'
-    alias disable-autolock='disable-lock'
+    if [ "$XDG_CURRENT_DESKTOP" = "XFCE" ] || [ "$XDG_SESSION_DESKTOP" = "xfce" ]; then
+        alias lock='xflock4'
+        alias disable-autolock='pkill -9 -f xflock4'
+    elif [ "$XDG_CURRENT_DESKTOP" = "i3" ] || [ "$XDG_SESSION_DESKTOP" = "i3" ]; then
+        alias lock='i3exit lock'
+        alias disable-autolock='pkill -9 -f xautolock'
+    fi
 fi
 
 # Windows Linux SubSytstem

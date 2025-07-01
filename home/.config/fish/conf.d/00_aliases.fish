@@ -54,9 +54,12 @@ alias df='df -h'
 alias free='free -mh'
 
 # Arch i3
-alias lock='blurlock'
-alias disable-lock='pkill -9 -f xautolock'
-alias disable-autolock='disable-lock'
-
+if test "$XDG_CURRENT_DESKTOP" = "XFCE" -o "$XDG_SESSION_DESKTOP" = "xfce"
+    alias lock 'xflock4'
+    alias disable-autolock 'pkill -9 -f xflock4'
+else if test "$XDG_CURRENT_DESKTOP" = "i3" -o "$XDG_SESSION_DESKTOP" = "i3"
+    alias lock 'i3exit lock'
+    alias disable-autolock 'pkill -9 -f xautolock'
+end
 # gui sudo
 alias gsudo='/usr/bin/pkexec'
