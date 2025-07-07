@@ -10,10 +10,13 @@ alias adb-url='adb shell am start -a android.intent.action.VIEW -d '
 
 
 # lock screen aliases
-if test "$XDG_CURRENT_DESKTOP" = "XFCE" -o "$XDG_SESSION_DESKTOP" = "xfce"
+if test (string lower "$XDG_CURRENT_DESKTOP$XDG_SESSION_DESKTOP") = "xfce"
     alias lock 'xflock4'
     alias disable-autolock 'pkill -9 -f xflock4'
-else if test "$XDG_CURRENT_DESKTOP" = "i3" -o "$XDG_SESSION_DESKTOP" = "i3"
+else if test (string lower "$XDG_CURRENT_DESKTOP$XDG_SESSION_DESKTOP") = "i3"
     alias lock 'i3exit lock'
     alias disable-autolock 'pkill -9 -f xautolock'
+else
+    alias lock 'xflock4 || i3exit lock || echo "No lock command found"'
+    alias disable-autolock 'pkill -9 -f xflock4; pkill -9 -f xautolock'
 end
