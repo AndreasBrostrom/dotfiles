@@ -1,0 +1,35 @@
+#!/bin/bash
+# filepath: /home/andre/Repositories/dotfiles/home/programs/src/monitor/dotfilestatus
+
+# Usage: ./dotfilestatus
+
+
+_symbol='!'
+
+if [[ -d ~/Repositories/dotfiles ]]; then
+    if [[ ! $(git -C ~/Repositories/dotfiles status | grep nothin) || $(git -C ~/Repositories/dotfiles status | grep Untracked) ]]; then
+        echo $_symbol
+        exit 1
+    fi
+fi
+if [[ -d ~/Repositories/dotfiles_private ]]; then
+    if [[ ! $(git -C ~/Repositories/dotfiles_private status | grep nothin) || $(git -C ~/Repositories/dotfiles_private status | grep Untracked) ]]; then
+        echo $_symbol
+        exit 1
+    fi
+fi
+if [[ -d ~/Repositories/Tools ]]; then
+    if [[ ! $(git -C ~/Repositories/Tools status | grep nothin) || $(git -C ~/Repositories/Tools status | grep Untracked) ]]; then
+        echo $_symbol
+        exit 1
+    fi
+fi
+if [[ -d ~/Repositories/wdotfiles ]]; then
+    if [[ ! $(git -C ~/Repositories/wdotfiles status | grep nothin) || $(git -C ~/Repositories/wdotfiles status | grep Untracked) ]]; then
+        echo $_symbol
+        exit 1
+    fi
+fi
+
+echo ""
+exit 0
