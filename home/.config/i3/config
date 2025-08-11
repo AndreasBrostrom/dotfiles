@@ -49,7 +49,7 @@ bindsym $mod+XF86AudioLowerVolume exec dbus-send --print-reply --dest=org.mpris.
 # bindsym XF86MonBrightnessUp exec "xbacklight -inc 10; notify-send 'brightness up'"
 # bindsym XF86MonBrightnessDown exec "xbacklight -dec 10; notify-send 'brightness down'"
 bindsym XF86MonBrightnessUp exec "brightnessctl set +10%"
-bindsym XF86MonBrightnessDown exec "brightnessctl set -10%"
+bindsym XF86MonBrightnessDown exec "brightnessctl set 10%-"
 
 
 # Use Mouse+$mod to drag floating windows to their wanted position
