@@ -5,6 +5,7 @@
 [user]
 	name = AndreasBrostrom
 	email = andreas.brostrom.ce@gmail.com
+	signingkey = 1C9E39BBFB03BA98
 [alias]
 	root = rev-parse --show-toplevel
 	ccl = rev-parse --verify HEAD
@@ -15,9 +16,15 @@
 	defaultBranch = main
 [checkout]
 	defaultRemote = origin
+[push]
+	autoSetupRemote = true
 [pull]
 	rebase = true
 [diff]
 	tool = vimdiff
 [merge]
 	tool = vimdiff
+[commit]
+	gpgsign = true
+[tag]
+	gpgSign = true
