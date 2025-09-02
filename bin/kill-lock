@@ -1,7 +1,43 @@
 #!/bin/sh
 
-if [ "$XDG_CURRENT_DESKTOP" = "XFCE" ] || [ "$XDG_SESSION_DESKTOP" = "xfce" ]; then
-    pkill -9 -f xflock4
-elif [ "$XDG_CURRENT_DESKTOP" = "i3" ] || [ "$XDG_SESSION_DESKTOP" = "i3" ]; then
-    pkill -9 -f i3lock
-fi
+# List of desktop environments
+envs="gnome kde mate cinnamon lxde xfce jwm i3"
+
+for env in $envs; do
+    count=$(ps -A | grep -i "$env" | wc -l)
+    if [ "$count" -gt 4 ]; then
+        selected_env="$env"
+        break
+    fi
+done
+echo "Detected desktop environment: $selected_env"
+
+case "$selected_env" in
+    xfce)
+        pkill -9 -f xflock4
+        ;;
+    i3)
+        pkill -9 -f i3lock
+        ;;
+    gnome)
+        pkill -9 -f gnome-screensaver
+        ;;
+    kde)
+        pkill -9 -f kscreenlocker
+        ;;
+    mate)
+        pkill -9 -f mate-screensaver
+        ;;
+    cinnamon)
+        pkill -9 -f cinnamon-screensaver
+        ;;
+    lxde)
+        pkill -9 -f lxlock
+        ;;
+    jwm)
+        pkill -9 -f jwm
+        ;;
+    *)
+        echo "No known desktop environment detected or no lock process found."
+        ;;
+esac
