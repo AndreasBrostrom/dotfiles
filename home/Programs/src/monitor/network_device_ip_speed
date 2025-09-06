@@ -16,7 +16,7 @@ else
     ipaddr=$(ip -4 addr show "$iface" | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
 fi
 
-# Try to get speed using ethtool (wired) or iwconfig (wireless)
+# Try to get speed using ethtool (wired)
 raw_speed=$(ethtool "$iface" 2>/dev/null | awk -F': ' '/Speed:/ {print $2}')
 speed="unknown"
 if [[ "$raw_speed" =~ ([0-9]+)Mb/s ]]; then
