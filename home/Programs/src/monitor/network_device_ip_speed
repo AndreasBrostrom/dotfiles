@@ -25,4 +25,14 @@ elif [[ "$raw_speed" =~ ([0-9]+)Gb/s ]]; then
     speed="$((BASH_REMATCH[1] * 1000)) Mbit/s"
 fi
 
+# If speed is still unknown, try iwconfig for wireless Bit Rate
+if [[ "$speed" == "unknown" ]]; then
+    iwconfig_out=$(iwconfig "$iface" 2>/dev/null)
+    iw_speed=$(echo "$iwconfig_out" | awk -F'=' '/Bit Rate/ {print $2}' | awk '{print $1, $2}')
+    if [[ -n "$iw_speed" ]]; then
+        # Replace Mb/s with Mbit/s for consistency
+        speed=$(echo "$iw_speed" | sed 's/Mb\/s/Mbit\/s/')
+    fi
+fi
+
 echo "$ipaddr ($speed)"
