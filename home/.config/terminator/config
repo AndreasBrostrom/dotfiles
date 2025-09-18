@@ -15,15 +15,14 @@
 [profiles]
   [[default]]
     icon_bell = False
-    background_color = "#222d31"
+    background_color = "#2c2c2c"
     background_darkness = 0.94
     font = RobotoMono Nerd Font 10
-    foreground_color = "#c0bfbc"
+    foreground_color = "#dcdcdc"
     scrollback_infinite = True
-    palette = "#202020:#a51d2d:#26a269:#f6d32d:#3584e4:#c061cb:#2fe0c8:#96a8a7:#676767:#e01b24:#8ff0a4:#f9f06b:#99c1f1:#de4974:#38add8:#aed5c6"
+    palette = "#3f3f3f:#705050:#60b48a:#dfaf8f:#9ab8d7:#dc8cc3:#8cd0d3:#dcdcdc:#709080:#dca3a3:#72d5a3:#f0dfaf:#94bff3:#ec93d3:#93e0e3:#ffffff"
     use_system_font = False
-    title_transmit_fg_color = "#000000"
-    title_transmit_bg_color = "#33b498"
+    title_transmit_bg_color = "#77767b"
     title_inactive_fg_color = "#ffffff"
     title_inactive_bg_color = "#4f4f4f"
 [layouts]
