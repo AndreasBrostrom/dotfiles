@@ -1,24 +1,16 @@
 #!/bin/bash
+# add this to sudoers (with visudo) to allow this script to run without password:
+# myUser ALL=(root) NOPASSWD: /bin/micmute_led_handler
 
-# 1. Define the LED path
 LED_FILE="/sys/class/leds/platform::micmute/brightness"
-
-# 2. Toggle the system's default source (microphone) mute state
-# This command toggles the mute state of the default microphone source
 pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
-# 3. Get the *new* system mute state (0=unmuted, 1=muted)
-# Uses pactl and awk to extract the Mute status (a clean 'yes' or 'no')
 MUTE_STATUS=$(pactl get-source-mute @DEFAULT_SOURCE@ | awk '{print $2}')
 
-# 4. Determine the LED value based on the Mute status
 if [ "$MUTE_STATUS" == "yes" ]; then
-    # Mic is Muted (LED ON)
     LED_VALUE=1
 else
-    # Mic is Unmuted (LED OFF)
     LED_VALUE=0
 fi
 
-# 5. Write the value to the LED file (requires sudo/root access)
 echo "$LED_VALUE" | sudo tee "$LED_FILE" > /dev/null
