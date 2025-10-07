@@ -2,14 +2,22 @@
 # add this to sudoers (with visudo) to allow this script to run without password:
 # ALL ALL=(root) NOPASSWD: /bin/micmute_led_handler
 
+# Set PATH to include common directories
+export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+
 # Ensure we have the right environment for PulseAudio
 export XDG_RUNTIME_DIR="/run/user/$(id -u)"
 export PULSE_RUNTIME_PATH="${XDG_RUNTIME_DIR}/pulse"
 
-LED_FILE="/sys/class/leds/platform::micmute/brightness"
-pactl set-source-mute @DEFAULT_SOURCE@ toggle
+# Debug log (optional - remove after testing)
+echo "$(date): micmute_led_handler called" >> /tmp/micmute_debug.log
 
-MUTE_STATUS=$(pactl get-source-mute @DEFAULT_SOURCE@ | awk '{print $2}')
+LED_FILE="/sys/class/leds/platform::micmute/brightness"
+
+# Use full path to pactl and add error checking
+/usr/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle 2>>/tmp/micmute_debug.log
+
+MUTE_STATUS=$(/usr/bin/pactl get-source-mute @DEFAULT_SOURCE@ 2>>/tmp/micmute_debug.log | awk '{print $2}')
 
 if [ "$MUTE_STATUS" == "yes" ]; then
     LED_VALUE=1
@@ -18,4 +26,5 @@ else
 fi
 
 echo "$LED_VALUE" | sudo tee "$LED_FILE" > /dev/null
+echo "$(date): Mute status: $MUTE_STATUS, LED: $LED_VALUE" >> /tmp/micmute_debug.log
 #echo "micmute: $MUTE_STATUS | micmute_led: $LED_VALUE"
