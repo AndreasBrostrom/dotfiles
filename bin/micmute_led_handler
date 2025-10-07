@@ -23,5 +23,10 @@ else
     LED_VALUE=0
 fi
 
-echo "$LED_VALUE" | sudo tee "$LED_FILE" > /dev/null
+# Only use sudo for the LED file write
+if [ -w "$LED_FILE" ]; then
+    echo "$LED_VALUE" > "$LED_FILE"
+else
+    echo "$LED_VALUE" | sudo tee "$LED_FILE" > /dev/null
+fi
 #echo "micmute: $MUTE_STATUS | micmute_led: $LED_VALUE"
