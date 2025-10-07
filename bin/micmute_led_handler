@@ -14,4 +14,4 @@ else
 fi
 
 echo "$LED_VALUE" | sudo tee "$LED_FILE" > /dev/null
-echo "micmute_led: $LED_VALUE"
+echo "micmute: $MUTE_STATUS | micmute_led: $LED_VALUE"
