@@ -3,7 +3,7 @@
 # myUser ALL=(root) NOPASSWD: /bin/micmute_led_handler
 
 LED_FILE="/sys/class/leds/platform::micmute/brightness"
-#pactl set-source-mute @DEFAULT_SOURCE@ toggle
+pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
 MUTE_STATUS=$(pactl get-source-mute @DEFAULT_SOURCE@ | awk '{print $2}')
 
@@ -14,3 +14,4 @@ else
 fi
 
 echo "$LED_VALUE" | sudo tee "$LED_FILE" > /dev/null
+echo "micmute_led: $LED_VALUE"
