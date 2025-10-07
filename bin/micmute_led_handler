@@ -1,13 +1,15 @@
 #!/bin/bash
+# add this to sudoers (with visudo) to allow this script to run without password:
+# ALL ALL=(root) NOPASSWD: /bin/micmute_led_handler
 
-# 1. Define the LED path
+# Ensure we have the right environment for PulseAudio
+export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+export PULSE_RUNTIME_PATH="${XDG_RUNTIME_DIR}/pulse"
+
 LED_FILE="/sys/class/leds/platform::micmute/brightness"
+pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
-LOGGED_IN_USER=$(logname)
-
-sudo -u "$LOGGED_IN_USER" /usr/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle
-
-MUTE_STATUS=$(sudo -u "$LOGGED_IN_USER" /usr/bin/pactl get-source-mute @DEFAULT_SOURCE@ | /usr/bin/awk '{print $2}')
+MUTE_STATUS=$(pactl get-source-mute @DEFAULT_SOURCE@ | awk '{print $2}')
 
 if [ "$MUTE_STATUS" == "yes" ]; then
     LED_VALUE=1
@@ -15,5 +17,5 @@ else
     LED_VALUE=0
 fi
 
-echo "$LED_VALUE" | sudo /usr/bin/tee "$LED_FILE" > /dev/null
-#echo "micmute: $MUTE_STATUS | micmute_led: $LED_VALUE" 
+echo "$LED_VALUE" | sudo tee "$LED_FILE" > /dev/null
+#echo "micmute: $MUTE_STATUS | micmute_led: $LED_VALUE"
