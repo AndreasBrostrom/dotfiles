@@ -1,0 +1,19 @@
+#!/bin/bash
+
+echo "Checking extensions..."
+
+allExtensions=$(code --list-extensions)
+extCount=$(echo $allExtensions | wc -w)
+
+echo "Found extensions: ($extCount)"
+for ext in $allExtensions; do
+  echo " -> $ext"
+done
+
+echo "Upgrading extensions"
+for ext in $allExtensions; do
+  echo " -> Updating $ext..."
+  code --install-extension "$ext" --force --user-data-dir=/tmp/vscode-update >/dev/null 2>&1
+done
+
+echo "Done upgrading $extCount vscode extensions."
