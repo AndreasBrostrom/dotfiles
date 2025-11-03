@@ -1,6 +1,5 @@
 [global_config]
   focus = mouse
-  enabled_plugins = LaunchpadBugURLHandler, LaunchpadCodeURLHandler, APTURLHandler, TerminatorThemes
   ask_before_closing = never
   putty_paste_style_source_clipboard = True
 [keybindings]
@@ -30,6 +29,7 @@
     [[[window0]]]
       type = Window
       parent = ""
+      size = 1200, 800
     [[[child1]]]
       type = Terminal
       parent = window0
