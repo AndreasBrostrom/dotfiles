@@ -102,12 +102,12 @@ cd $SCRIPT_DIR/etc/
 sudo cp -f "pacman.conf" "/etc/pacman.conf"
 
 
-echo -e "\033[1mSetting up terminal aliases\033[0m"
-cd /usr/bin/
-for TERM in term gnome-terminal default-terminal TerminalEmulator; do
-    echo -e " \033[2mCreating softlink for $TERM => terminal\033[0m"
-    sudo ln -sf terminal $TERM
-done
+#echo -e "\033[1mSetting up terminal aliases\033[0m"
+#cd /usr/bin/
+#for TERM in term gnome-terminal default-terminal TerminalEmulator; do
+#    echo -e " \033[2mCreating softlink for $TERM => terminal\033[0m"
+#    sudo ln -sf terminal $TERM
+#done
 
 # Install /usr files (Manual)
 echo -e "\033[1mSetting usr files\033[0m"
