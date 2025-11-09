@@ -1,0 +1,62 @@
+#!/bin/sh
+
+# List of desktop environments
+envs="gnome kde mate cinnamon lxde xfce jwm i3"
+
+for env in $envs; do
+    count=$(ps -A | grep -i "$env" | wc -l)
+    if [ "$count" -gt 4 ]; then
+        selected_env="$env"
+        break
+    fi
+done
+echo "Detected desktop environment: $selected_env"
+
+case "$selected_env" in
+    xfce)
+        pkill -9 -f xflock4
+        pkill -9 -f xfce4-power-manager
+        pkill -9 -f xfce4-screensaver
+        pkill -9 -f xautolock
+        ;;
+    i3)
+        pkill -9 -f i3lock
+        pkill -9 -f xautolock
+        pkill -9 -f xss-lock
+        pkill -9 -f xidlehook
+        ;;
+    gnome)
+        pkill -9 -f gnome-screensaver
+        pkill -9 -f gnome-settings-daemon
+        ;;
+    kde)
+        pkill -9 -f kscreenlocker
+        pkill -9 -f kscreenlocker_greet
+        ;;
+    mate)
+        pkill -9 -f mate-screensaver
+        ;;
+    cinnamon)
+        pkill -9 -f cinnamon-screensaver
+        ;;
+    lxde)
+        pkill -9 -f lxlock
+        pkill -9 -f light-locker
+        pkill -9 -f xscreensaver
+        ;;
+    jwm)
+        pkill -9 -f jwm
+        pkill -9 -f xautolock
+        pkill -9 -f xscreensaver
+        ;;
+    *)
+        echo "No known desktop environment detected or no lock process found."
+        # Try killing common auto-lock daemons anyway
+        pkill -9 -f xautolock
+        pkill -9 -f xss-lock
+        pkill -9 -f light-locker
+        pkill -9 -f xscreensaver
+        ;;
+esac
+
+echo "Auto-lock processes killed for $selected_env (temporary until reboot)"
