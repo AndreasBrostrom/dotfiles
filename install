@@ -6,7 +6,8 @@ echo -e "\033[34;1mInstalling $(basename $SCRIPT_DIR)...\033[0m"
 
 # Argument flags
 ARG_NONE_I3=0
-ARG_SUDO=0
+ARG_NO_SUDO=0
+ARG_ANDROID=0
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -15,8 +16,12 @@ while [[ $# -gt 0 ]]; do
             ARG_NONE_I3=1
             shift
             ;;
+        -a|--android)
+            ARG_ANDROID=1
+            shift
+            ;;
         --no-sudo)
-            ARG_SUDO=0
+            ARG_NO_SUDO=1
             shift
             ;;
         *)
@@ -38,13 +43,19 @@ function isProtected () {
 function isNoneI3() {
     if [[ $ARG_NONE_I3 == 1 ]]; then
         local file="$1"
-        local config="$SCRIPT_DIR/install_config.sh"
+        local config="$SCRIPT_DIR/install_config"
         [[ ! -f "$config" ]] && return 1
         source "$config"
         for uniq in "${i3[@]}"; do
             [[ "$file" == "$uniq" ]] && return 0
         done
         return 1
+    fi
+    return 1
+}
+function isAndroid() {
+    if [[ $ARG_ANDROID == 1 ]]; then
+        return 0
     fi
     return 1
 }
@@ -73,34 +84,42 @@ fi
 if [ -d $SCRIPT_DIR/bin ]; then 
     echo -e "\033[1mInstall bin scripts\033[0m"
     cd $SCRIPT_DIR/bin
+    isAndroid && echo -e " \033[2mAndroid detected, installing to termux bin folder\033[0m"
     for FILE in $(rg --files --hidden); do
         isProtected "/usr/bin/$FILE" && echo -e " \033[31m$FILE is protected\033[0m" && continue
         isNoneI3 "$FILE" && echo -e " \033[33m$FILE is i3 specific, skipping\033[0m" && continue
         
+        if isAndroid; then
+            echo -e " \033[2mCopying $FILE\033[0m"
+            cp -f $FILE /data/data/com.termux/files/usr/bin/$FILE
+            continue
+        fi
+
         echo -e " \033[2mCopying $FILE\033[0m"
         sudo cp -f $FILE /usr/bin/$FILE
     done
 fi
 
 # Install /etc files (Manual)
-echo -e "\033[1mSetting etc files\033[0m"
-cd $SCRIPT_DIR/etc/X11/xorg.conf.d/
-echo -e " \033[2mCopying 00-keyboard.conf\033[0m"
-sudo cp -f "00-keyboard.conf" "/etc/X11/xorg.conf.d/00-keyboard.conf"
+if [ -d $SCRIPT_DIR/etc ]; then
+    echo -e "\033[1mInstall etc configs\033[0m"
 
-#echo -e " \033[2mCopying lightdm configs\033[0m"
-#cd $SCRIPT_DIR/etc/lightdm/
-#sudo cp -f "lightdm-webkit2-greeter.conf"   "/etc/lightdm/lightdm-webkit2-greeter.conf"
-#sudo cp -f "lightdm.conf"                   "/etc/lightdm/lightdm.conf"
+    # Adjust this list as needed
+    filesToMove=(etc/modprobe.d/nobeep.conf
+                 etc/pacman.conf
+                 etc/X11/xorg.conf.d/00-keyboard.conf)
 
-echo -e " \033[2mCopying modprobe.d configs\033[0m"
-cd $SCRIPT_DIR/etc/modprobe.d/
-sudo cp -f "nobeep.conf" "/etc/modprobe.d/nobeep.conf"
-
-echo -e " \033[2mCopying pacman.conf\033[0m"
-cd $SCRIPT_DIR/etc/
-sudo cp -f "pacman.conf" "/etc/pacman.conf"
-
+    cd $SCRIPT_DIR
+    for FILE in "${filesToMove[@]}"; do
+        filename=$(basename "$FILE")
+        isProtected "usr/$FILE" && echo -e " \033[31m$FILE is protected\033[0m" && continue
+        isNoneI3 "$FILE" && echo -e " \033[33m$FILE is i3 specific, skipping\033[0m" && continue
+        isAndroid && echo -e " \033[33m$FILE is not for Android, skipping\033[0m" && continue
+        
+        echo -e " \033[2mCopying $filename\033[0m"
+        sudo cp -f "$SCRIPT_DIR/$FILE" "/$FILE"
+    done
+fi
 
 #echo -e "\033[1mSetting up terminal aliases\033[0m"
 #cd /usr/bin/
@@ -109,17 +128,21 @@ sudo cp -f "pacman.conf" "/etc/pacman.conf"
 #    sudo ln -sf terminal $TERM
 #done
 
-# Install /usr files (Manual)
-echo -e "\033[1mSetting usr files\033[0m"
 
-echo -e " \033[2mAdding conky\033[0m"
-[ ! -d "/usr/share/conky/" ] && sudo mkdir -p /usr/share/conky/
-sudo cp -rf $SCRIPT_DIR/usr/share/conky/* /usr/share/conky/.
+# Install /usr files
+if [ -d $SCRIPT_DIR/usr ]; then
+    echo -e "\033[1mSetting usr files\033[0m"
+    cd $SCRIPT_DIR/usr
+    for FILE in $(rg --files --hidden); do
+        isProtected "$FILE" && echo -e " \033[31m$FILE is protected\033[0m" && continue
+        isNoneI3 "$FILE" && echo -e " \033[33m$FILE is i3 specific, skipping\033[0m" && continue
+        isAndroid && echo -e " \033[33m$FILE is not for Android, skipping\033[0m" && continue
 
-#echo -e " \033[2mAdding services\033[0m"
-#[ ! -d "/usr/share/dbus-1/services" ] && sudo mkdir -p /usr/share/dbus-1/services
-#sudo cp -rf $SCRIPT_DIR/usr/share/dbus-1/services/* /usr/share/dbus-1/services/.
-
+        echo -e " \033[2mCopying $FILE\033[0m"
+        [ ! -d $(dirname "/usr/$FILE") ] && sudo mkdir -p $(dirname "/usr/$FILE")
+        sudo cp -rf $FILE "/usr/$FILE"
+    done
+fi
 
 # Get tools folder if non exist
 if [ ! -d $SCRIPT_DIR/../Tools ]; then
@@ -155,27 +178,3 @@ chmod 600 $HOME/.ssh/config
 chmod 600 $HOME/.ssh/authorized_keys
 chmod 600 $HOME/.ssh/*id_rsa
 chmod 644 $HOME/.ssh/*.pub
-
-
-# ##
-# If not i3 remove the i3 configs
-#echo -e "\033[1mChecking desktop enviroment\033[0m"
-#if [ ! "$XDG_CURRENT_DESKTOP" == "i3" ]; then
-#    echo -e " \033[2mi3 not used removing configs.\033[0m"
-#    rm -rf $HOME/.i3
-#    rm -rf $HOME/.config/i3status
-#    rm -rf $HOME/.config/i3-scrot.conf
-#    rm -rf $HOME/.config/morc_menu
-#    
-#    sudo rm -f  /bin/start_conky_evul
-#    sudo rm -rf /usr/share/conky
-#fi
-#
-## If WSL remove unnecessary configs
-#if grep -qi microsoft /proc/version; then
-#    echo -e " \033[2mWSL used removing unnecessary configs.\033[0m"
-#    sudo rm -f /etc/samba/smb.conf
-#    sudo rm -f /etc/X11/xorg.conf.d/00-keyboard.conf
-#    sudo rm -f /etc/X11/xorg.conf.d/91-monitor-office.conf
-#    sudo rm -f /etc/X11/xorg.conf.d/92-xpra-virtual.conf
-#fi
