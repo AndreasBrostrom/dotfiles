@@ -59,6 +59,12 @@ function isAndroid() {
     fi
     return 1
 }
+function hasNoSudo() {
+    if [[ $ARG_NO_SUDO == 1 ]]; then
+        return 0
+    fi
+    return 1
+}
 
 # Install /home files
 if [ -d $SCRIPT_DIR/home ]; then 
@@ -151,7 +157,7 @@ if [ ! -d $SCRIPT_DIR/../Tools ]; then
 fi
 if [ -d $SCRIPT_DIR/../Tools ]; then
     echo -e "\033[1mFetching scripts from Tools\033[0m"
-    $SCRIPT_DIR/../Tools/installScripts ln
+    $SCRIPT_DIR/../Tools/installScripts $* --link
 fi
 
 
