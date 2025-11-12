@@ -72,19 +72,20 @@ function hasNoSudo() {
 if [ -d $SCRIPT_DIR/home ]; then 
     echo -e "\033[1mLinking up home\033[0m"
     cd $SCRIPT_DIR/home
+    DEST="$HOME"
     for FILE in $(rg --files --hidden); do
-        isProtected "$HOME/$FILE" && echo -e " \033[31m$FILE is protected\033[0m" && continue
-        isNoneI3 "$FILE" && echo -e " \033[33m$FILE is i3 specific, skipping\033[0m" && continue
+        isProtected "$DEST/$FILE" && echo -e " \033[31m~/$FILE is protected\033[0m" && continue
+        isNoneI3 "$FILE" && echo -e " \033[33m~/$FILE is i3 specific, skipping\033[0m" && continue
 
         # handle SSH files
         [[ $(dirname "$HOME/$FILE") == "$HOME/.ssh" ]] &&
-            echo -e " \033[2mCopying $FILE\033[0m" &&
+            echo -e " \033[2mCopying $FILE to ~/$FILE\033[0m" &&
             cp -f "$SCRIPT_DIR/home/$FILE" "$HOME/$FILE" &&
             continue
         
-        echo -e " \033[2mCreating softlink for $FILE\033[0m"
-        [ ! -d $(dirname "$HOME/$FILE") ] && mkdir -p $(dirname "$HOME/$FILE")
-        ln -sf "$SCRIPT_DIR/home/$FILE" "$HOME/$FILE"
+        echo -e " \033[2mLinking ~/$FILE => $FILE\033[0m"
+        [ ! -d $(dirname "$DEST/$FILE") ] && mkdir -p $(dirname "$DEST/$FILE")
+        ln -sf "$SCRIPT_DIR/home/$FILE" "$DEST/$FILE"
     done
 fi
 
@@ -92,10 +93,11 @@ fi
 if [ -d $SCRIPT_DIR/bin ]; then 
     echo -e "\033[1mInstall bin scripts\033[0m"
     cd $SCRIPT_DIR/bin
-    isAndroid && echo -e " \033[2mAndroid detected, installing to termux bin folder\033[0m"
+    isAndroid && echo -e " \033[2mAndroid detected, installing to Termux bin folder\033[0m"
+    DEST="/usr/bin"
     for FILE in $(rg --files --hidden); do
-        isProtected "/usr/bin/$FILE" && echo -e " \033[31m$FILE is protected\033[0m" && continue
-        isNoneI3 "$FILE" && echo -e " \033[33m$FILE is i3 specific, skipping\033[0m" && continue
+        isProtected "$DEST/$FILE" && echo -e " \033[31m$DEST/$FILE is protected\033[0m" && continue
+        isNoneI3 "$DEST/$FILE" && echo -e " \033[33m$DEST/$FILE is i3 specific, skipping\033[0m" && continue
         
         if isAndroid; then
             echo -e " \033[2mCopying $FILE\033[0m"
@@ -103,7 +105,7 @@ if [ -d $SCRIPT_DIR/bin ]; then
             continue
         fi
 
-        echo -e " \033[2mCopying $FILE\033[0m"
+        echo -e " \033[2mCopying $FILE to $DEST\033[0m"
         sudo cp -f $FILE /usr/bin/$FILE
     done
 fi
@@ -117,14 +119,14 @@ if [ -d $SCRIPT_DIR/etc ]; then
                  etc/pacman.conf
                  etc/X11/xorg.conf.d/00-keyboard.conf)
 
+    DEST="etc"
     cd $SCRIPT_DIR
     for FILE in "${filesToMove[@]}"; do
-        filename=$(basename "$FILE")
-        isProtected "usr/$FILE" && echo -e " \033[31m$FILE is protected\033[0m" && continue
-        isNoneI3 "$FILE" && echo -e " \033[33m$FILE is i3 specific, skipping\033[0m" && continue
-        isAndroid && echo -e " \033[33m$FILE is not for Android, skipping\033[0m" && continue
-        
-        echo -e " \033[2mCopying $filename\033[0m"
+        fileFolder=$(dirname "$FILE")
+        isProtected "/$DEST/$FILE" && echo -e " \033[31m$DEST/$FILE is protected\033[0m" && continue
+        isNoneI3 "/$DEST/$FILE" && echo -e " \033[33m$DEST/$FILE is i3 specific, skipping\033[0m" && continue
+        isAndroid && echo -e " \033[33m$DEST/$FILE is not for Android, skipping\033[0m" && continue
+        echo -e " \033[2mCopying $DEST/$FILE to /$fileFolder\033[0m"
         sudo cp -f "$SCRIPT_DIR/$FILE" "/$FILE"
     done
 fi
@@ -140,15 +142,16 @@ fi
 # Install /usr files
 if [ -d $SCRIPT_DIR/usr ]; then
     echo -e "\033[1mSetting usr files\033[0m"
-    cd $SCRIPT_DIR/usr
+    DEST="usr"
+    cd $SCRIPT_DIR/$DEST
     for FILE in $(rg --files --hidden); do
-        isProtected "$FILE" && echo -e " \033[31m$FILE is protected\033[0m" && continue
-        isNoneI3 "$FILE" && echo -e " \033[33m$FILE is i3 specific, skipping\033[0m" && continue
-        isAndroid && echo -e " \033[33m$FILE is not for Android, skipping\033[0m" && continue
+        isProtected "/$DEST/$FILE" && echo -e " \033[31m$DEST/$FILE is protected\033[0m" && continue
+        isNoneI3 "/$DEST/$FILE" && echo -e " \033[33m$DEST/$FILE is i3 specific, skipping\033[0m" && continue
+        isAndroid && echo -e " \033[33m$DEST/$FILE is not for Android, skipping\033[0m" && continue
 
         echo -e " \033[2mCopying $FILE\033[0m"
-        [ ! -d $(dirname "/usr/$FILE") ] && sudo mkdir -p $(dirname "/usr/$FILE")
-        sudo cp -rf $FILE "/usr/$FILE"
+        [ ! -d $(dirname "/$DEST/$FILE") ] && sudo mkdir -p $(dirname "/$DEST/$FILE")
+        sudo cp -rf $FILE "/$DEST/$FILE"
     done
 fi
 
@@ -169,12 +172,12 @@ if [ ! -d $SCRIPT_DIR/../secure ]; then
     git clone git@github.com:AndreasBrostrom/secure.git
 fi
 if [ -d $SCRIPT_DIR/../secure/ssh ]; then
-    echo -e "\033[1mHome secret from secure\033[0m"
+    echo -e "\033[1mHome secrets from secure\033[0m"
     cd $SCRIPT_DIR/../secure/ssh
     [ ! -d "$HOME/.ssh" ] && mkdir -p $HOME/.ssh
     EXISTING=($(ls $HOME/.ssh))
     for FILE in $(rg --files --hidden); do
-        echo -e " \033[2mCopying $FILE\033[0m"
+        echo -e " \033[2mCopying $FILE to $HOME/.ssh/$FILE\033[0m"
         cp -f $FILE $HOME/.ssh/$FILE
     done
 fi
