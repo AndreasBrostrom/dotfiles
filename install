@@ -100,13 +100,13 @@ if [ -d $SCRIPT_DIR/bin ]; then
         isNoneI3 "$DEST/$FILE" && echo -e " \033[33m$DEST/$FILE is i3 specific, skipping\033[0m" && continue
         
         if isAndroid; then
-            echo -e " \033[2mCopying $FILE\033[0m"
+            echo -e " \033[2mCopying $FILE to ~/../usr/bin\033[0m"
             cp -f $FILE /data/data/com.termux/files/usr/bin/$FILE
             continue
         fi
 
         echo -e " \033[2mCopying $FILE to $DEST\033[0m"
-        sudo cp -f $FILE /usr/bin/$FILE
+        sudo cp -f $FILE $DEST/$FILE
     done
 fi
 
@@ -142,16 +142,16 @@ fi
 # Install /usr files
 if [ -d $SCRIPT_DIR/usr ]; then
     echo -e "\033[1mSetting usr files\033[0m"
-    DEST="usr"
+    DEST="/usr"
     cd $SCRIPT_DIR/$DEST
     for FILE in $(rg --files --hidden); do
-        isProtected "/$DEST/$FILE" && echo -e " \033[31m$DEST/$FILE is protected\033[0m" && continue
-        isNoneI3 "/$DEST/$FILE" && echo -e " \033[33m$DEST/$FILE is i3 specific, skipping\033[0m" && continue
+        isProtected "$DEST/$FILE" && echo -e " \033[31m$DEST/$FILE is protected\033[0m" && continue
+        isNoneI3 "$DEST/$FILE" && echo -e " \033[33m$DEST/$FILE is i3 specific, skipping\033[0m" && continue
         isAndroid && echo -e " \033[33m$DEST/$FILE is not for Android, skipping\033[0m" && continue
 
-        echo -e " \033[2mCopying $FILE\033[0m"
-        [ ! -d $(dirname "/$DEST/$FILE") ] && sudo mkdir -p $(dirname "/$DEST/$FILE")
-        sudo cp -rf $FILE "/$DEST/$FILE"
+        echo -e " \033[2mCopying $FILE to $DEST\033[0m"
+        [ ! -d $(dirname "$DEST/$FILE") ] && sudo mkdir -p $(dirname "$DEST/$FILE")
+        sudo cp -rf $FILE "$DEST/$FILE"
     done
 fi
 
