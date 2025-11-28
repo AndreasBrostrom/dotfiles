@@ -55,7 +55,8 @@ function upgrade
             if ! test (count $orphan) -eq 0
                 echo -e '\n\033[1mOrphan package dependencies:\033[0m'
                 for i in $orphan; echo " $i"; end
-                echo -e '\033[2mManually run: paru -Rc $(paru -Qtdq)\033[0m'
+                echo -e '\033[2mTo remove them:           paru -Rc $(paru -Qtdq)\033[0m'
+                echo -e '\033[2mTo set them as explicit:  paru -D --asexplicit PKG\033[0m'
             end
             _fn_upgrade_dotfiles
             exist notify-send && notify-send 'paru' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
@@ -76,7 +77,8 @@ function upgrade
             if ! test (count $orphan) -eq 0
                 echo -e '\n\033[1mOrphan package dependencies:\033[0m'
                 for i in $orphan; echo " $i"; end
-                echo -e '\033[2mManually run: yay -Rc $(yay -Qtdq)\033[0m'
+                echo -e '\033[2mTo remove them:           yay -Rc $(yay -Qtdq)\033[0m'
+                echo -e '\033[2mTo set them as explicit:  yay -D --asexplicit PKG\033[0m'
             end
             _fn_upgrade_dotfiles
             exist notify-send && notify-send 'yay' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
@@ -95,7 +97,8 @@ function upgrade
         if ! test (count $orphan) -eq 0
             echo -e '\n\033[1mOrphan package dependencies:\033[0m'
             for i in $orphan; echo " $i"; end
-            echo -e '\033[2mManually run: sudo pacman -Rc $(pacman -Qtdq)\033[0m'
+            echo -e '\033[2mTo remove them:           sudo pacman -Rc $(pacman -Qtdq)\033[0m'
+            echo -e '\033[2mTo set them as explicit:  sudo pacman -D --asexplicit PKG\033[0m'
         end
         _fn_upgrade_dotfiles
         exist notify-send && notify-send 'pacman' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
@@ -107,17 +110,18 @@ function upgrade
 
     # Debian
     if exist apt
-        # termux pkg (apt wraper)
+        # termux pkg (apt wrapper)
         if exist pkg
             echo -e '\033[1;32mpkg\033[0m'
             pkg upgrade -y
             pkg autoclean
             _fn_upgrade_dotfiles
-            exist termux-notification && termux-notification -i "tuUpdatePKG" -t "Termux PKG" -c "System upgrade is complet." --led-color AAFF00 >/dev/null 2>/dev/null
+            exist termux-notification && termux-notification -i "tuUpdatePKG" -t "Termux PKG" -c "System upgrade is completed." --led-color AAFF00 >/dev/null 2>/dev/null
             echo -e '\033[1mFull upgrade completed\033[0m'
             _fn_upgrade_deconstructor
             return
         end
+        
 
         # apt (default)
         sudo -v
@@ -128,7 +132,7 @@ function upgrade
         _fn_upgrade_flatpak
         _fn_upgrade_snap
         _fn_upgrade_dotfiles
-        exist notify-send && notify-send 'apt' '<i>System upgrade is complet.</i>' --urgency=normal >/dev/null 2>/dev/null
+        exist notify-send && notify-send 'apt' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
         echo -e "\033[1mAll updates are completed.\033[0m"
         _fn_upgrade_deconstructor
         return
