@@ -14,8 +14,6 @@ _file="dotfiles"
 _path="$HOME/.cache/i3status_monitor"
 
 while true; do 
-    sleep 10
-
     [ ! -d "$_path" ] && mkdir -p $_path
     if [[ -d ~/Repositories/dotfiles ]]; then
         if [[ ! $(git -C ~/Repositories/dotfiles status | grep nothin) || $(git -C ~/Repositories/dotfiles status | grep Untracked) ]]; then
@@ -48,4 +46,6 @@ while true; do
 
     echo "No Changed detected"
     echo "" > $_path/$_file
+
+    sleep 10
 done

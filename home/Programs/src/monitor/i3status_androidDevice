@@ -13,8 +13,6 @@ _file="phone"
 _path="$HOME/.cache/i3status_monitor"
 
 while true; do 
-    sleep 10
-
     [ ! -d "$_path" ] && mkdir -p $_path
 
     if [[ $(pgrep adb) ]]; then
@@ -31,4 +29,5 @@ while true; do
 
     echo "No device connected"
     echo "" > $_path/$_file
+    sleep 10
 done
