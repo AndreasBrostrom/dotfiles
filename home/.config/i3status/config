@@ -112,5 +112,6 @@ read_file phone {
 
 read_file imperialStandardCalendarDate {
         path = "/home/andre/.cache/i3status_monitor/isc"
-        format = "%content"
+        format = "1%content"
+        color_good = "#ffffff"
 }

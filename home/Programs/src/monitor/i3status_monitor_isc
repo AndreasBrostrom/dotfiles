@@ -11,10 +11,11 @@ _file="isc"
 _path="$HOME/.cache/i3status_monitor"
 
 while true; do 
-    sleep 25
 
     [ ! -d "$_path" ] && mkdir -p $_path
 
     echo "Updated date"
     date2isc > $_path/$_file
+
+    sleep 300
 done
