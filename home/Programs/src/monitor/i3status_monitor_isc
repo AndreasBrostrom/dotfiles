@@ -1,0 +1,20 @@
+#!/bin/bash
+# .config/i3status/config
+#   read_file todo {
+#       path = "/home/andre/.cache/i3status_monitor/isc"
+#       format = "%content"
+#       color_good = "#586E75"
+#   }
+
+
+_file="isc"
+_path="$HOME/.cache/i3status_monitor"
+
+while true; do 
+    sleep 25
+
+    [ ! -d "$_path" ] && mkdir -p $_path
+
+    echo "Updated date"
+    date2isc > $_path/$_file
+done

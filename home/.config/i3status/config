@@ -21,6 +21,7 @@ order += "ethernet _first_"
 # order += "load"
 order += "cpu_usage"
 order += "memory"
+order += "read_file imperialStandardCalendarDate"
 order += "tztime local"
 
 cpu_usage {
@@ -107,4 +108,9 @@ read_file phone {
         path = "/home/andre/.cache/i3status_monitor/phone"
         format = "%content"
         format_bad = ""
+}
+
+read_file imperialStandardCalendarDate {
+        path = "/home/andre/.cache/i3status_monitor/isc"
+        format = "%content"
 }
