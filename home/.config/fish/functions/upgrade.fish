@@ -51,6 +51,7 @@ function upgrade
             paru -Syyu --sudoloop --noconfirm --color=always
             _fn_upgrade_flatpak
             _fn_upgrade_snap
+            _fn_upgrade_dotfiles
             set orphan (paru -Qtdq)
             if ! test (count $orphan) -eq 0
                 echo -e '\n\033[1mOrphan package dependencies:\033[0m'
@@ -58,7 +59,6 @@ function upgrade
                 echo -e '\033[2mTo remove them:           paru -Rc $(paru -Qtdq)\033[0m'
                 echo -e '\033[2mTo set them as explicit:  paru -D --asexplicit PKG\033[0m'
             end
-            _fn_upgrade_dotfiles
             exist notify-send && notify-send 'paru' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
             echo -e '\033[1mFull upgrade completed\033[0m'
             sudo --reset-timestamp
@@ -73,6 +73,7 @@ function upgrade
             yay -Syyu --sudoloop --noconfirm --color=always
             exist flatpak && _fn_upgrade_flatpak
             exist snap && _fn_upgrade_snap
+            _fn_upgrade_dotfiles
             set orphan (yay -Qtdq)
             if ! test (count $orphan) -eq 0
                 echo -e '\n\033[1mOrphan package dependencies:\033[0m'
@@ -80,7 +81,6 @@ function upgrade
                 echo -e '\033[2mTo remove them:           yay -Rc $(yay -Qtdq)\033[0m'
                 echo -e '\033[2mTo set them as explicit:  yay -D --asexplicit PKG\033[0m'
             end
-            _fn_upgrade_dotfiles
             exist notify-send && notify-send 'yay' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
             echo -e '\033[1mFull upgrade completed\033[0m'
             sudo --reset-timestamp
@@ -93,6 +93,7 @@ function upgrade
         sudo pacman -Syyu --noconfirm --color=always
         _fn_upgrade_flatpak
         _fn_upgrade_snap
+        _fn_upgrade_dotfiles
         set orphan (pacman -Qtdq)
         if ! test (count $orphan) -eq 0
             echo -e '\n\033[1mOrphan package dependencies:\033[0m'
@@ -100,7 +101,6 @@ function upgrade
             echo -e '\033[2mTo remove them:           sudo pacman -Rc $(pacman -Qtdq)\033[0m'
             echo -e '\033[2mTo set them as explicit:  sudo pacman -D --asexplicit PKG\033[0m'
         end
-        _fn_upgrade_dotfiles
         exist notify-send && notify-send 'pacman' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
         echo -e '\033[1mFull upgrade completed\033[0m'
         sudo --reset-timestamp
@@ -121,7 +121,6 @@ function upgrade
             _fn_upgrade_deconstructor
             return
         end
-        
 
         # apt (default)
         sudo -v
