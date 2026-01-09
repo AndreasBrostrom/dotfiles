@@ -3,10 +3,12 @@
 STEAM_DIR="$HOME/.steam/steam/steamapps"
 OUTPUT=()
 SHOW_PATHS=0
+SHOW_DISK=0
 
 _fn_help() {
     echo "Usage: $(basename $0) [OPTIONS]"
     echo "  -p, --path     Show game and workshop paths"
+    echo "  -d, --disk     Show disk space usage in GB"
     echo "  -h, --help     Show this help message"
     exit 0
 }
@@ -16,6 +18,10 @@ while [[ $# -gt 0 ]]; do
     case "$1" in
         -p|--path)
             SHOW_PATHS=1
+            shift
+            ;;
+        -d|--disk)
+            SHOW_DISK=1
             shift
             ;;
         -h|--help)
@@ -39,6 +45,7 @@ while IFS= read -r file; do
     appid=$(grep -m1 '"appid"' "$file" | sed -E 's/.*"appid"[[:space:]]*"([0-9]+)".*/\1/')
     name=$(grep -m1 '"name"' "$file" | sed -E 's/.*"name"[[:space:]]*"([^"]+)".*/\1/')
     appDir=$(grep -m1 '"installdir"' "$file" | sed -E 's/.*"installdir"[[:space:]]*"([^"]+)".*/\1/')
+    sizeOnDisk=$(grep -m1 '"SizeOnDisk"' "$file" | sed -E 's/.*"SizeOnDisk"[[:space:]]*"([0-9]+)".*/\1/')
 
     appPath="$STEAM_DIR/common/$appDir"
     workshopPath="$STEAM_DIR/workshop/content/$appid"
@@ -52,6 +59,12 @@ while IFS= read -r file; do
     # Prepare optional fields
     workshopField=""
     protonField=""
+    diskField=""
+
+    if [[ $SHOW_DISK -eq 1 && -n "$sizeOnDisk" ]]; then
+        diskGB=$(echo "scale=2; $sizeOnDisk / 1073741824" | bc)
+        diskField="|||  $(printf '%-18s' "Disk Usage:")${diskGB} GB"
+    fi
 
     if [[ -d "$workshopPath" ]]; then
         workshopLink=$(echo -e "\033]8;;file:$workshopPath\033\\$workshopPath\033]8;;\033\\")
@@ -64,9 +77,9 @@ while IFS= read -r file; do
     fi
 
     if [[ $SHOW_PATHS -eq 1 ]]; then
-        OUTPUT+=("AppID: $(printf '%-12s' "$appid") $(printf '%-42s' "$appName")|||  $(printf '%-18s' "Path:")$appPathLink$protonField$workshopField")
+        OUTPUT+=("AppID: $(printf '%-12s' "$appid") $(printf '%-42s' "$appName")|||  $(printf '%-18s' "Path:")$appPathLink$diskField$protonField$workshopField")
     else
-        OUTPUT+=("AppID: $(printf '%-12s' "$appid") $(printf '%-42s' "$appName")")
+        OUTPUT+=("AppID: $(printf '%-12s' "$appid") $(printf '%-42s' "$appName")$diskField")
     fi
 
 done < <(find "$STEAM_DIR" -type f -name 'appmanifest_*.acf')
