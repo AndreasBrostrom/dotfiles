@@ -17,7 +17,7 @@ if [[ ! -f "$_configFile" ]]; then
 # Configuration file for sitrep
 # Parameters to pass to install scripts
 
-# Example: install_params = ["--no-i3", "--minimal"]
+# Example: install_params = ["--none-i3", "--android", "--no-sudo"]
 install_params = []
 EOF
 fi
