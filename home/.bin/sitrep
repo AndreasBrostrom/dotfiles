@@ -154,10 +154,8 @@ done
 # if install flag is set, run install scripts for dotfiles repo.
 if [[ "$_arg_install" == "true" ]]; then
     if [[ -f "$_repoDir/dotfiles/install" ]]; then
-        echo -e "\e[2mRunning install script for dotfiles with params: ${_install_params[*]}\e[0m"
         bash "$_repoDir/dotfiles/install" "${_install_params[@]}"
     fi
-    exit 1
 fi
 
 # Print sitrep
