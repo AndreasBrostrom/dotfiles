@@ -1,11 +1,53 @@
 #!/bin/bash
 _repoDir="$HOME/Repositories"
+_configFile="$HOME/.config/sitrep.conf"
 
 _status=()
 
 _arg_update="false"
 _arg_commit="false"
+_arg_install="false"
 _error="false"
+_install_params=()
+
+# Create config file if it doesn't exist
+if [[ ! -f "$_configFile" ]]; then
+    mkdir -p "$(dirname "$_configFile")"
+    cat > "$_configFile" << 'EOF'
+# Configuration file for sitrep
+# Parameters to pass to install scripts
+
+# Example: install_params = ["--no-i3", "--minimal"]
+install_params = []
+EOF
+fi
+
+# Read config file
+if [[ -f "$_configFile" ]]; then
+    # Parse install_params from config
+    _params_line=$(grep "^install_params" "$_configFile" | sed 's/install_params[[:space:]]*=[[:space:]]*//')
+    if [[ -n "$_params_line" ]]; then
+        # Remove brackets and quotes, split by comma
+        _params_line=$(echo "$_params_line" | sed 's/^\[\(.*\)\]$/\1/' | sed 's/"//g' | sed "s/'//g")
+        if [[ -n "$_params_line" ]]; then
+            IFS=',' read -ra _install_params <<< "$_params_line"
+            # Trim whitespace from each parameter
+            for i in "${!_install_params[@]}"; do
+                _install_params[$i]=$(echo "${_install_params[$i]}" | xargs)
+            done
+        fi
+    fi
+fi
+
+function showHelp() {
+    echo "Usage: $(basename "$0") [OPTIONS]"
+    echo ""
+    echo "Options:"
+    echo "  --upgrade, -u, --pull, -p    Update repositories if no changes are found"
+    echo "  --commit, -c, --push, -pu    Commit and push changes to repositories"
+    echo "  --install, -i                Run install script for dotfiles"
+    echo "  -h, --help                   Show this help message"
+}
 
 # Handle Arguments
 while [[ $# -gt 0 ]]; do
@@ -16,14 +58,18 @@ while [[ $# -gt 0 ]]; do
         --commit|-c|--push|-pu)
             _arg_commit="true"
             ;;
-        --help)
-            echo "Usage: $0 [OPTIONS]"
-            echo ""
-            echo "Options:"
-            echo "  --upgrade, -u, --pull, -p    Update repositories if no changes are found"
-            echo "  --commit, -c, --push, -pu    Commit and push changes to repositories"
-            echo "  -h, --help                   Show this help message"
+        --install|-i)
+            _arg_install="true"
+            ;;
+        --help|-h)
+            showHelp
             exit 0
+            ;;
+        *)
+            echo -e "\e[31mError: Unknown argument '$1'\e[0m"
+            echo ""
+            showHelp
+            exit 1
             ;;
     esac
     shift
@@ -104,6 +150,15 @@ for _path in "${_dotfiles[@]}"; do
         _status+=("$_gitChanges")
     fi
 done
+
+# if install flag is set, run install scripts for dotfiles repo.
+if [[ "$_arg_install" == "true" ]]; then
+    if [[ -f "$_repoDir/dotfiles/install" ]]; then
+        echo -e "\e[2mRunning install script for dotfiles with params: ${_install_params[*]}\e[0m"
+        bash "$_repoDir/dotfiles/install" "${_install_params[@]}"
+    fi
+    exit 1
+fi
 
 # Print sitrep
 if [ ${#_status[@]} -gt 0 ]; then
