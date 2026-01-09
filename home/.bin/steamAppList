@@ -62,7 +62,7 @@ while IFS= read -r file; do
     diskField=""
 
     if [[ $SHOW_DISK -eq 1 && -n "$sizeOnDisk" ]]; then
-        diskGB=$(echo "scale=2; $sizeOnDisk / 1073741824" | bc)
+        diskGB=$(awk "BEGIN {printf \"%.2f\", $sizeOnDisk / 1073741824}")
         diskField="|||  $(printf '%-18s' "Disk Usage:")${diskGB} GB"
     fi
 
