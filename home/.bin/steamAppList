@@ -77,7 +77,7 @@ while IFS= read -r file; do
     fi
 
     if [[ $SHOW_PATHS -eq 1 ]]; then
-        OUTPUT+=("AppID: $(printf '%-12s' "$appid") $(printf '%-42s' "$appName")|||  $(printf '%-18s' "Path:")$appPathLink$diskField$protonField$workshopField")
+        OUTPUT+=("AppID: $(printf '%-12s' "$appid") $(printf '%-42s' "$appName")|||  $(printf '%-18s' "Path:")$diskField$appPathLink$protonField$workshopField")
     else
         OUTPUT+=("AppID: $(printf '%-12s' "$appid") $(printf '%-42s' "$appName")$diskField")
     fi
