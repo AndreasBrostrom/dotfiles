@@ -36,7 +36,7 @@ function upgrade
     function _fn_upgrade_dotfiles
         if exist sitrep
             echo -e '\033[1;32msitrep\033[0m'
-            sitrep -u
+            sitrep -u -i
         end
     end
 
