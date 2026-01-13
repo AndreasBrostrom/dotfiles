@@ -7,7 +7,10 @@ _status=()
 _arg_update="false"
 _arg_commit="false"
 _arg_install="false"
+_arg_install_force="false"
+
 _error="false"
+_has_changes="false"
 _install_params=()
 
 # Create config file if it doesn't exist
@@ -46,6 +49,7 @@ function showHelp() {
     echo "  --upgrade, -u, --pull, -p    Update repositories if no changes are found"
     echo "  --commit, -c, --push, -pu    Commit and push changes to repositories"
     echo "  --install, -i                Run install script for dotfiles"
+    echo "  --force-install, -f, -fi     Force run install script for dotfiles"
     echo "  -h, --help                   Show this help message"
 }
 
@@ -60,6 +64,9 @@ while [[ $# -gt 0 ]]; do
             ;;
         --install|-i)
             _arg_install="true"
+            ;;
+        --force-install|-f|-fi)
+            _arg_install_force="true"
             ;;
         --help|-h)
             showHelp
@@ -111,6 +118,7 @@ for _path in "${_dotfiles[@]}"; do
 
     # Check we have any changes
     if [[ ! $(git -C $_repoDir/$_path status | grep nothin) || $(git -C $_repoDir/$_path status | grep Untracked) ]]; then
+        _has_changes="true"
 
         # if we have changes and want to commit them run the commit else just show the status
         if [[ "$_arg_commit" == "true" ]]; then
@@ -152,7 +160,7 @@ for _path in "${_dotfiles[@]}"; do
 done
 
 # if install flag is set, run install scripts for dotfiles repo.
-if [[ "$_arg_install" == "true" ]]; then
+if [[ "$_arg_install_force" == "true" ]] || ([[ "$_arg_install" == "true" ]] && [[ "$_has_changes" == "true" ]]); then
     if [[ -f "$_repoDir/dotfiles/install" ]]; then
         bash "$_repoDir/dotfiles/install" "${_install_params[@]}"
     fi
