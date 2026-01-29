@@ -3,4 +3,3 @@
 SETUVAR __fish_initialized:4300
 SETUVAR fish_features:no\x2dkeyboard\x2dprotocols
 SETUVAR fish_greeting:
-SETUVAR fish_key_bindings:fish_default_key_bindings
