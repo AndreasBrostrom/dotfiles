@@ -27,12 +27,14 @@ function upgrade
             sudo flatpak update -y
         end
     end
+    
     function _fn_upgrade_snap
         if exist snap
             echo -e "\033[1;32msnap\033[0m"
             sudo snap refresh
         end
     end
+
     function _fn_upgrade_dotfiles
         if exist sitrep
             echo -e '\033[1;32msitrep\033[0m'
@@ -60,7 +62,7 @@ function upgrade
                 echo -e '\033[2mTo set them as explicit:  paru -D --asexplicit PKG\033[0m'
             end
             exist notify-send && notify-send 'paru' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
-            echo -e '\033[1mFull upgrade completed\033[0m'
+            echo -e '\n\033[1mFull upgrade completed\033[0m'
             sudo --reset-timestamp
             _fn_upgrade_deconstructor
             return
@@ -82,7 +84,7 @@ function upgrade
                 echo -e '\033[2mTo set them as explicit:  yay -D --asexplicit PKG\033[0m'
             end
             exist notify-send && notify-send 'yay' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
-            echo -e '\033[1mFull upgrade completed\033[0m'
+            echo -e '\n\033[1mFull upgrade completed\033[0m'
             sudo --reset-timestamp
             _fn_upgrade_deconstructor
             return
@@ -102,7 +104,7 @@ function upgrade
             echo -e '\033[2mTo set them as explicit:  sudo pacman -D --asexplicit PKG\033[0m'
         end
         exist notify-send && notify-send 'pacman' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
-        echo -e '\033[1mFull upgrade completed\033[0m'
+        echo -e '\n\033[1mFull upgrade completed\033[0m'
         sudo --reset-timestamp
         _fn_upgrade_deconstructor
         return
@@ -117,7 +119,7 @@ function upgrade
             pkg autoclean
             _fn_upgrade_dotfiles
             exist termux-notification && termux-notification -i "tuUpdatePKG" -t "Termux PKG" -c "System upgrade is completed." --led-color AAFF00 >/dev/null 2>/dev/null
-            echo -e '\033[1mFull upgrade completed\033[0m'
+            echo -e '\n\033[1mFull upgrade completed\033[0m'
             _fn_upgrade_deconstructor
             return
         end
@@ -132,7 +134,7 @@ function upgrade
         _fn_upgrade_snap
         _fn_upgrade_dotfiles
         exist notify-send && notify-send 'apt' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
-        echo -e "\033[1mAll updates are completed.\033[0m"
+        echo -e "\n\033[1mAll updates are completed.\033[0m"
         _fn_upgrade_deconstructor
         return
     end
@@ -148,7 +150,7 @@ function upgrade
         _fn_upgrade_snap
         _fn_upgrade_dotfiles
         exist notify-send && notify-send 'dfn' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
-        echo -e "\033[1mAll updates are completed.\033[0m"
+        echo -e "\n\033[1mAll updates are completed.\033[0m"
         _fn_upgrade_deconstructor
         return
     end
