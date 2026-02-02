@@ -4,11 +4,25 @@ function upgrade
         for arg in $argv
             switch $arg
                 case "--help"
-                    echo -e "\033[1mUsage: upgrade\033[0m [--help]"
-                    echo -e "This script attempts to fully upgrade your system using the OS-specific package manager."
-                    echo -e "If snap, flatpak or sitrep exist this will also upgrade."
-                    echo -e "\n\033[1mOptions:\033[0m"
-                    echo -e "  \033[1;32m--help\033[0m         Show this help message and exit"
+                    echo -e "\033[1mUsage:\033[0m upgrade [--help]"
+                    echo -e ""
+                    echo -e "\033[1mDescription:\033[0m"
+                    echo -e "  Fully upgrades your system using the detected package manager."
+                    echo -e ""
+                    echo -e "\033[1mSupported Package Managers:\033[0m"
+                    echo -e "  \033[1;34mArch Linux:\033[0m    paru, yay, pacman"
+                    echo -e "  \033[1;34mDebian/Ubuntu:\033[0m apt, pkg (Termux)"
+                    echo -e "  \033[1;34mFedora:\033[0m        dnf"
+                    echo -e ""
+                    echo -e "\033[1mAdditional Features:\033[0m"
+                    echo -e "  • Automatically upgrades Flatpak packages if installed"
+                    echo -e "  • Automatically upgrades Snap packages if installed"
+                    echo -e "  • Runs sitrep (dotfiles manager) if installed"
+                    echo -e "  • Lists orphaned packages (Arch-based systems)"
+                    echo -e "  • Sends desktop notifications on completion"
+                    echo -e ""
+                    echo -e "\033[1mOptions:\033[0m"
+                    echo -e "  \033[1;32m--help\033[0m    Show this help message and exit"
                     return
             end
         end
