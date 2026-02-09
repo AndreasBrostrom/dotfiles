@@ -12,7 +12,7 @@ git-squash - Squash commits to merge-base with target branch
 
 SYNOPSIS
     git squash [<base-branch>]
-    git squash -h | --help
+    git squash -h | --help | -help
 
 DESCRIPTION
     Squashes all commits on the current branch down to the merge-base
