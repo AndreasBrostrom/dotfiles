@@ -41,9 +41,16 @@ EOF
 }
 
 # Check for help flag
-if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+if [[ "$1" == "-h" || "$1" == "--help" || "$1" == "-help" ]]; then
     show_help
     exit 0
+fi
+
+# Check for invalid options
+if [[ "$1" == -* ]]; then
+    echo "error: unknown option '$1'"
+    echo "Try 'git squash -h' for more information."
+    exit 1
 fi
 
 # Default to 'main' if no argument provided
