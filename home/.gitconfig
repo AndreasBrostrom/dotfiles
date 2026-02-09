@@ -11,7 +11,7 @@
 	ccl = rev-parse --verify HEAD
 	ccs = rev-parse --short HEAD
 	checkout-pr = "!bash github_checkout_pr"
-	squash = "!bash git_squash"
+	squash = "!~/Programs/src/git/squash"
 [init]
 	defaultBranch = main
 [checkout]
