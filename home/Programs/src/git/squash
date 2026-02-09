@@ -1,0 +1,52 @@
+#!/bin/bash
+#
+# This script is just a wrapper
+# Best usage is to add the script to your git aliases
+# > [alias]
+# >	squash = "!~/Programs/src/git/squash"
+
+# Show help message
+show_help() {
+    cat << EOF
+git-squash - Squash commits to merge-base with target branch
+
+SYNOPSIS
+    git squash [<base-branch>]
+    git squash -h | --help
+
+DESCRIPTION
+    Squashes all commits on the current branch down to the merge-base
+    with the specified branch. This resets the current branch to the
+    point where it diverged from the base branch, keeping all changes
+    staged for a new commit.
+
+OPTIONS
+    -h, --help
+        Show this help message and exit
+
+ARGUMENTS
+    <base-branch>
+        The branch to squash to. Defaults to 'main' if not specified.
+
+EXAMPLES
+    git squash
+        Squash all commits to the merge-base with main
+
+    git squash origin/main
+        Squash all commits to the merge-base with origin/main
+
+    git squash my-Branch-Name
+        Squash all commits to the merge-base with my-Branch-Name
+EOF
+}
+
+# Check for help flag
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help
+    exit 0
+fi
+
+# Default to 'main' if no argument provided
+BASE_BRANCH="${1:-main}"
+
+git reset $(git merge-base "$BASE_BRANCH" $(git branch --show-current))
