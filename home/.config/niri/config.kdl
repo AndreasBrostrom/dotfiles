@@ -106,6 +106,28 @@ input {
     position x=1280 y=0
 }
 
+// Office monitor setup: 2 landscape + 1 portrait
+output "DP-1" {
+    mode "1920x1080@60.000"
+    scale 1
+    transform "normal"
+    position x=0 y=0
+}
+
+output "HDMI-A-1" {
+    mode "1920x1080@60.000"
+    scale 1
+    transform "normal"
+    position x=1920 y=0
+}
+
+output "DVI-D-1" {
+    mode "1920x1080@60.000"
+    scale 1
+    transform "90"
+    position x=3840 y=-450  // Adjusted for portrait alignment
+}
+
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Layout
@@ -366,6 +388,7 @@ binds {
     Mod+Return { spawn "terminator"; }
     Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
+    Mod+L { spawn "swaylock"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
@@ -405,10 +428,10 @@ binds {
     Mod+Down  { focus-window-down; }
     Mod+Up    { focus-window-up; }
     Mod+Right { focus-column-right; }
-    Mod+H     { focus-column-left; }
-    Mod+J     { focus-window-down; }
-    Mod+K     { focus-window-up; }
-    Mod+L     { focus-column-right; }
+    // Mod+H     { focus-column-left; }
+    // Mod+J     { focus-window-down; }
+    // Mod+K     { focus-window-up; }
+    // Mod+L     { focus-column-right; }
 
     Mod+Ctrl+Left  { move-column-left; }
     Mod+Ctrl+Down  { move-window-down; }
