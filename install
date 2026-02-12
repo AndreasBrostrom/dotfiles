@@ -7,15 +7,20 @@ echo -e "\033[34;1mInstalling $(basename $SCRIPT_DIR)...\033[0m"
 ORIGINAL_ARGS=("$@")
 
 # Argument flags
-ARG_NONE_I3=0
+ARG_I3=0
+ARG_NIRI=0
 ARG_NO_SUDO=0
 ARG_ANDROID=0
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --none-i3)
-            ARG_NONE_I3=1
+        --i3)
+            ARG_I3=1
+            shift
+            ;;
+        --niri)
+            ARG_NIRI=1
             shift
             ;;
         -a|--android)
@@ -42,17 +47,26 @@ function isProtected () {
     done
     return 1
 }
-function isNoneI3() {
-    if [[ $ARG_NONE_I3 == 1 ]]; then
-        local file="$1"
-        local config="$SCRIPT_DIR/install_config"
-        [[ ! -f "$config" ]] && return 1
-        source "$config"
+function shouldSkipWM() {
+    local file="$1"
+    local config="$SCRIPT_DIR/install_config"
+    [[ ! -f "$config" ]] && return 1
+    source "$config"
+
+    # Skip i3 files if --i3 flag is not set
+    if [[ $ARG_I3 == 0 ]]; then
         for uniq in "${i3[@]}"; do
             [[ "$file" == "$uniq" ]] && return 0
         done
-        return 1
     fi
+
+    # Skip niri files if --niri flag is not set
+    if [[ $ARG_NIRI == 0 ]]; then
+        for uniq in "${niri[@]}"; do
+            [[ "$file" == "$uniq" ]] && return 0
+        done
+    fi
+
     return 1
 }
 function isAndroid() {
@@ -75,7 +89,7 @@ if [ -d $SCRIPT_DIR/home ]; then
     DEST="$HOME"
     for FILE in $(rg --files --hidden); do
         isProtected "$DEST/$FILE" && echo -e " \033[31m~/$FILE is protected\033[0m" && continue
-        isNoneI3 "$FILE" && echo -e " \033[33m~/$FILE is i3 specific, skipping\033[0m" && continue
+        shouldSkipWM "$FILE" && echo -e " \033[33m~/$FILE is WM specific, skipping\033[0m" && continue
 
         # handle SSH files
         [[ $(dirname "$HOME/$FILE") == "$HOME/.ssh" ]] &&
@@ -97,7 +111,7 @@ if [ -d $SCRIPT_DIR/bin ]; then
     DEST="/usr/bin"
     for FILE in $(rg --files --hidden); do
         isProtected "$DEST/$FILE" && echo -e " \033[31m$DEST/$FILE is protected\033[0m" && continue
-        isNoneI3 "$DEST/$FILE" && echo -e " \033[33m$DEST/$FILE is i3 specific, skipping\033[0m" && continue
+        shouldSkipWM "$DEST/$FILE" && echo -e " \033[33m$DEST/$FILE is WM specific, skipping\033[0m" && continue
         
         if isAndroid; then
             echo -e " \033[2mCopying $FILE to ~/../usr/bin\033[0m"
@@ -124,7 +138,7 @@ if [ -d $SCRIPT_DIR/etc ]; then
     for FILE in "${filesToMove[@]}"; do
         fileFolder=$(dirname "$FILE")
         isProtected "/$DEST/$FILE" && echo -e " \033[31m$DEST/$FILE is protected\033[0m" && continue
-        isNoneI3 "/$DEST/$FILE" && echo -e " \033[33m$DEST/$FILE is i3 specific, skipping\033[0m" && continue
+        shouldSkipWM "/$DEST/$FILE" && echo -e " \033[33m$DEST/$FILE is WM specific, skipping\033[0m" && continue
         isAndroid && echo -e " \033[33m$DEST/$FILE is not for Android, skipping\033[0m" && continue
         echo -e " \033[2mCopying $DEST/$FILE to /$fileFolder\033[0m"
         sudo cp -f "$SCRIPT_DIR/$FILE" "/$FILE"
@@ -146,7 +160,7 @@ if [ -d $SCRIPT_DIR/usr ]; then
     cd $SCRIPT_DIR/$DEST
     for FILE in $(rg --files --hidden); do
         isProtected "$DEST/$FILE" && echo -e " \033[31m$DEST/$FILE is protected\033[0m" && continue
-        isNoneI3 "$DEST/$FILE" && echo -e " \033[33m$DEST/$FILE is i3 specific, skipping\033[0m" && continue
+        shouldSkipWM "$DEST/$FILE" && echo -e " \033[33m$DEST/$FILE is WM specific, skipping\033[0m" && continue
         isAndroid && echo -e " \033[33m$DEST/$FILE is not for Android, skipping\033[0m" && continue
 
         echo -e " \033[2mCopying $FILE to $DEST\033[0m"
