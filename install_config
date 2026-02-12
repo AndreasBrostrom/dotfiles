@@ -17,4 +17,5 @@ niri=(
   ".config/waybar/datetime-combo.sh"
   ".config/waybar/power_menu.xml"
   ".config/fuzzel/fuzzel.ini"
+  "Programs/src/monitor/waybar_dotfilestatus"
 )

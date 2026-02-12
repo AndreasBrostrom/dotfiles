@@ -19,6 +19,8 @@ input {
             // If this section is empty, niri will fetch xkb settings
             // from org.freedesktop.locale1. You can control these using
             // localectl set-x11-keymap.
+            layout "se"
+            options "caps:escape,compose:none"
         }
 
         // Enable numlock on startup, omitting this setting disables it.
@@ -291,6 +293,9 @@ layout {
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "waybar"
+
+// Set the desktop background.
+spawn-at-startup "swaybg" "-i" "~/Pictures/Background/jonas-de-ro-practice-gothic-city.jpg" "-m" "fill"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"

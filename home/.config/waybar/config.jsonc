@@ -18,6 +18,7 @@
     "modules-right": [
         //"mpd",
         //"idle_inhibitor",
+        "custom/dotfiles",
         "pulseaudio",
         "network",
         "power-profiles-daemon",
@@ -254,5 +255,11 @@
             "suspend": "systemctl suspend",
             "hibernate": "systemctl hibernate"
         }
+    },
+    "custom/dotfiles": {
+        "format": "{}",
+        "return-type": "json",
+        "exec": "$HOME/Programs/src/monitor/waybar_dotfilestatus",
+        "tooltip": true
     }
 }
