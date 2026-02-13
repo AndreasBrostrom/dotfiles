@@ -1,7 +1,6 @@
 i3=(
-  "e-scrot"
-  "dmenu_recent"
-  "kill-lock"
+  "bin/e-scrot"
+  "bin/dmenu_recent"
   ".config/i3/config"
   ".config/i3-scrot.conf"
   ".config/morc_menu/morc_menu_v1.conf"

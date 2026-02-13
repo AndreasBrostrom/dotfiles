@@ -111,14 +111,14 @@ if [ -d $SCRIPT_DIR/home ]; then
 fi
 
 # Install /bin files
-if [ -d $SCRIPT_DIR/bin ]; then 
+if [ -d $SCRIPT_DIR/bin ]; then
     echo -e "\033[1mInstall bin scripts\033[0m"
     cd $SCRIPT_DIR/bin
     isAndroid && echo -e " \033[2mAndroid detected, installing to Termux bin folder\033[0m"
-    DEST="/usr/bin"
+    DEST="/bin"
     for FILE in $(rg --files --hidden); do
         isProtected "$DEST/$FILE" && echo -e " \033[31m$DEST/$FILE is protected\033[0m" && continue
-        shouldSkipWM "$DEST/$FILE" && echo -e " \033[33m$DEST/$FILE is WM specific, skipping\033[0m" && continue
+        shouldSkipWM "bin/$FILE" && echo -e " \033[33m$DEST/$FILE is WM specific, skipping\033[0m" && continue
         
         if isAndroid; then
             echo -e " \033[2mCopying $FILE to ~/../usr/bin\033[0m"
