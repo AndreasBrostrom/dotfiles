@@ -253,7 +253,8 @@
             "shutdown": "shutdown",
             "reboot": "reboot",
             "suspend": "systemctl suspend",
-            "hibernate": "systemctl hibernate"
+            "hibernate": "systemctl hibernate",
+            "logout": "niri msg action quit"
         }
     },
     "custom/dotfiles": {
