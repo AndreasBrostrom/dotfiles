@@ -7,7 +7,9 @@ set --export GIT_EDITOR nvim
 set --export DISPLAY :0
 
 # SSH Agent (set by gnome-keyring via systemd)
-set --export SSH_AUTH_SOCK "$XDG_RUNTIME_DIR/keyring/ssh"
+if test -z "$SSH_AUTH_SOCK"
+    set --export SSH_AUTH_SOCK "$XDG_RUNTIME_DIR/keyring/ssh"
+end
 
 # Paths
 fish_add_path -Pp $HOME/Programs/bin
