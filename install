@@ -67,6 +67,13 @@ function shouldSkipWM() {
         done
     fi
 
+    # Skip android files if --android flag is not set
+    if [[ $ARG_ANDROID == 0 ]]; then
+        for uniq in "${android[@]}"; do
+            [[ "$file" == "$uniq" || "$file" == "$uniq"/* ]] && return 0
+        done
+    fi
+
     return 1
 }
 function isAndroid() {

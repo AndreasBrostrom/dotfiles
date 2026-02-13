@@ -7,13 +7,16 @@ i3=(
   ".config/morc_menu/morc_menu_v1.conf"
   "Programs/src/monitor/i3status_androidDevice"
   "Programs/src/monitor/i3status_dotfilestatus"
+  "Programs/src/monitor/i3status_monitor_isc"
   "/usr/share/conky/conky_evul"
   "/usr/share/conky/conky_shortcuts_evul"
 )
 niri=(
-  ".config/niri/*"
-  ".config/waybar/*"
-  ".config/fuzzel/*"
-  ".config/rofi/*"
+  ".config/niri"
+  ".config/waybar"
+  ".config/fuzzel"
+  ".config/rofi"
   "Programs/src/monitor/waybar_dotfilestatus"
+)
+android=(
 )
