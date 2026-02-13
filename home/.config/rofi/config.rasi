@@ -1,0 +1,18 @@
+configuration {
+    modi: "drun,run,window";
+    show-icons: true;
+    display-drun: "Apps";
+    display-run: "Run";
+    display-window: "Windows";
+    drun-display-format: "{name}";
+    font: "monospace 12";
+
+    /* Mode switching keybindings */
+    kb-mode-next: "Shift+Right,Control+Tab";
+    kb-mode-previous: "Shift+Left,Control+ISO_Left_Tab";
+
+    /* Show mode name in prompt */
+    show-match: true;
+}
+
+@theme "Arc-Dark"
