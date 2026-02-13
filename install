@@ -56,14 +56,14 @@ function shouldSkipWM() {
     # Skip i3 files if --i3 flag is not set
     if [[ $ARG_I3 == 0 ]]; then
         for uniq in "${i3[@]}"; do
-            [[ "$file" == "$uniq" ]] && return 0
+            [[ "$file" == "$uniq" || "$file" == "$uniq"/* ]] && return 0
         done
     fi
 
     # Skip niri files if --niri flag is not set
     if [[ $ARG_NIRI == 0 ]]; then
         for uniq in "${niri[@]}"; do
-            [[ "$file" == "$uniq" ]] && return 0
+            [[ "$file" == "$uniq" || "$file" == "$uniq"/* ]] && return 0
         done
     fi
 

@@ -11,11 +11,9 @@ i3=(
   "/usr/share/conky/conky_shortcuts_evul"
 )
 niri=(
-  ".config/niri/config.kdl"
-  ".config/waybar/config.jsonc"
-  ".config/waybar/style.css"
-  ".config/waybar/datetime-combo.sh"
-  ".config/waybar/power_menu.xml"
-  ".config/fuzzel/fuzzel.ini"
+  ".config/niri/*"
+  ".config/waybar/*"
+  ".config/fuzzel/*"
+  ".config/rofi/*"
   "Programs/src/monitor/waybar_dotfilestatus"
 )
