@@ -7,8 +7,6 @@ configuration {
     drun-display-format: "{name}";
     font: "monospace 12";
 
-
-
     /* Mode switching */
     sidebar-mode: true;
     kb-mode-next: "Shift+Right,Control+Tab";
