@@ -108,27 +108,8 @@ input {
     position x=1280 y=0
 }
 
-// Office monitor setup: 2 landscape + 1 portrait
-output "DP-1" {
-    mode "1920x1080@60.000"
-    scale 1
-    transform "normal"
-    position x=0 y=0
-}
-
-output "HDMI-A-1" {
-    mode "1920x1080@60.000"
-    scale 1
-    transform "normal"
-    position x=1920 y=0
-}
-
-output "DVI-D-1" {
-    mode "1920x1080@60.000"
-    scale 1
-    transform "90"
-    position x=3840 y=-450  // Adjusted for portrait alignment
-}
+// Include location-specific monitor and background config
+include "config_office.kdl"
 
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
@@ -293,9 +274,6 @@ layout {
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "waybar"
-
-// Set the desktop background.
-spawn-at-startup "swaybg" "-i" "~/Pictures/Background/jonas-de-ro-practice-gothic-city.jpg" "-m" "fill"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
