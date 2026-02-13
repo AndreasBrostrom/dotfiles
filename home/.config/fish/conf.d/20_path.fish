@@ -1,10 +1,13 @@
-set --export GTK_THEME Adwaita:dark 
+set --export GTK_THEME Adwaita:dark
 set --export TERMINAL terminator
 set --export TERM $TERMINAL
 
 set --export EDITOR nvim
 set --export GIT_EDITOR nvim
 set --export DISPLAY :0
+
+# SSH Agent (set by gnome-keyring via systemd)
+set --export SSH_AUTH_SOCK "$XDG_RUNTIME_DIR/keyring/ssh"
 
 # Paths
 fish_add_path -Pp $HOME/Programs/bin
