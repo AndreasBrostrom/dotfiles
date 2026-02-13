@@ -2,6 +2,6 @@
 # Output both Unix timestamp and Warhammer GST as JSON
 
 UNIX=$(date +%s)
-WARHAMMER="M$(($(date +%Y) + 40000)).$(date +%j)"
+WARHAMMER="1 $(date | date2isc)"
 
 echo "{\"text\":\"$UNIX\", \"alt\":\"$WARHAMMER\", \"tooltip\":\"Click to toggle\"}"
