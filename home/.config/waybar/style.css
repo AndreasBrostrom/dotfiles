@@ -350,3 +350,21 @@ label:focus {
 #custom-dotfiles.clean {
     background-color: transparent;
 }
+
+#custom-androidDevice {
+    padding: 0 10px;
+    color: #ffffff;
+}
+
+#custom-androidDevice.connected {
+    background-color: #2ecc71;
+    color: #000000;
+}
+
+#custom-androidDevice.disconnected {
+    background-color: transparent;
+}
+
+#custom-androidDevice.no-server {
+    background-color: transparent;
+}

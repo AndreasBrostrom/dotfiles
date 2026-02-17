@@ -111,6 +111,9 @@ function hasNoSudo() {
 }
 
 echo -e "\033[34;1mInstalling $(basename $SCRIPT_DIR)...\033[0m"
+if ! hasNoSudo; then
+    sudo -v
+fi
 
 # Install /home files
 if [ -d $SCRIPT_DIR/home ]; then 

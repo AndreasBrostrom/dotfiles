@@ -226,5 +226,11 @@
         "return-type": "json",
         "exec": "$HOME/Programs/src/monitor/waybar_dotfilestatus",
         "tooltip": true
+    },
+    "custom/androidDevice": {
+        "format": "{}",
+        "return-type": "json",
+        "exec": "$HOME/Programs/src/monitor/waybar_androidDevice",
+        "tooltip": true
     }
 }
