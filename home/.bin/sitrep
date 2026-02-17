@@ -153,6 +153,7 @@ for _path in "${_dotfiles[@]}"; do
         echo -e "\e[2mPulling updates for $_path\e[0m"
         _gitPull="$(git -C "$_repoDir/$_path" pull)"
         [[ $(echo $_gitPull | grep Already) ]] && continue
+        _has_changes="true"
         _gitChanges="\e[2m$(git -C "$_repoDir/$_path" diff --name-only HEAD@{1})\e[0m"
         _status+=("\e]8;;$_repoDir/$_path\a$_path\e]8;;\a\e[0m: repository updated")
         _status+=("$_gitChanges")
