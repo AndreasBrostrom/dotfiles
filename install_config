@@ -10,13 +10,13 @@ i3=(
   "/usr/share/conky/conky_evul"
   "/usr/share/conky/conky_shortcuts_evul"
 )
+
 niri=(
   ".config/niri"
   ".config/waybar"
   ".config/fuzzel"
   ".config/rofi"
-  "Programs/src/monitor/waybar_dotfilestatus"
-  "Programs/src/monitor/waybar_androidDevice"
 )
+
 android=(
 )

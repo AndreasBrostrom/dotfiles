@@ -206,7 +206,7 @@
         "format-alt": "{alt}",
         "return-type": "json",
         "interval": 1,
-        "exec": "$HOME/.config/waybar/datetime-combo.sh"
+        "exec": "$HOME/.config/waybar/scripts/datetime-combo.sh"
     },
     "custom/power": {
         "format": "⏻",
@@ -224,13 +224,13 @@
     "custom/dotfiles": {
         "format": "{}",
         "return-type": "json",
-        "exec": "$HOME/Programs/src/monitor/waybar_dotfilestatus",
+        "exec": "$HOME/.config/waybar/scripts/dotfilestatus",
         "tooltip": true
     },
     "custom/androidDevice": {
         "format": "{}",
         "return-type": "json",
-        "exec": "$HOME/Programs/src/monitor/waybar_androidDevice",
+        "exec": "$HOME/.config/waybar/scripts/androidDevice",
         "tooltip": true
     }
 }

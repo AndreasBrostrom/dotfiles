@@ -5,6 +5,9 @@
 _symbol="✆"
 _device="3A271JEHN06791"
 
+# Start ADB server if not running
+adb start-server >/dev/null 2>&1
+
 while true; do
     if [[ $(pgrep adb) ]]; then
         # ADB server is running, check for device
