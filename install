@@ -2,7 +2,6 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 cd $SCRIPT_DIR
-echo -e "\033[34;1mInstalling $(basename $SCRIPT_DIR)...\033[0m"
 
 ORIGINAL_ARGS=("$@")
 
@@ -110,6 +109,8 @@ function hasNoSudo() {
     fi
     return 1
 }
+
+echo -e "\033[34;1mInstalling $(basename $SCRIPT_DIR)...\033[0m"
 
 # Install /home files
 if [ -d $SCRIPT_DIR/home ]; then 
