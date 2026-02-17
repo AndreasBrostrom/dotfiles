@@ -15,6 +15,27 @@ ARG_ANDROID=0
 # Parse arguments
 while [[ $# -gt 0 ]]; do
     case "$1" in
+        -h|--help)
+            echo "Usage: ./install [OPTIONS]"
+            echo ""
+            echo "Install and link private dotfiles to your home directory."
+            echo ""
+            echo "Options:"
+            echo "  -h, --help      Show this help message"
+            echo "  --i3            Install i3 window manager specific files"
+            echo "  --niri          Install niri compositor specific files"
+            echo "  -a, --android   Install for Android/Termux environment"
+            echo "  --no-sudo       Skip operations requiring sudo privileges"
+            echo ""
+            echo "Protected System:"
+            echo "  Files listed in ../.protected will not be overwritten during installation."
+            echo "  This prevents accidentally replacing customized system files."
+            echo ""
+            echo "  Example: To protect ~/.bashrc, add to ../.protected:"
+            echo "    echo \"\$HOME/.bashrc\" >> ../.protected"
+            echo ""
+            exit 0
+            ;;
         --i3)
             ARG_I3=1
             shift
@@ -33,6 +54,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         *)
             echo "Unknown option: $1"
+            echo "Use -h or --help for usage information"
             exit 1
             ;;
     esac
