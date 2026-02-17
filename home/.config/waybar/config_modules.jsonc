@@ -90,10 +90,18 @@
     },
     "cpu": {
         "format": "{usage}% ",
-        "tooltip": false
+        "tooltip": true
     },
     "memory": {
-        "format": "{}% "
+        "format": "{}% ",
+        "tooltip": true,
+        "tooltip-format": "Used: {used} / {total}\nAvailable: {avail} ({percentage}%)"
+    },
+    "disk": {
+        "interval": 30,
+        "format": "{percentage_used}% ⛁",
+        "path": "/",
+        "tooltip-format": "Used: {used} / {total}\nFree: {free} ({percentage_free}%)"
     },
     "temperature": {
         // "thermal-zone": 2,

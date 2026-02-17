@@ -19,6 +19,7 @@
         "power-profiles-daemon",
         "cpu",
         "memory",
+        "disk",
         "temperature",
         "backlight",
         //"keyboard-state",
