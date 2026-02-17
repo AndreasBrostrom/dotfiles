@@ -109,7 +109,7 @@ input {
 }
 
 // Include location-specific monitor and background config
-include "config_office.kdl"
+include "config_local.kdl"
 
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
