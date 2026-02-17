@@ -16,6 +16,7 @@ niri=(
   ".config/waybar"
   ".config/fuzzel"
   ".config/rofi"
+  
 )
 
 android=(

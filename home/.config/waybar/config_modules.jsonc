@@ -224,13 +224,13 @@
     "custom/dotfiles": {
         "format": "{}",
         "return-type": "json",
-        "exec": "$HOME/.config/waybar/scripts/dotfilestatus",
+        "exec": "$HOME/.config/waybar/scripts/dotfilestatus.sh",
         "tooltip": true
     },
     "custom/androidDevice": {
         "format": "{}",
         "return-type": "json",
-        "exec": "$HOME/.config/waybar/scripts/androidDevice",
+        "exec": "$HOME/.config/waybar/scripts/androidDevice.sh",
         "tooltip": true
     }
 }
