@@ -118,6 +118,13 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# Custom completions
+if [ -d ~/.config/bash/completions ]; then
+  for f in ~/.config/bash/completions/*.bash; do
+    [ -f "$f" ] && . "$f"
+  done
+fi
+
 if [ -z "$SSH_AGENT_PID" ]; then
   eval `ssh-agent -s` >/dev/null 2>/dev/null 
 fi

@@ -46,11 +46,11 @@ function showHelp() {
     echo "Usage: $(basename "$0") [OPTIONS]"
     echo ""
     echo "Options:"
-    echo "  --upgrade, -u, --pull, -p    Update repositories if no changes are found"
-    echo "  --commit, -c, --push, -pu    Commit and push changes to repositories"
-    echo "  --install, -i                Run install script for dotfiles"
-    echo "  --force-install, -f, -fi     Force run install script for dotfiles"
-    echo "  -h, --help                   Show this help message"
+    echo "  --upgrade, -u, --pull, -p      Update repositories if no changes are found"
+    echo "  --commit, -c, --push, -pu      Commit and push changes to repositories"
+    echo "  --install, -i                  Run install script for dotfiles"
+    echo "  --force-install, -f, -fi -if   Force run install script for dotfiles"
+    echo "  -h, --help                     Show this help message"
 }
 
 # Handle Arguments
@@ -65,7 +65,7 @@ while [[ $# -gt 0 ]]; do
         --install|-i)
             _arg_install="true"
             ;;
-        --force-install|-f|-fi)
+        --force-install|-f|-fi|-if)
             _arg_install_force="true"
             ;;
         --help|-h)
