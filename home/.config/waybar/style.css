@@ -227,9 +227,9 @@ label:focus {
 }
 
 #custom-power {
-    padding-right: 9px;
-    padding-left: 7px;
+    padding: 0px 10px;
     color: #ffffff;
+    background-color: #212121;
 }
 
 #custom-datetime {
