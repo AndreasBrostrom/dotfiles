@@ -28,6 +28,11 @@ if [ -f ~/.bash_path ]; then
   . ~/.bash_path
 fi
 
+# Theme Variables
+if [ -f ~/.config/bash/theme ]; then
+  . ~/.config/bash/theme
+fi
+
 # set object colors for ls
 eval "$(dircolors ~/.config/dir_colors)"
 

@@ -1,0 +1,11 @@
+# Dark mode theme configuration for bash
+
+# GTK dark theme
+export GTK_THEME=Adwaita-dark
+export GTK_SETTINGS_OVERRIDE_DIR=$HOME/.config/gtk-3.0
+
+# Qt dark theme
+export QT_STYLE_OVERRIDE=adwaita-dark
+
+# Application prefer dark theme
+export GTK_APPLICATION_PREFER_DARK_THEME=1
