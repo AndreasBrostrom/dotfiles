@@ -139,7 +139,7 @@
         "format": "{capacity}% {icon}",
         "format-full": "{capacity}%",
         "format-charging": "{capacity}% CHAR",
-        "format-plugged": "{capacity}% BAT",
+        "format-plugged": "{capacity}% POW",
         "format-alt": "{time} {icon}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
