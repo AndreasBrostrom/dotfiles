@@ -214,7 +214,8 @@
         "format-alt": "{alt}",
         "return-type": "json",
         "interval": 1,
-        "exec": "$HOME/.config/waybar/scripts/datetime-combo.sh"
+        "exec": "$HOME/.config/waybar/scripts/datetime-combo.sh",
+        "on-right-click": "$HOME/.config/waybar/scripts/datetime-copy.sh"
     },
     "custom/power": {
         "format": "⏻",
