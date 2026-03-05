@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkMenu" id="menu">
+    <child>
+      <object class="GtkMenuItem" id="scrcpy">
+        <property name="label">Scrcpy</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="wakeup">
+        <property name="label">Wakeup</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="restart">
+        <property name="label">Restart</property>
+      </object>
+    </child>
+  </object>
+</interface>

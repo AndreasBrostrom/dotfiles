@@ -240,6 +240,13 @@
         "format": "{}",
         "return-type": "json",
         "exec": "$HOME/.config/waybar/scripts/androidDevice.sh",
-        "tooltip": true
+        "tooltip": true,
+        "menu": "on-click",
+        "menu-file": "$HOME/.config/waybar/androidDevice_menu.xml", // Menu file in resources folder
+        "menu-actions": {
+            "scrcpy": "scrcpy -s 3A271JEHN06791",
+            "wakeup": "adb -s 3A271JEHN06791 shell input keyevent 26",
+            "restart": "adb -s 3A271JEHN06791 reboot"
+        }
     }
 }
