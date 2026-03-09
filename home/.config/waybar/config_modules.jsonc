@@ -83,10 +83,22 @@
         // "timezone": "America/New_York",
         "format": "{:%H:%M:%S}",
         "interval": 1,
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+        "tooltip": false
     },
     "clock#date": {
-        "format": "{:%Y-%m-%d}"
+        "format": "{:%Y-%m-%d}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "month",
+            "weeks-pos": "left",
+            "format": {
+                "months": "<span color='#cdd6f4'><b>{}</b></span>",
+                "days": "<span color='#cdd6f4'>{}</span>",
+                "weeks": "<span color='#6c7086'>{}</span>",
+                "weekdays": "<span color='#89b4fa'>{}</span>",
+                "today": "<span color='#ffffff'><b>{}</b></span>"
+            }
+        }
     },
     "cpu": {
         "format": "{usage}% ",
@@ -206,8 +218,8 @@
             "default": "🎜"
         },
         "escape": true,
-        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+        //"exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
+        "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     },
     "custom/datetime": {
         "format": "{}",
