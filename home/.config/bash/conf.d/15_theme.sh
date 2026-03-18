@@ -1,4 +1,4 @@
-# Dark mode theme configuration for bash
+# Dark mode theme configuration
 
 # GTK dark theme
 export GTK_THEME=Adwaita-dark

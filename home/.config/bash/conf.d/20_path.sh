@@ -1,4 +1,3 @@
-export GTK_THEME=Adwaita:dark
 export TERMINAL=terminator
 export TERM=$TERMINAL
 

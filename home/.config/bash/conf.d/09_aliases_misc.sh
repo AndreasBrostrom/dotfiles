@@ -1,5 +1,5 @@
 
-alias py='python'
+alias py='python3'
 alias vim='nvim'
 
 # ADB

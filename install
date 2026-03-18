@@ -10,6 +10,7 @@ ARG_I3=0
 ARG_NIRI=0
 ARG_NO_SUDO=0
 ARG_ANDROID=0
+ARG_WSL=0
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -24,6 +25,7 @@ while [[ $# -gt 0 ]]; do
             echo "  --i3            Install i3 window manager specific files"
             echo "  --niri          Install niri compositor specific files"
             echo "  -a, --android   Install for Android/Termux environment"
+            echo "  -w, --wsl       Install for Windows Subsystem for Linux environment"
             echo "  --no-sudo       Skip operations requiring sudo privileges"
             echo ""
             echo "Protected System:"
@@ -45,6 +47,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         -a|--android)
             ARG_ANDROID=1
+            shift
+            ;;
+        -w|--wsl)
+            ARG_WSL=1
             shift
             ;;
         --no-sudo)
@@ -95,10 +101,23 @@ function shouldSkipWM() {
         done
     fi
 
+    # Skip wsl files if --wsl flag is not set
+    if [[ $ARG_WSL == 0 ]]; then
+        for uniq in "${wsl[@]}"; do
+            [[ "$file" == "$uniq" || "$file" == "$uniq"/* ]] && return 0
+        done
+    fi
+
     return 1
 }
 function isAndroid() {
     if [[ $ARG_ANDROID == 1 ]]; then
+        return 0
+    fi
+    return 1
+}
+function isWSL() {
+    if [[ $ARG_WSL == 1 ]]; then
         return 0
     fi
     return 1

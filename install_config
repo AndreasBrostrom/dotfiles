@@ -20,4 +20,9 @@ niri=(
 )
 
 android=(
+  "home/.config/bash/conf.d/50_termux.sh"
+)
+
+wsl=(
+  "home/.config/bash/conf.d/50_wsl.sh"
 )
