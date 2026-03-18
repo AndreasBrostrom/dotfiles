@@ -242,6 +242,12 @@
             "logout": "niri msg action quit"
         }
     },
+    "custom/todo": {
+        "format": "{}",
+        "return-type": "json",
+        "interval": 10,
+        "exec": "$HOME/.config/waybar/scripts/todo"
+    },
     "custom/dotfiles": {
         "format": "{}",
         "return-type": "json",

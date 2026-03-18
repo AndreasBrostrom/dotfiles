@@ -368,3 +368,13 @@ label:focus {
 #custom-androidDevice.no-server {
     background-color: transparent;
 }
+
+#custom-todo {
+    padding: 0 10px;
+    color: #ffffff;
+}
+
+#custom-todo.active {
+    background-color: #e67e22;
+    color: #000000;
+}
