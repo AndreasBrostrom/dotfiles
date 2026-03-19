@@ -7,11 +7,11 @@ _status=()
 _arg_update="false"
 _arg_commit="false"
 _arg_install="false"
-_arg_install_force="false"
 
 _error="false"
 _has_changes="false"
 _install_params=()
+_install_script="dotfiles/install"
 
 # Create config file if it doesn't exist
 if [[ ! -f "$_configFile" ]]; then
@@ -22,6 +22,10 @@ if [[ ! -f "$_configFile" ]]; then
 
 # Example: install_params = ["--none-i3", "--android", "--no-sudo"]
 install_params = []
+
+# Override default install script path (relative to Repositories dir)
+# Default: dotfiles/install
+# install_script = dotfiles/install
 EOF
 fi
 
@@ -40,6 +44,10 @@ if [[ -f "$_configFile" ]]; then
             done
         fi
     fi
+    _script_line=$(grep "^install_script" "$_configFile" | sed 's/install_script[[:space:]]*=[[:space:]]*//' | xargs)
+    if [[ -n "$_script_line" ]]; then
+        _install_script="$_script_line"
+    fi
 fi
 
 function showHelp() {
@@ -48,8 +56,7 @@ function showHelp() {
     echo "Options:"
     echo "  --upgrade, -u, --pull, -p      Update repositories if no changes are found"
     echo "  --commit, -c, --push, -pu      Commit and push changes to repositories"
-    echo "  --install, -i                  Run install script for dotfiles"
-    echo "  --force-install, -f, -fi -if   Force run install script for dotfiles"
+    echo "  --install, -i, -f, -fi, -if    Run install script for dotfiles (always installs unless combined with --pull, then only on changes)"
     echo "  -h, --help                     Show this help message"
 }
 
@@ -65,8 +72,9 @@ while [[ $# -gt 0 ]]; do
         --install|-i)
             _arg_install="true"
             ;;
-        --force-install|-f|-fi|-if)
-            _arg_install_force="true"
+        -ui)
+            _arg_update="true"
+            _arg_install="true"
             ;;
         --help|-h)
             showHelp
@@ -161,9 +169,9 @@ for _path in "${_dotfiles[@]}"; do
 done
 
 # if install flag is set, run install scripts for dotfiles repo.
-if [[ "$_arg_install_force" == "true" ]] || ([[ "$_arg_install" == "true" ]] && [[ "$_has_changes" == "true" ]]); then
-    if [[ -f "$_repoDir/dotfiles/install" ]]; then
-        bash "$_repoDir/dotfiles/install" "${_install_params[@]}"
+if [[ "$_arg_install" == "true" ]] && ([[ "$_arg_update" == "false" ]] || [[ "$_has_changes" == "true" ]]); then
+    if [[ -f "$_repoDir/$_install_script" ]]; then
+        bash "$_repoDir/$_install_script" "${_install_params[@]}"
     fi
 fi
 
