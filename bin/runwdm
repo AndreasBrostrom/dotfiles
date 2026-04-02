@@ -1,0 +1,43 @@
+#!/bin/bash
+
+if [ $# -lt 2 ]; then
+  echo "Usage: runwdm <x11|wayland> <command> [args...]"
+  exit 1
+fi
+
+dm="$1"
+shift
+
+# Find the first available X11 socket
+x11_display() {
+  for d in /tmp/.X11-unix/X*; do
+    num="${d##*/X}"
+    echo ":$num"
+    return
+  done
+  echo ":0"
+}
+
+case "$dm" in
+  x11)
+    display=$(x11_display)
+    echo "Using DISPLAY=$display"
+    env -u WAYLAND_DISPLAY DISPLAY="$display" GDK_BACKEND=x11 QT_QPA_PLATFORM=xcb "$@" &
+    ;;
+  wayland)
+    env GDK_BACKEND=wayland QT_QPA_PLATFORM=wayland "$@" &
+    ;;
+  *)
+    echo "Unknown display manager: $dm (use x11 or wayland)"
+    exit 1
+    ;;
+esac
+
+pid=$!
+sleep 1
+
+if kill -0 "$pid" 2>/dev/null; then
+  echo "$1 is running (PID $pid)"
+else
+  echo "$1 failed to start or exited immediately"
+fi
