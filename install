@@ -10,6 +10,7 @@ ORIGINAL_ARGS=("$@")
 # Argument flags
 ARG_I3=0
 ARG_NIRI=0
+ARG_XFCE=0
 ARG_NO_SUDO=0
 ARG_ANDROID=0
 ARG_WSL=0
@@ -26,6 +27,7 @@ while [[ $# -gt 0 ]]; do
             echo "  -h, --help      Show this help message"
             echo "  --i3            Install i3 window manager specific files"
             echo "  --niri          Install niri compositor specific files"
+            echo "  --xfce          Install XFCE specific files"
             echo "  -a, --android   Install for Android/Termux environment"
             echo "  -w, --wsl       Install for Windows Subsystem for Linux environment"
             echo "  --no-sudo       Skip operations requiring sudo privileges"
@@ -45,6 +47,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --niri)
             ARG_NIRI=1
+            shift
+            ;;
+        --xfce)
+            ARG_XFCE=1
             shift
             ;;
         -a|--android)
@@ -89,6 +95,13 @@ function shouldSkipWM() {
     # Skip niri files if --niri flag is not set
     if [[ $ARG_NIRI == 0 ]]; then
         for uniq in "${niri[@]}"; do
+            [[ "$file" == "$uniq" || "$file" == "$uniq"/* ]] && return 0
+        done
+    fi
+
+    # Skip xfce files if --xfce flag is not set
+    if [[ $ARG_XFCE == 0 ]]; then
+        for uniq in "${xfce[@]}"; do
             [[ "$file" == "$uniq" || "$file" == "$uniq"/* ]] && return 0
         done
     fi
@@ -159,7 +172,11 @@ if [ -d $SCRIPT_DIR/bin ]; then
     echo -e "\033[1mInstall bin scripts\033[0m"
     cd $SCRIPT_DIR/bin
     isAndroid && echo -e " \033[2mAndroid detected, installing to Termux bin folder\033[0m"
-    DEST="/bin"
+    if [[ -L /bin ]] && [[ "$(readlink -f /bin)" == "/usr/bin" ]]; then
+        DEST="/usr/bin"
+    else
+        DEST="/bin"
+    fi
     for FILE in $(rg --files --hidden); do
         isProtected "$DEST/$FILE" && echo -e " \033[31m$DEST/$FILE is protected\033[0m" && continue
         shouldSkipWM "bin/$FILE" && echo -e " \033[33m$DEST/$FILE is WM specific, skipping\033[0m" && continue
