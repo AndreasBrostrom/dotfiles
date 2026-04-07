@@ -1,6 +1,4 @@
 #!/bin/bash
-set -e
-
 _repoDir="$HOME/Repositories"
 _configFile="$HOME/.config/sitrep.conf"
 
