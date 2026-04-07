@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 _repoDir="$HOME/Repositories"
 _configFile="$HOME/.config/sitrep.conf"
 
@@ -107,7 +109,7 @@ fi
 
 
 if [[ "$_arg_update" == "true" ]]; then
-    echo -e "Updating repositories"
+    echo -e "\n\e[2mUpdating repositories\e[0m"
 fi
 
 if [[ "$_arg_status" == "true" ]]; then
