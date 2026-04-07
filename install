@@ -74,12 +74,25 @@ while [[ $# -gt 0 ]]; do
 done
 
 function isProtected () {
+    local dest="$1"
+    local repoPath="$2"
     [[ ! -f "$SCRIPT_DIR/../.protected" ]] && return 1
-    mapfile -t < $SCRIPT_DIR/../.protected
-    protectedFiles="${MAPFILE[@]}"
-    for ProtectedFile in $protectedFiles; do
-        [[ "$ProtectedFile" == "$*" ]] && return 0
-    done
+    while IFS= read -r ProtectedFile || [[ -n "$ProtectedFile" ]]; do
+        [[ "$ProtectedFile" =~ ^[[:space:]]*# ]] && continue
+        [[ -z "${ProtectedFile// }" ]] && continue
+        ProtectedFile="${ProtectedFile/#\~/$HOME}"
+        # /abs/path/* — match any file under that destination directory
+        if [[ "$ProtectedFile" == *"/*" ]]; then
+            local dir="${ProtectedFile%\/*}"
+            [[ "$dest" == "$dir/"* ]] && return 0
+        # relative/path — match against repo-relative path
+        elif [[ "$ProtectedFile" != /* ]]; then
+            [[ "$repoPath" == "$ProtectedFile" ]] && return 0
+        # /abs/path — exact destination match
+        else
+            [[ "$dest" == "$ProtectedFile" ]] && return 0
+        fi
+    done < "$SCRIPT_DIR/../.protected"
     return 1
 }
 function shouldSkipWM() {
@@ -152,7 +165,7 @@ if [ -d $SCRIPT_DIR/home ]; then
     cd $SCRIPT_DIR/home
     DEST="$HOME"
     for FILE in $(rg --files --hidden); do
-        isProtected "$DEST/$FILE" && echo -e " \033[31m~/$FILE is protected\033[0m" && continue
+        isProtected "$DEST/$FILE" "home/$FILE" && echo -e " \033[31m~/$FILE is protected\033[0m" && continue
         shouldSkipWM "$FILE" && echo -e " \033[33m~/$FILE is WM specific, skipping\033[0m" && continue
 
         # handle SSH files
@@ -178,7 +191,7 @@ if [ -d $SCRIPT_DIR/bin ]; then
         DEST="/bin"
     fi
     for FILE in $(rg --files --hidden); do
-        isProtected "$DEST/$FILE" && echo -e " \033[31m$DEST/$FILE is protected\033[0m" && continue
+        isProtected "$DEST/$FILE" "bin/$FILE" && echo -e " \033[31m$DEST/$FILE is protected\033[0m" && continue
         shouldSkipWM "bin/$FILE" && echo -e " \033[33m$DEST/$FILE is WM specific, skipping\033[0m" && continue
         
         if isAndroid; then
@@ -199,7 +212,7 @@ if [ -d $SCRIPT_DIR/etc ]; then
     cd $SCRIPT_DIR
     for ENTRY in "${etc[@]}"; do
         FILE="${ENTRY#etc/}"
-        isProtected "$DEST/$FILE" && echo -e " \033[31m$DEST/$FILE is protected\033[0m" && continue
+        isProtected "$DEST/$FILE" "$ENTRY" && echo -e " \033[31m$DEST/$FILE is protected\033[0m" && continue
         shouldSkipWM "$ENTRY" && echo -e " \033[33m$DEST/$FILE is WM specific, skipping\033[0m" && continue
         isAndroid && echo -e " \033[33m$DEST/$FILE is not for Android, skipping\033[0m" && continue
         echo -e " \033[2mCopying $ENTRY to $DEST/$FILE\033[0m"
@@ -207,14 +220,6 @@ if [ -d $SCRIPT_DIR/etc ]; then
         sudo cp -f "$SCRIPT_DIR/$ENTRY" "$DEST/$FILE"
     done
 fi
-
-#echo -e "\033[1mSetting up terminal aliases\033[0m"
-#cd /usr/bin/
-#for TERM in term gnome-terminal default-terminal TerminalEmulator; do
-#    echo -e " \033[2mCreating softlink for $TERM => terminal\033[0m"
-#    sudo ln -sf terminal $TERM
-#done
-
 
 # Install /usr files
 if [ -d $SCRIPT_DIR/usr ]; then
