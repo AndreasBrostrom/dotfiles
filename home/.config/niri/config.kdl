@@ -274,8 +274,14 @@ layout {
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "waybar"
-spawn-at-startup "xwayland-satellite"
 
+// Unified clipboard: keep primary selection in sync with clipboard so
+// middle-mouse paste and Ctrl+V always paste the same thing.
+spawn-at-startup "wl-paste" "--watch" "wl-copy" "--primary"
+// Disable middle-mouse paste in GTK apps.
+spawn-sh-at-startup "gsettings set org.gnome.desktop.interface gtk-enable-primary-paste false"
+
+spawn-at-startup "xwayland-satellite"
 environment {
     DISPLAY ":0"
 }
