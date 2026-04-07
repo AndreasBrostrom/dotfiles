@@ -23,7 +23,7 @@ niri=(
   ".config/niri"
   ".config/waybar"
   ".config/fuzzel"
-  ".config/rofi"
+  ".config/rofi" # Used in niri
 )
 
 android=(
