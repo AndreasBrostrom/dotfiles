@@ -1,0 +1,32 @@
+<?xml version="1.1" encoding="UTF-8"?>
+
+<channel name="xfce4-notifyd" version="1.0">
+  <property name="log-max-size-enabled" type="bool" value="true"/>
+  <property name="applications" type="empty">
+    <property name="known_applications" type="array">
+      <value type="string" value="balenaEtcher"/>
+      <value type="string" value="blueman"/>
+      <value type="string" value="code"/>
+      <value type="string" value="com.usebottles.bottles"/>
+      <value type="string" value="discord"/>
+      <value type="string" value="FileZilla"/>
+      <value type="string" value="google-chrome"/>
+      <value type="string" value="niri"/>
+      <value type="string" value="notify-send"/>
+      <value type="string" value="org.freedesktop.network-manager-applet"/>
+      <value type="string" value="org.gnome.baobab"/>
+      <value type="string" value="org.gnome.Boxes"/>
+      <value type="string" value="org.kde.drkonqi"/>
+      <value type="string" value="org.kde.ktorrent"/>
+      <value type="string" value="org.qbittorrent.qBittorrent"/>
+      <value type="string" value="org.xfce.Thunar"/>
+      <value type="string" value="Spotify"/>
+      <value type="string" value="System Config Printer Notification"/>
+      <value type="string" value="thunar-volman"/>
+      <value type="string" value="Transmission"/>
+      <value type="string" value="Xfce volume control"/>
+      <value type="string" value="xfce4-settings-helper"/>
+    </property>
+  </property>
+  <property name="date-time-custom-format" type="string" value="%a %H:%M:%S"/>
+</channel>

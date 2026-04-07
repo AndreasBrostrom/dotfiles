@@ -33,3 +33,7 @@ android=(
 wsl=(
   ".config/bash/conf.d/50_wsl.sh"
 )
+
+xfce=(
+  ".config/xfce4"
+)
