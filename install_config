@@ -1,3 +1,11 @@
+etc=(
+  "etc/lightdm/lightdm.conf"
+  "etc/modprobe.d/nobeep.conf"
+  "etc/pacman.conf"
+  "etc/X11/xorg.conf.d/00-keyboard.conf"
+)
+
+# Desktop Environments
 i3=(
   "bin/e-scrot"
   "bin/dmenu_recent"
@@ -16,7 +24,6 @@ niri=(
   ".config/waybar"
   ".config/fuzzel"
   ".config/rofi"
-  
 )
 
 android=(

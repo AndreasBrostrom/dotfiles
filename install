@@ -3,6 +3,8 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 cd $SCRIPT_DIR
 
+[[ -f "$SCRIPT_DIR/install_config" ]] && source "$SCRIPT_DIR/install_config"
+
 ORIGINAL_ARGS=("$@")
 
 # Argument flags
@@ -76,9 +78,6 @@ function isProtected () {
 }
 function shouldSkipWM() {
     local file="$1"
-    local config="$SCRIPT_DIR/install_config"
-    [[ ! -f "$config" ]] && return 1
-    source "$config"
 
     # Skip i3 files if --i3 flag is not set
     if [[ $ARG_I3 == 0 ]]; then
@@ -176,24 +175,19 @@ if [ -d $SCRIPT_DIR/bin ]; then
     done
 fi
 
-# Install /etc files (Manual)
+# Install /etc files
 if [ -d $SCRIPT_DIR/etc ]; then
     echo -e "\033[1mInstall etc configs\033[0m"
-
-    # Adjust this list as needed
-    filesToMove=(etc/modprobe.d/nobeep.conf
-                 etc/pacman.conf
-                 etc/X11/xorg.conf.d/00-keyboard.conf)
-
-    DEST="etc"
+    DEST="/etc"
     cd $SCRIPT_DIR
-    for FILE in "${filesToMove[@]}"; do
-        fileFolder=$(dirname "$FILE")
-        isProtected "/$DEST/$FILE" && echo -e " \033[31m$DEST/$FILE is protected\033[0m" && continue
-        shouldSkipWM "/$DEST/$FILE" && echo -e " \033[33m$DEST/$FILE is WM specific, skipping\033[0m" && continue
+    for ENTRY in "${etc[@]}"; do
+        FILE="${ENTRY#etc/}"
+        isProtected "$DEST/$FILE" && echo -e " \033[31m$DEST/$FILE is protected\033[0m" && continue
+        shouldSkipWM "$ENTRY" && echo -e " \033[33m$DEST/$FILE is WM specific, skipping\033[0m" && continue
         isAndroid && echo -e " \033[33m$DEST/$FILE is not for Android, skipping\033[0m" && continue
-        echo -e " \033[2mCopying $DEST/$FILE to /$fileFolder\033[0m"
-        sudo cp -f "$SCRIPT_DIR/$FILE" "/$FILE"
+        echo -e " \033[2mCopying $ENTRY to $DEST/$FILE\033[0m"
+        [ ! -d $(dirname "$DEST/$FILE") ] && sudo mkdir -p $(dirname "$DEST/$FILE")
+        sudo cp -f "$SCRIPT_DIR/$ENTRY" "$DEST/$FILE"
     done
 fi
 
