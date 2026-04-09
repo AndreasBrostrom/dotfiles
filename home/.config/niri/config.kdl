@@ -116,6 +116,7 @@ spawn-sh-at-startup "gsettings set org.gnome.desktop.interface gtk-enable-primar
 }
 
 // Include location-specific monitor and background config
+include "config_monitor.kdl"
 include "config_local.kdl"
 
 // Settings that influence how windows are positioned and sized.
