@@ -117,7 +117,6 @@ spawn-sh-at-startup "gsettings set org.gnome.desktop.interface gtk-enable-primar
 
 // Include location-specific monitor and background config
 include "config_monitor.kdl"
-include "config_local.kdl"
 
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
@@ -364,7 +363,11 @@ window-rule {
     clip-to-geometry true
 }
 
+// Local configurations
+include "config_local.kdl"
+
 binds {
+
     // Keys consist of modifiers separated by + signs, followed by an XKB key name
     // in the end. To find an XKB name for a particular key, you may use a program
     // like wev.
@@ -408,6 +411,11 @@ binds {
     XF86AudioStop               allow-when-locked=true { spawn-sh "playerctl stop"; }
     XF86AudioPrev               allow-when-locked=true { spawn-sh "playerctl previous"; }
     XF86AudioNext               allow-when-locked=true { spawn-sh "playerctl next"; }
+
+    // No media Keys
+    Mod+XF86AudioMute           allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+    Mod+XF86AudioRaiseVolume    allow-when-locked=true { spawn-sh "playerctl previous"; }
+    Mod+XF86AudioLowerVolume    allow-when-locked=true { spawn-sh "playerctl next"; }
 
     // Example brightness key mappings for brightnessctl.
     // You can use regular spawn with multiple arguments too (to avoid going through "sh"),
