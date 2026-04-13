@@ -380,7 +380,7 @@ binds {
 
     // Mod-Shift-/, which is usually the same as Mod-?,
     // shows a list of important hotkeys.
-    Mod+Shift+Slash { show-hotkey-overlay; }
+    Mod+Shift+F1 { show-hotkey-overlay; }
 
     Mod+Return      hotkey-overlay-title="Open a Terminal"      { spawn "terminator"; }
     Mod+D           hotkey-overlay-title="Run Application"      { spawn "rofi" "-show" "drun"; }
@@ -407,10 +407,10 @@ binds {
 
     // Example media keys mapping using playerctl.
     // This will work with any MPRIS-enabled media player.
-    XF86AudioPlay               allow-when-locked=true { spawn-sh "playerctl play-pause"; }
-    XF86AudioStop               allow-when-locked=true { spawn-sh "playerctl stop"; }
-    XF86AudioPrev               allow-when-locked=true { spawn-sh "playerctl previous"; }
-    XF86AudioNext               allow-when-locked=true { spawn-sh "playerctl next"; }
+    XF86AudioPlay  hotkey-overlay-title=null allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+    XF86AudioStop  hotkey-overlay-title=null allow-when-locked=true { spawn-sh "playerctl stop"; }
+    XF86AudioPrev  hotkey-overlay-title=null allow-when-locked=true { spawn-sh "playerctl previous"; }
+    XF86AudioNext  hotkey-overlay-title=null allow-when-locked=true { spawn-sh "playerctl next"; }
 
     // No media Keys
     Mod+XF86AudioMute           allow-when-locked=true { spawn-sh "playerctl play-pause"; }
