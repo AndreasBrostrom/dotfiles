@@ -9,7 +9,7 @@ _arg_commit="false"
 _arg_install="false"
 
 _error="false"
-_has_changes="false"
+_has_remote_changes="false"
 _install_params=()
 _install_script="dotfiles/install"
 
@@ -133,7 +133,7 @@ for _path in "${_dotfiles[@]}"; do
 
     # Check we have any changes
     if [[ ! $(git -C $_repoDir/$_path status | grep nothin) || $(git -C $_repoDir/$_path status | grep Untracked) ]]; then
-        _has_changes="true"
+
 
         # if we have changes and want to commit them run the commit else just show the status
         if [[ "$_arg_commit" == "true" ]]; then
@@ -168,7 +168,8 @@ for _path in "${_dotfiles[@]}"; do
         echo -e "\e[2mPulling updates for $_path\e[0m"
         _gitPull="$(git -C "$_repoDir/$_path" pull)"
         [[ $(echo $_gitPull | grep Already) ]] && continue
-        _has_changes="true"
+
+        _has_remote_changes="true"
         _gitChanges="\e[2m$(git -C "$_repoDir/$_path" diff --name-only HEAD@{1})\e[0m"
         _status+=("\e]8;;$_repoDir/$_path\a$_path\e]8;;\a\e[0m: repository updated")
         _status+=("$_gitChanges")
@@ -176,7 +177,7 @@ for _path in "${_dotfiles[@]}"; do
 done
 
 # if install flag is set, run install scripts for dotfiles repo.
-if [[ "$_arg_install" == "true" ]] && ([[ "$_arg_update" == "false" ]] || [[ "$_has_changes" == "true" ]]); then
+if [[ "$_arg_install" == "true" ]] && ([[ "$_arg_update" == "false" ]] || [[ "$_has_remote_changes" == "true" ]]); then
     if [[ -f "$_repoDir/$_install_script" ]]; then
         bash "$_repoDir/$_install_script" "${_install_params[@]}"
     fi
