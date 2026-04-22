@@ -56,7 +56,7 @@ function showHelp() {
     echo "Options:"
     echo "  --upgrade, -u, --pull, -p      Update repositories if no changes are found"
     echo "  --commit, -c, --push, -pu      Commit and push changes to repositories"
-    echo "  --install, -i, -f, -fi, -if    Run install script for dotfiles (always installs unless combined with --pull, then only on changes)"
+    echo "  --install, -i                  Run install script for dotfiles (always installs unless combined with --pull, then only on changes)"
     echo "  -h, --help                     Show this help message"
 }
 
@@ -72,7 +72,7 @@ while [[ $# -gt 0 ]]; do
         --install|-i)
             _arg_install="true"
             ;;
-        -ui)
+        -ui|-pi|-ip|-iu)
             _arg_update="true"
             _arg_install="true"
             ;;
