@@ -25,8 +25,10 @@ function gitshort                             # git help sort commands
     echo "  grm       -> git rebase origin/main"
     echo ""
     echo "Pull and Push:"
+    echo "  gpull     -> git pull"
     echo "  gp        -> git pull"
     echo "  gpo       -> git pull origin"
+    echo "  gpush     -> git push"
     echo "  gpu       -> git push"
     echo "  gpuo      -> git push origin"
     echo "  gpuof     -> git push --set-upstream origin (current branch)"
@@ -62,6 +64,7 @@ function gitshort                             # git help sort commands
     echo "  gccs      -> git ccs"
 end
 alias gshort='gitshort'
+alias ghelp='gitshort'
 
 # Git Aliases
 alias g='git'
@@ -85,9 +88,11 @@ alias gf='git fetch --all --prune'
 alias gr='git rebase'
 alias grm='git rebase origin/main'
 
+alias gpull='git pull'
 alias gp='git pull'
 alias gpo='git pull origin'
 
+alias gpush='git push'
 alias gpu='git push'
 alias gpuo='git push origin'
 alias gpuof='eval git push --set-upstream origin (git rev-parse --abbrev-ref HEAD)'
