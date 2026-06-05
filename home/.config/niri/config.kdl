@@ -71,12 +71,8 @@ input {
     focus-follows-mouse max-scroll-amount="0%"
 }
 
-// Bidirectional clipboard sync: PRIMARY ↔ CLIPBOARD so that selecting
-// text and Ctrl+C both update each other — middle-click = Ctrl+V.
-spawn-at-startup "wl-paste" "--watch" "--primary" "wl-copy"
-spawn-at-startup "wl-paste" "--watch" "wl-copy" "--primary"
-// Disable middle-mouse paste in GTK apps.
-spawn-sh-at-startup "gsettings set org.gnome.desktop.interface gtk-enable-primary-paste false"
+// Keep clipboard content alive after the source app closes.
+spawn-at-startup "wl-clip-persist" "--clipboard" "regular"
 
 // You can configure outputs by their name, which you can find
 // by running `niri msg outputs` while inside a niri instance.
