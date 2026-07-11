@@ -72,7 +72,7 @@ function upgrade
             if ! test (count $orphan) -eq 0
                 echo -e '\n\033[1mOrphan package dependencies:\033[0m'
                 for i in $orphan; echo " $i"; end
-                echo -e '\033[2mTo remove them:           paru -Rc $(paru -Qtdq)\033[0m'
+                echo -e '\033[2mTo remove them:           paru -Rns $(paru -Qtdq)\033[0m'
                 echo -e '\033[2mTo set them as explicit:  paru -D --asexplicit PKG\033[0m'
             end
             exist notify-send && notify-send 'paru' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
@@ -94,7 +94,7 @@ function upgrade
             if ! test (count $orphan) -eq 0
                 echo -e '\n\033[1mOrphan package dependencies:\033[0m'
                 for i in $orphan; echo " $i"; end
-                echo -e '\033[2mTo remove them:           yay -Rc $(yay -Qtdq)\033[0m'
+                echo -e '\033[2mTo remove them:           yay -Rns $(yay -Qtdq)\033[0m'
                 echo -e '\033[2mTo set them as explicit:  yay -D --asexplicit PKG\033[0m'
             end
             exist notify-send && notify-send 'yay' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
@@ -114,7 +114,7 @@ function upgrade
         if ! test (count $orphan) -eq 0
             echo -e '\n\033[1mOrphan package dependencies:\033[0m'
             for i in $orphan; echo " $i"; end
-            echo -e '\033[2mTo remove them:           sudo pacman -Rc $(pacman -Qtdq)\033[0m'
+            echo -e '\033[2mTo remove them:           sudo pacman -Rns $(pacman -Qtdq)\033[0m'
             echo -e '\033[2mTo set them as explicit:  sudo pacman -D --asexplicit PKG\033[0m'
         end
         exist notify-send && notify-send 'pacman' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
