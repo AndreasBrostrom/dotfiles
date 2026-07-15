@@ -15,6 +15,7 @@ ARG_XFCE=0
 ARG_NO_SUDO=0
 ARG_ANDROID=0
 ARG_WSL=0
+ARG_DRYRUN=0
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -32,6 +33,7 @@ while [[ $# -gt 0 ]]; do
             echo "  -a, --android   Install for Android/Termux environment"
             echo "  -w, --wsl       Install for Windows Subsystem for Linux environment"
             echo "  --no-sudo       Skip operations requiring sudo privileges"
+            echo "  -n, --dryrun    Print what would be linked/copied instead of doing it"
             echo ""
             echo "Protected System:"
             echo "  Files listed in ../.protected will not be overwritten during installation."
@@ -64,6 +66,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --no-sudo)
             ARG_NO_SUDO=1
+            shift
+            ;;
+        -n|--dryrun)
+            ARG_DRYRUN=1
             shift
             ;;
         *)
@@ -154,9 +160,16 @@ function hasNoSudo() {
     fi
     return 1
 }
+function isDryRun() {
+    if [[ $ARG_DRYRUN == 1 ]]; then
+        return 0
+    fi
+    return 1
+}
 
 echo -e "\033[34;1mInstalling $(basename $SCRIPT_DIR)...\033[0m"
-if ! hasNoSudo; then
+isDryRun && echo -e "\033[33;1mDry run: no files will be linked or copied\033[0m"
+if ! hasNoSudo && ! isDryRun; then
     sudo -v
 fi
 
@@ -170,11 +183,21 @@ if [ -d $SCRIPT_DIR/home ]; then
         shouldSkipWM "$FILE" && echo -e " \033[33m~/$FILE is WM specific, skipping\033[0m" && continue
 
         # handle SSH files
-        [[ $(dirname "$HOME/$FILE") == "$HOME/.ssh" ]] &&
-            echo -e " \033[2mCopying $FILE to ~/$FILE\033[0m" &&
-            cp -f "$SCRIPT_DIR/home/$FILE" "$HOME/$FILE" &&
+        if [[ $(dirname "$HOME/$FILE") == "$HOME/.ssh" ]]; then
+            if isDryRun; then
+                echo -e " \033[2m[dry-run] Would copy $FILE to ~/$FILE\033[0m"
+            else
+                echo -e " \033[2mCopying $FILE to ~/$FILE\033[0m"
+                cp -f "$SCRIPT_DIR/home/$FILE" "$HOME/$FILE"
+            fi
             continue
-        
+        fi
+
+        if isDryRun; then
+            echo -e " \033[2m[dry-run] Would link ~/$FILE => $FILE\033[0m"
+            continue
+        fi
+
         echo -e " \033[2mLinking ~/$FILE => $FILE\033[0m"
         [ ! -d $(dirname "$DEST/$FILE") ] && mkdir -p $(dirname "$DEST/$FILE")
         ln -sf "$SCRIPT_DIR/home/$FILE" "$DEST/$FILE"
@@ -196,8 +219,17 @@ if [ -d $SCRIPT_DIR/bin ]; then
         shouldSkipWM "bin/$FILE" && echo -e " \033[33m$DEST/$FILE is WM specific, skipping\033[0m" && continue
         
         if isAndroid; then
-            echo -e " \033[2mCopying $FILE to ~/../usr/bin\033[0m"
-            cp -f $FILE /data/data/com.termux/files/usr/bin/$FILE
+            if isDryRun; then
+                echo -e " \033[2m[dry-run] Would copy $FILE to ~/../usr/bin\033[0m"
+            else
+                echo -e " \033[2mCopying $FILE to ~/../usr/bin\033[0m"
+                cp -f $FILE /data/data/com.termux/files/usr/bin/$FILE
+            fi
+            continue
+        fi
+
+        if isDryRun; then
+            echo -e " \033[2m[dry-run] Would copy $FILE to $DEST\033[0m"
             continue
         fi
 
@@ -216,6 +248,12 @@ if [ -d $SCRIPT_DIR/etc ]; then
         isProtected "$DEST/$FILE" "$ENTRY" && echo -e " \033[31m$DEST/$FILE is protected\033[0m" && continue
         shouldSkipWM "$ENTRY" && echo -e " \033[33m$DEST/$FILE is WM specific, skipping\033[0m" && continue
         isAndroid && echo -e " \033[33m$DEST/$FILE is not for Android, skipping\033[0m" && continue
+
+        if isDryRun; then
+            echo -e " \033[2m[dry-run] Would copy $ENTRY to $DEST/$FILE\033[0m"
+            continue
+        fi
+
         echo -e " \033[2mCopying $ENTRY to $DEST/$FILE\033[0m"
         [ ! -d $(dirname "$DEST/$FILE") ] && sudo mkdir -p $(dirname "$DEST/$FILE")
         sudo cp -f "$SCRIPT_DIR/$ENTRY" "$DEST/$FILE"
@@ -232,6 +270,11 @@ if [ -d $SCRIPT_DIR/usr ]; then
         shouldSkipWM "$DEST/$FILE" && echo -e " \033[33m$DEST/$FILE is WM specific, skipping\033[0m" && continue
         isAndroid && echo -e " \033[33m$DEST/$FILE is not for Android, skipping\033[0m" && continue
 
+        if isDryRun; then
+            echo -e " \033[2m[dry-run] Would copy $FILE to $DEST\033[0m"
+            continue
+        fi
+
         echo -e " \033[2mCopying $FILE to $DEST\033[0m"
         [ ! -d $(dirname "$DEST/$FILE") ] && sudo mkdir -p $(dirname "$DEST/$FILE")
         sudo cp -rf $FILE "$DEST/$FILE"
@@ -240,8 +283,12 @@ fi
 
 # Get tools folder if non exist
 if [ ! -d $SCRIPT_DIR/../Tools ]; then
-    cd $SCRIPT_DIR/..
-    git clone git@github.com:AndreasBrostrom/Tools.git
+    if isDryRun; then
+        echo -e " \033[2m[dry-run] Would clone Tools repo\033[0m"
+    else
+        cd $SCRIPT_DIR/..
+        git clone git@github.com:AndreasBrostrom/Tools.git
+    fi
 fi
 if [ -d $SCRIPT_DIR/../Tools ]; then
     echo -e "\033[1mFetching scripts from Tools\033[0m"
@@ -251,24 +298,36 @@ fi
 
 # Get ssh folder if non exist
 if [ ! -d $SCRIPT_DIR/../secure ]; then
-    cd $SCRIPT_DIR/..
-    git clone git@github.com:AndreasBrostrom/secure.git
+    if isDryRun; then
+        echo -e " \033[2m[dry-run] Would clone secure repo\033[0m"
+    else
+        cd $SCRIPT_DIR/..
+        git clone git@github.com:AndreasBrostrom/secure.git
+    fi
 fi
 if [ -d $SCRIPT_DIR/../secure/ssh ]; then
     echo -e "\033[1mHome secrets from secure\033[0m"
     cd $SCRIPT_DIR/../secure/ssh
-    [ ! -d "$HOME/.ssh" ] && mkdir -p $HOME/.ssh
-    EXISTING=($(ls $HOME/.ssh))
+    [ ! -d "$HOME/.ssh" ] && ! isDryRun && mkdir -p $HOME/.ssh
+    EXISTING=($(ls $HOME/.ssh 2>/dev/null))
     for FILE in $(rg --files --hidden); do
+        if isDryRun; then
+            echo -e " \033[2m[dry-run] Would copy $FILE to $HOME/.ssh/$FILE\033[0m"
+            continue
+        fi
         echo -e " \033[2mCopying $FILE to $HOME/.ssh/$FILE\033[0m"
         cp -f $FILE $HOME/.ssh/$FILE
     done
 fi
 
 # SSH permissions
-echo -e " \033[2mFixing SSH permissions\033[0m"
-chmod 700 $HOME/.ssh
-chmod 600 $HOME/.ssh/config
-chmod 600 $HOME/.ssh/authorized_keys
-chmod 600 $HOME/.ssh/*id_rsa
-chmod 644 $HOME/.ssh/*.pub
+if isDryRun; then
+    echo -e " \033[2m[dry-run] Would fix SSH permissions\033[0m"
+else
+    echo -e " \033[2mFixing SSH permissions\033[0m"
+    chmod 700 $HOME/.ssh
+    chmod 600 $HOME/.ssh/config
+    chmod 600 $HOME/.ssh/authorized_keys
+    chmod 600 $HOME/.ssh/*id_rsa
+    chmod 644 $HOME/.ssh/*.pub
+fi

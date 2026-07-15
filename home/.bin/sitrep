@@ -7,6 +7,7 @@ _status=()
 _arg_update="false"
 _arg_commit="false"
 _arg_install="false"
+_arg_dryrun="false"
 
 _error="false"
 _has_remote_changes="false"
@@ -57,6 +58,7 @@ function showHelp() {
     echo "  --upgrade, -u, --pull, -p      Update repositories if no changes are found"
     echo "  --commit, -c, --push, -pu      Commit and push changes to repositories"
     echo "  --install, -i                  Run install script for dotfiles (always installs unless combined with --pull, then only on changes)"
+    echo "  --dryrun, -n                   Pass through to the install script: print what would be linked/copied instead of doing it"
     echo "  -h, --help                     Show this help message"
 }
 
@@ -71,6 +73,9 @@ while [[ $# -gt 0 ]]; do
             ;;
         --install|-i)
             _arg_install="true"
+            ;;
+        --dryrun|-n)
+            _arg_dryrun="true"
             ;;
         -ui|-pi|-ip|-iu)
             _arg_update="true"
@@ -179,7 +184,9 @@ done
 # if install flag is set, run install scripts for dotfiles repo.
 if [[ "$_arg_install" == "true" ]] && ([[ "$_arg_update" == "false" ]] || [[ "$_has_remote_changes" == "true" ]]); then
     if [[ -f "$_repoDir/$_install_script" ]]; then
-        bash "$_repoDir/$_install_script" "${_install_params[@]}"
+        _final_params=("${_install_params[@]}")
+        [[ "$_arg_dryrun" == "true" ]] && _final_params+=("--dryrun")
+        bash "$_repoDir/$_install_script" "${_final_params[@]}"
     fi
 fi
 
