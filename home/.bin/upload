@@ -1,0 +1,232 @@
+#!/bin/bash
+# Upload files to a file server from the command line.
+# Config: ~/.config/upload.conf   Session cache: ~/.cache/upload/session
+_configFile="$HOME/.config/upload.conf"
+_sessionFile="$HOME/.cache/upload/session"
+
+_api_url=""
+_file_url=""
+_username=""
+_password=""
+_password_cmd=""
+
+_arg_login="false"
+_arg_copy="false"
+_arg_quiet="false"
+_files=()
+
+for _dep in curl jq; do
+    if ! command -v "$_dep" >/dev/null 2>&1; then
+        echo -e "\e[31mError: '$_dep' is required but not installed\e[0m" >&2
+        exit 1
+    fi
+done
+
+# Create config file if it doesn't exist
+if [[ ! -f "$_configFile" ]]; then
+    mkdir -p "$(dirname "$_configFile")"
+    cat > "$_configFile" << 'EOF'
+# Configuration file for upload
+# Keep this file private (chmod 600) if you store a password here.
+
+# API base URL (no trailing slash)
+api_url = https://localhost/api
+
+# Public base URL for uploaded files, used to print share links
+file_url = https://localhost
+
+# Credentials used to obtain a session token
+username =
+password =
+
+# Alternatively, a command whose stdout is the password (takes precedence over password)
+# password_cmd = pass show localhost
+EOF
+    chmod 600 "$_configFile"
+    echo -e "\e[33mCreated config file: $_configFile\e[0m"
+    echo "Fill in username and password (or password_cmd), then run again."
+    exit 1
+fi
+
+# Read config file (key = value, '#' comments)
+function readConfig() {
+    local key="$1"
+    grep -E "^[[:space:]]*$key[[:space:]]*=" "$_configFile" | tail -n1 | sed "s/^[[:space:]]*$key[[:space:]]*=[[:space:]]*//" | xargs
+}
+_val=$(readConfig api_url);      [[ -n "$_val" ]] && _api_url="${_val%/}"
+_val=$(readConfig file_url);     [[ -n "$_val" ]] && _file_url="${_val%/}"
+_username=$(readConfig username)
+_password=$(readConfig password)
+_password_cmd=$(readConfig password_cmd)
+
+function showHelp() {
+    echo "Usage: $(basename "$0") [OPTIONS] FILE..."
+    echo ""
+    echo "Upload one or more files and print their share links."
+    echo ""
+    echo "Options:"
+    echo "  --login, -l       Force a new login even if a cached session exists"
+    echo "  --copy, -c        Copy the share link(s) to the clipboard"
+    echo "  --quiet, -q       Only print share links"
+    echo "  -h, --help        Show this help message"
+    echo ""
+    echo "Config:  $_configFile"
+    echo "Session: $_sessionFile"
+}
+
+# Handle Arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --login|-l)
+            _arg_login="true"
+            ;;
+        --copy|-c)
+            _arg_copy="true"
+            ;;
+        --quiet|-q)
+            _arg_quiet="true"
+            ;;
+        --help|-h)
+            showHelp
+            exit 0
+            ;;
+        --)
+            shift
+            _files+=("$@")
+            break
+            ;;
+        -*)
+            echo -e "\e[31mError: Unknown argument '$1'\e[0m"
+            echo ""
+            showHelp
+            exit 1
+            ;;
+        *)
+            _files+=("$1")
+            ;;
+    esac
+    shift
+done
+
+if [[ ${#_files[@]} -eq 0 && "$_arg_login" != "true" ]]; then
+    showHelp
+    exit 1
+fi
+
+function log() {
+    [[ "$_arg_quiet" == "true" ]] || echo -e "$@"
+}
+
+function getPassword() {
+    if [[ -n "$_password_cmd" ]]; then
+        bash -c "$_password_cmd"
+    else
+        printf '%s' "$_password"
+    fi
+}
+
+function login() {
+    if [[ -z "$_username" ]]; then
+        echo -e "\e[31mError: username not set in $_configFile\e[0m" >&2
+        exit 1
+    fi
+    local password
+    password=$(getPassword)
+    if [[ -z "$password" ]]; then
+        echo -e "\e[31mError: password (or password_cmd) not set in $_configFile\e[0m" >&2
+        exit 1
+    fi
+
+    log "\e[2mLogging in as $_username...\e[0m"
+    local response
+    response=$(jq -cn --arg u "$_username" --arg p "$password" '{username:$u,password:$p}' |
+        curl -sS -X POST "$_api_url/auth/login" -H "Content-Type: application/json" --data-binary @-)
+
+    _session=$(echo "$response" | jq -r '.sessionId // empty')
+    if [[ -z "$_session" ]]; then
+        echo -e "\e[31mError: login failed: $(echo "$response" | jq -r '.error // .message // .' 2>/dev/null)\e[0m" >&2
+        exit 1
+    fi
+
+    mkdir -p "$(dirname "$_sessionFile")"
+    (umask 077; printf '%s' "$_session" > "$_sessionFile")
+}
+
+_session=""
+if [[ "$_arg_login" != "true" && -s "$_sessionFile" ]]; then
+    _session=$(<"$_sessionFile")
+fi
+[[ -z "$_session" ]] && login
+
+# Upload a single file; sets _lastUrl on success, returns non-zero on failure
+function uploadFile() {
+    local file="$1"
+    local response http_code body
+
+    response=$(curl -sS -w '\n%{http_code}' -X POST "$_api_url/files/upload" \
+        -H "Authorization: Bearer $_session" \
+        -F "file=@$file")
+    http_code="${response##*$'\n'}"
+    body="${response%$'\n'*}"
+
+    if [[ "$http_code" == "401" ]]; then
+        log "\e[33mSession expired, logging in again\e[0m"
+        login
+        response=$(curl -sS -w '\n%{http_code}' -X POST "$_api_url/files/upload" \
+            -H "Authorization: Bearer $_session" \
+            -F "file=@$file")
+        http_code="${response##*$'\n'}"
+        body="${response%$'\n'*}"
+    fi
+
+    if [[ "$http_code" != "200" && "$http_code" != "201" ]]; then
+        echo -e "\e[31mError: upload of '$file' failed (HTTP $http_code): $(echo "$body" | jq -r '.error // .' 2>/dev/null)\e[0m" >&2
+        return 1
+    fi
+
+    local uri
+    uri=$(echo "$body" | jq -r '.file.uri // empty')
+    if [[ -z "$uri" ]]; then
+        echo -e "\e[31mError: unexpected response for '$file': $body\e[0m" >&2
+        return 1
+    fi
+    _lastUrl="${_file_url}${uri// /%20}"
+}
+
+_urls=()
+_error="false"
+for _file in "${_files[@]}"; do
+    if [[ ! -f "$_file" ]]; then
+        echo -e "\e[31mError: '$_file' is not a file\e[0m" >&2
+        _error="true"
+        continue
+    fi
+    log "\e[2mUploading $(basename "$_file")...\e[0m"
+    if uploadFile "$_file"; then
+        _urls+=("$_lastUrl")
+        if [[ "$_arg_quiet" == "true" ]]; then
+            echo "$_lastUrl"
+        else
+            echo -e "\e[32m$(basename "$_file")\e[0m  \e]8;;$_lastUrl\a$_lastUrl\e]8;;\a"
+        fi
+    else
+        _error="true"
+    fi
+done
+
+if [[ "$_arg_copy" == "true" && ${#_urls[@]} -gt 0 ]]; then
+    _text=$(printf '%s\n' "${_urls[@]}")
+    if command -v wl-copy >/dev/null 2>&1 && [[ -n "$WAYLAND_DISPLAY" ]]; then
+        printf '%s' "$_text" | wl-copy
+    elif command -v xclip >/dev/null 2>&1; then
+        printf '%s' "$_text" | xclip -selection clipboard
+    elif command -v xsel >/dev/null 2>&1; then
+        printf '%s' "$_text" | xsel --clipboard --input
+    else
+        echo -e "\e[33mWarning: no clipboard tool found (wl-copy/xclip/xsel)\e[0m" >&2
+    fi
+    log "\e[2mCopied ${#_urls[@]} link(s) to clipboard\e[0m"
+fi
+
+[[ "$_error" == "true" ]] && exit 1
+exit 0
