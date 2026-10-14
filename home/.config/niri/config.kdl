@@ -373,7 +373,7 @@ binds {
     // shows a list of important hotkeys.
     Mod+Shift+F1 { show-hotkey-overlay; }
 
-    Mod+Return      hotkey-overlay-title="Open a Terminal"      { spawn "terminator"; }
+    Mod+Return      hotkey-overlay-title="Open a Terminal"      { spawn "terminal"; }
     Mod+D           hotkey-overlay-title="Run Application"      { spawn "rofi" "-show" "drun"; }
     Mod+R           hotkey-overlay-title="Run Command"          { spawn "rofi" "-show" "run"; }
     Mod+L           hotkey-overlay-title="Lock the Screen"      { spawn "swaylock" "-c" "1e1e1e"; }
