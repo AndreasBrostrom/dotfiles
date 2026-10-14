@@ -1,5 +1,4 @@
-export TERMINAL=terminator
-export TERM=$TERMINAL
+export TERMINAL=kitty
 
 export EDITOR=nvim
 export GIT_EDITOR=nvim

@@ -1,6 +1,5 @@
 set --export GTK_THEME Adwaita:dark
-set --export TERMINAL terminator
-set --export TERM $TERMINAL
+set --export TERMINAL kitty
 
 set --export EDITOR nvim
 set --export GIT_EDITOR nvim

@@ -1,4 +1,4 @@
-TerminalEmulator=terminator
+TerminalEmulator=kitty
 FileManager=thunar
 
 WebBrowser=google-chrome
