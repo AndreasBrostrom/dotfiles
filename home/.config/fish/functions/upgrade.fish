@@ -15,11 +15,11 @@ function upgrade
                     echo -e "  \033[1;34mFedora:\033[0m        dnf"
                     echo -e ""
                     echo -e "\033[1mAdditional Features:\033[0m"
-                    echo -e "  • Automatically upgrades Flatpak packages if installed"
-                    echo -e "  • Automatically upgrades Snap packages if installed"
-                    echo -e "  • Runs sitrep (dotfiles manager) if installed"
-                    echo -e "  • Lists orphaned packages (Arch-based systems)"
-                    echo -e "  • Sends desktop notifications on completion"
+                    echo -e "  - Automatically upgrades Flatpak packages if installed"
+                    echo -e "  - Automatically upgrades Snap packages if installed"
+                    echo -e "  - Runs sitrep (dotfiles manager) if installed"
+                    echo -e "  - Lists orphaned packages (Arch-based systems)"
+                    echo -e "  - Recommends cache cleaning when package caches exceed 10 GiB (Arch-based systems)"
                     echo -e ""
                     echo -e "\033[1mOptions:\033[0m"
                     echo -e "  \033[1;32m--help\033[0m    Show this help message and exit"
@@ -32,6 +32,7 @@ function upgrade
         functions -e _fn_upgrade_flatpak
         functions -e _fn_upgrade_snap
         functions -e _fn_upgrade_dotfiles
+        functions -e _fn_upgrade_cache_hint
         functions -e _fn_upgrade_deconstructor
     end
 
@@ -56,6 +57,45 @@ function upgrade
         end
     end
 
+    # Recommends cache cleaning when the package caches exceed 10 GiB.
+    # Usage: _fn_upgrade_cache_hint paru|yay|pacman
+    function _fn_upgrade_cache_hint
+        set -l limit 10737418240
+        set -l dirs /var/cache/pacman/pkg
+        set -l cmds
+
+        switch $argv[1]
+            case paru
+                set -a dirs $HOME/.cache/paru
+                set cmds 'paru -Sc' 'paru -Scc'
+            case yay
+                set -a dirs $HOME/.cache/yay
+                set cmds 'yay -Sc' 'yay -Scc'
+            case '*'
+                set cmds 'sudo pacman -Sc' 'sudo pacman -Scc'
+        end
+
+        set -l total 0
+        set -l report
+        for dir in $dirs
+            test -d $dir; or continue
+            set -l size (du -sb $dir 2>/dev/null | string split -f1 \t)
+            test -n "$size"; or continue
+            set total (math $total + $size)
+            set -a report (printf ' %s  %s' (numfmt --to=iec $size) $dir)
+        end
+
+        if test $total -gt $limit
+            echo -e "\n\033[1mPackage caches are large ("(numfmt --to=iec $total)"):\033[0m"
+            for line in $report; echo $line; end
+            if exist paccache
+                echo -e '\033[2mKeep only the latest version:  sudo paccache -rk1\033[0m'
+            end
+            echo -e "\033[2mClean uninstalled packages:     $cmds[1]\033[0m"
+            echo -e "\033[2mClear everything:               $cmds[2]\033[0m"
+        end
+    end
+
     echo -e '\033[1mFully upgrading system and packages...\033[0m'
 
     # Arch
@@ -75,6 +115,7 @@ function upgrade
                 echo -e '\033[2mTo remove them:           paru -Rns $(paru -Qtdq)\033[0m'
                 echo -e '\033[2mTo set them as explicit:  paru -D --asexplicit PKG\033[0m'
             end
+            _fn_upgrade_cache_hint paru
             exist notify-send && notify-send 'paru' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
             echo -e '\n\033[1mFull upgrade completed\033[0m'
             sudo --reset-timestamp
@@ -97,6 +138,7 @@ function upgrade
                 echo -e '\033[2mTo remove them:           yay -Rns $(yay -Qtdq)\033[0m'
                 echo -e '\033[2mTo set them as explicit:  yay -D --asexplicit PKG\033[0m'
             end
+            _fn_upgrade_cache_hint yay
             exist notify-send && notify-send 'yay' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
             echo -e '\n\033[1mFull upgrade completed\033[0m'
             sudo --reset-timestamp
@@ -117,6 +159,7 @@ function upgrade
             echo -e '\033[2mTo remove them:           sudo pacman -Rns $(pacman -Qtdq)\033[0m'
             echo -e '\033[2mTo set them as explicit:  sudo pacman -D --asexplicit PKG\033[0m'
         end
+        _fn_upgrade_cache_hint pacman
         exist notify-send && notify-send 'pacman' '<i>System upgrade is completed.</i>' --urgency=normal >/dev/null 2>/dev/null
         echo -e '\n\033[1mFull upgrade completed\033[0m'
         sudo --reset-timestamp
