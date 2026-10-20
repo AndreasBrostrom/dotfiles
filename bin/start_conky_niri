@@ -68,11 +68,15 @@ start() {
     done
 }
 
-# Restart cleanly if already running
+# Restart cleanly if already running. Widgets left over from a previous niri session
+# lose their display, spin at 100% CPU and ignore SIGTERM, so force-kill stragglers.
 for conf in "${CONFIGS[@]}"; do
     pkill -f "conky .*-c $CONF_DIR/$conf\$"
 done
 sleep 0.5
+for conf in "${CONFIGS[@]}"; do
+    pkill -9 -f "conky .*-c $CONF_DIR/$conf\$"
+done
 
 prev=$(niri msg --json focused-output | jq -r '.name // empty')
 
