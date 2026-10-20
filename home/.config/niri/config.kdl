@@ -291,6 +291,12 @@ layout {
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "waybar"
 
+// Wallpaper on every output (image comes from the public dotfiles repo)
+spawn-sh-at-startup "swaybg -o '*' -i \"$HOME/Pictures/Background/jonas-de-ro-practice-gothic-city.jpg\" -m fill"
+
+// System conky on the laptop screen (layer surfaces open on the focused output)
+spawn-sh-at-startup "niri msg action focus-monitor eDP-1; conky -c /usr/share/conky/conky_niri"
+
 // Polkit agent so apps (blueman etc.) can ask for a password
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 

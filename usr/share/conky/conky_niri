@@ -19,6 +19,7 @@ conky.config = {
 	output_backend = 'wayland',
 	own_window = true,
 	own_window_type = 'desktop',
+	own_window_hints = 'below', -- bottom layer: above the swaybg wallpaper, below windows
 	own_window_color = '#00000000',
 	update_interval = 1.0,
 }
@@ -52,6 +53,6 @@ ${voffset 10}${goto 40}${color}Swap${font5}$alignr${swap}/ ${swapfree}
 ${voffset 15}$font$alignr${execi 10000 awk -F= '/TION/ {print $2}' /etc/lsb-release |sed 's/"//g'} \
 ${execi 10000 awk -F= '/EASE=/ {printf $2" "} /NAME/ {print $2}' /etc/lsb-release}
 ${voffset 10}${color2}${alignr}${execi 1200 whoami}@${nodename}
-${alignr}${color2}$fontuptime: ${color}${uptime_short}
+${alignr}${color2}${font}uptime: ${color}${uptime_short}
 ${voffset 5}${color2}$font${alignr}kernel: ${color}${kernel}
 ]]
