@@ -34,6 +34,7 @@ niri=(
   "/usr/share/conky/conky_niri_info"
   "/usr/share/conky/conky_niri_calendar.lua"
   "/usr/share/conky/conky_niri_panel.lua"
+  "/usr/share/conky/conky_niri_sys.lua"
 )
 
 android=(

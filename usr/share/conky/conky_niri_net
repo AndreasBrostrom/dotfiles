@@ -1,10 +1,11 @@
 -- Grimdark (cold steel), shared with niri, waybar and rofi
 -- bone #d8d2c4, dim #8f8a80, light steel #7aa6c4, panel #1f1f1f
 -- Network monitor, bottom, left of the CPU/memory widget (conky_niri_cpu).
--- Heading, signal bar, download/upload graphs, then details.
+-- Heading, signal bar (Wi-Fi) or link speed (wired), download/upload graphs, then details.
 
--- Rounded panel helper lives next to this file (works from the dotfiles repo and /usr/share/conky)
+-- Helpers live next to this file (works from the dotfiles repo and /usr/share/conky)
 local dir = debug.getinfo(1, 'S').source:match('^@(.*)/') or '/usr/share/conky'
+local sys = dofile(dir .. '/conky_niri_sys.lua') -- network interface for this machine
 
 conky.config = {
 	alignment = 'bottom_right',
@@ -44,16 +45,33 @@ conky.config = {
 	font1 = 'Roboto:bold:size=8',
 }
 
+-- Wi-Fi and wired differ in three spots; the bar line keeps one text line either way,
+-- so the measured graph boxes stay put. NETDEV is replaced with the detected interface.
+local link
+if sys.wireless then
+	link = {
+		name = '${wireless_essid NETDEV}',
+		bar = '${color2}${wireless_link_bar 5,280 NETDEV}',
+		rate = '${color1}bitrate${alignr}${color1}${wireless_bitrate NETDEV}',
+	}
+else
+	link = {
+		name = 'wired',
+		bar = '${color1}link${alignr}${color}${execi 600 cat /sys/class/net/NETDEV/speed} Mb/s',
+		rate = '${color1}interface${alignr}${color1}NETDEV',
+	}
+end
+
 -- Graph args: height,width  start-colour end-colour
-conky.text = [[
-${font1}${color2}NETWORK${font}${goto 86}${color1}${wireless_essid wlan0}${alignr}${addr wlan0}
-${voffset 4}${color2}${wireless_link_bar 5,280 wlan0}
-${voffset 6}${downspeedgraph wlan0 50,124 3a5566 7aa6c4}${goto 172}${upspeedgraph wlan0 50,124 5a5650 d8d2c4}
+conky.text = ([[
+${font1}${color2}NETWORK${font}${goto 86}${color1}LINK_NAME${alignr}${addr NETDEV}
+${voffset 4}LINK_BAR
+${voffset 6}${downspeedgraph NETDEV 50,124 3a5566 7aa6c4}${goto 172}${upspeedgraph NETDEV 50,124 5a5650 d8d2c4}
 ${voffset 6}${color2}download${goto 172}${color1}upload
-${voffset 6}${color1}down${alignr}${color}${downspeed wlan0}
-${color1}up${alignr}${color}${upspeed wlan0}
-${color1}total down${alignr}${color1}${totaldown wlan0}
-${color1}total up${alignr}${color1}${totalup wlan0}
-${color1}bitrate${alignr}${color1}${wireless_bitrate wlan0}
+${voffset 6}${color1}down${alignr}${color}${downspeed NETDEV}
+${color1}up${alignr}${color}${upspeed NETDEV}
+${color1}total down${alignr}${color1}${totaldown NETDEV}
+${color1}total up${alignr}${color1}${totalup NETDEV}
+LINK_RATE
 ${color1}gateway${alignr}${color1}${gw_ip}
-]]
+]]):gsub('LINK_NAME', link.name):gsub('LINK_BAR', link.bar):gsub('LINK_RATE', link.rate):gsub('NETDEV', sys.iface)

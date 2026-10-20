@@ -1,15 +1,71 @@
 #!/bin/bash
-# Start the niri conky windows on the laptop screen.
-# On Wayland conky opens on whichever output has focus, so focus the laptop
-# screen, wait for each window to show up there, then give focus back.
+# Start the niri conky widgets on the right outputs.
+# On Wayland conky opens on whichever output has focus, so focus the target output,
+# start the widget, wait for its window to show up there, then give focus back.
+#
+# Layout, picked from the connected outputs:
+#   laptop           A laptop screen (eDP-1) exists: everything on it, whatever else
+#                    is plugged in.
+#   standing screen  No laptop screen but a portrait (rotated) output, like the office
+#                    desktop: clock on the main (center) screen; clock, info (top right,
+#                    below the clock), CPU/memory and network on the right-most portrait.
+#   otherwise        Everything on the largest screen.
+# Override the choice with output names from `niri msg outputs`, e.g. in niri:
+#   spawn-sh-at-startup "CONKY_MAIN=DP-1 CONKY_SIDE=DP-2 start_conky_niri"
+#
 # Usage: start_conky_niri [config dir]   (default /usr/share/conky)
 
-OUTPUT=eDP-1
 CONF_DIR=${1:-/usr/share/conky}
 CONFIGS=(conky_niri conky_niri_cpu conky_niri_net conky_niri_info)
 
+outputs=$(niri msg --json outputs)
+
+# Enabled outputs only (disabled ones have no logical geometry)
+pick() {
+    jq -r "[to_entries[] | select(.value.logical != null)] | $1 | .key // empty" <<<"$outputs"
+}
+portrait='map(select(.value.logical.height > .value.logical.width))'
+landscape='map(select(.value.logical.height <= .value.logical.width))'
+largest='max_by(.value.logical.width * .value.logical.height)'
+# Left/right edges of the whole desk (all screens), for finding the center screen
+desk='(map(.value.logical.x) | min) as $l | (map(.value.logical.x + .value.logical.width) | max) as $r'
+# Largest screen, ties broken by closeness to the middle of the desk (needs $desk first)
+central='sort_by([-(.value.logical.width * .value.logical.height),
+    ((.value.logical.x + .value.logical.width / 2) - ($l + $r) / 2 | fabs)]) | first'
+
+laptop=$(pick 'map(select(.key == "eDP-1")) | first')
+
+if [[ -n $laptop ]]; then
+    side=${CONKY_SIDE-}
+else
+    side=${CONKY_SIDE-$(pick "$portrait | max_by(.value.logical.x)")}
+fi
+if [[ -n $CONKY_MAIN ]]; then
+    main=$CONKY_MAIN
+elif [[ -n $laptop ]]; then
+    main=$laptop
+elif [[ -n $side ]]; then
+    main=$(pick "$desk | map(select(.key != \"$side\")) | $landscape | $central")
+else
+    main=$(pick "$largest")
+fi
+
 conky_count() {
-    niri msg --json layers | jq "[.[] | select(.namespace == \"conky\" and .output == \"$OUTPUT\")] | length"
+    niri msg --json layers | jq "[.[] | select(.namespace == \"conky\" and .output == \"$1\")] | length"
+}
+
+# start <config> <output> [extra conky args]
+start() {
+    local conf=$1 output=$2
+    shift 2
+    [[ -n $output ]] && niri msg action focus-monitor "$output"
+    local before=$(conky_count "$output")
+    CONKY_OUTPUT=$output conky -q "$@" -c "$CONF_DIR/$conf"
+    # Wait (max 5s) for the window before focus can move anywhere else
+    for _ in $(seq 50); do
+        (( $(conky_count "$output") > before )) && break
+        sleep 0.1
+    done
 }
 
 # Restart cleanly if already running
@@ -19,18 +75,20 @@ done
 sleep 0.5
 
 prev=$(niri msg --json focused-output | jq -r '.name // empty')
-niri msg --json outputs | jq -e "has(\"$OUTPUT\")" >/dev/null && niri msg action focus-monitor "$OUTPUT"
 
-for conf in "${CONFIGS[@]}"; do
-    before=$(conky_count)
-    conky -q -c "$CONF_DIR/$conf"
-    # Wait (max 5s) for the window before focus can move anywhere else
-    for _ in $(seq 50); do
-        (( $(conky_count) > before )) && break
-        sleep 0.1
+if [[ -n $side && $side != "$main" ]]; then
+    start conky_niri "$main"
+    start conky_niri "$side"
+    start conky_niri_cpu "$side"
+    start conky_niri_net "$side"
+    # Top right, under the clock (~260px tall at gap_y 30)
+    start conky_niri_info "$side" -a top_right -y 320
+else
+    for conf in "${CONFIGS[@]}"; do
+        start "$conf" "$main"
     done
-done
+fi
 
-[[ -n $prev && $prev != "$OUTPUT" ]] && niri msg action focus-monitor "$prev"
+[[ -n $prev ]] && niri msg action focus-monitor "$prev"
 
 exit 0

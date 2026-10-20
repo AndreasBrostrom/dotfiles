@@ -1,10 +1,12 @@
 -- Grimdark (cold steel), shared with niri, waybar and rofi
 -- bone #d8d2c4, dim #8f8a80, light steel #7aa6c4, panel #1f1f1f
--- System info, bottom left: neofetch-ish user@host header, then two columns
--- of sections in the same style as the monitor. Slow stuff uses execi with long intervals.
+-- System info, bottom left (top right on the office's standing screen, see start_conky_niri):
+-- neofetch-ish user@host header, then two columns of sections in the monitor's style.
+-- Static machine info comes from conky_niri_sys.lua; changing values use execi with long intervals.
 
--- Rounded panel helper lives next to this file (works from the dotfiles repo and /usr/share/conky)
+-- Helpers live next to this file (works from the dotfiles repo and /usr/share/conky)
 local dir = debug.getinfo(1, 'S').source:match('^@(.*)/') or '/usr/share/conky'
+local sys = dofile(dir .. '/conky_niri_sys.lua') -- what this machine is and has
 
 conky.config = {
 	alignment = 'bottom_left',
@@ -43,23 +45,80 @@ conky.config = {
 
 -- Columns: left label 0 / value 80, right label 280 / value 365
 -- Memory, disk, battery and CPU temp are left out: the monitor and waybar already show them
+
+-- Static strings go straight into the conky text, so escape conky's $ and #
+local function esc(s)
+	return (s:gsub('%$', '$$$$'):gsub('#', '\\#'))
+end
+
+local function row(label, value)
+	return { label = label, value = value }
+end
+
+-- Join two columns of rows into conky lines; a missing side is left blank
+local function columns(left, right)
+	local lines = {}
+	for i = 1, math.max(#left, #right) do
+		local line = ''
+		if left[i] then
+			line = '${color1}' .. left[i].label .. '${goto 80}${color}' .. left[i].value
+		end
+		if right[i] then
+			line = line .. '${goto 280}${color1}' .. right[i].label .. '${goto 365}${color}' .. right[i].value
+		end
+		lines[#lines + 1] = line
+	end
+	return table.concat(lines, '\n')
+end
+
+local pkgver = "| cut -d' ' -f2 | sed 's/^[0-9]*://; s/[+-].*//'"
+
+local system = {
+	row('kernel', '${kernel}${if_match "${kernel}" != "${execi 600 pacman -Q linux | cut -d\' \' -f2 | sed \'s/\\.arch/-arch/\'}"}${color3} reboot${endif}'),
+	row('host', esc(sys.host)),
+	row('bios', esc(sys.bios)),
+	row('shell', '${execi 86400 getent passwd $USER | cut -d: -f7 | xargs basename}'),
+	row('terminal', 'kitty'),
+	row('boot', "${execi 86400 systemd-analyze | head -1 | sed 's/.*= //'}"),
+}
+
+local packages = {
+	row('installed', '${execi 600 pacman -Qq | wc -l}${color1} (${execi 600 pacman -Qqe | wc -l} expl)'),
+	row('updates', '${execi 3600 checkupdates 2>/dev/null | wc -l}${color1} pending'),
+	row('upgraded', "${execi 600 grep 'starting full system upgrade' /var/log/pacman.log | tail -1 | cut -c2-17 | tr T ' '}"),
+	row('firmware', "${execi 3600 pacman -Q linux-firmware | cut -d' ' -f2 | sed 's/-.*//'}"),
+	row('mesa', '${execi 3600 pacman -Q mesa ' .. pkgver .. '}'),
+	row('systemd', '${execi 3600 pacman -Q systemd ' .. pkgver .. '}'),
+}
+
+local hardware = {
+	row('cpu', esc(sys.cpu)),
+	row('gpu', esc(sys.gpu)),
+	row('cores', sys.cores .. '${color1} cores, ${color}' .. sys.threads .. '${color1} threads'),
+}
+if sys.gpu_temp ~= '' then hardware[#hardware + 1] = row('gpu temp', sys.gpu_temp) end
+if sys.display ~= '' then hardware[#hardware + 1] = row('display', esc(sys.display)) end
+
+-- Only list toolchains that are installed on this machine
+local dev = {}
+for _, tool in ipairs({
+	{ 'python', 'python', "python --version | cut -d' ' -f2" },
+	{ 'gcc', 'gcc', 'gcc -dumpfullversion' },
+	{ 'rust', 'rustc', "rustc --version | cut -d' ' -f2" },
+	{ 'go', 'go', "go version | cut -d' ' -f3 | sed 's/^go//'" },
+	{ 'node', 'node', 'node --version | tr -d v' },
+	{ 'java', 'java', "java -version 2>&1 | head -1 | cut -d'\"' -f2" },
+	{ 'docker', 'docker', "docker --version | cut -d' ' -f3 | tr -d ,"},
+	{ 'claude', 'claude', "claude --version | cut -d' ' -f1" },
+}) do
+	if sys.has(tool[2]) then dev[#dev + 1] = row(tool[1], '${execi 3600 ' .. tool[3] .. '}') end
+end
+
 conky.text = [[
 ${font2}${color2}${execi 86400 whoami}${color1}@${color}${nodename}${font}
 ${voffset 2}${color1}${execi 86400 sh -c '. /etc/os-release; echo "$NAME"'} ${machine}  ·  niri ${execi 3600 niri --version | cut -d' ' -f2}  ·  up ${uptime_short}
-#
 ${voffset 12}${font1}${color2}SYSTEM${font}${goto 280}${font1}${color2}PACKAGES${font}
-${voffset 4}${color1}kernel${goto 80}${color}${kernel}${if_match "${kernel}" != "${execi 600 pacman -Q linux | cut -d' ' -f2 | sed 's/\.arch/-arch/'}"}${color3} reboot${endif}${goto 280}${color1}installed${goto 365}${color}${execi 600 pacman -Qq | wc -l}${color1} (${execi 600 pacman -Qqe | wc -l} expl)
-${color1}host${goto 80}${color}${execi 86400 cat /sys/class/dmi/id/product_version}${goto 280}${color1}updates${goto 365}${color}${execi 3600 checkupdates 2>/dev/null | wc -l}${color1} pending
-${color1}bios${goto 80}${color}${execi 86400 cat /sys/class/dmi/id/bios_version | cut -d' ' -f1}${goto 280}${color1}upgraded${goto 365}${color}${execi 600 grep 'starting full system upgrade' /var/log/pacman.log | tail -1 | cut -c2-17 | tr T ' '}
-${color1}shell${goto 80}${color}${execi 86400 getent passwd $USER | cut -d: -f7 | xargs basename}${goto 280}${color1}firmware${goto 365}${color}${execi 3600 pacman -Q linux-firmware | cut -d' ' -f2 | sed 's/-.*//'}
-${color1}terminal${goto 80}${color}kitty${goto 280}${color1}mesa${goto 365}${color}${execi 3600 pacman -Q mesa | cut -d' ' -f2 | sed 's/^[0-9]*://; s/[+-].*//'}
-${color1}boot${goto 80}${color}${execi 86400 systemd-analyze | head -1 | sed 's/.*= //'}${goto 280}${color1}systemd${goto 365}${color}${execi 3600 pacman -Q systemd | cut -d' ' -f2 | sed 's/[+-].*//'}
-#
+${voffset 4}]] .. columns(system, packages) .. [[
+
 ${voffset 12}${font1}${color2}HARDWARE${font}${goto 280}${font1}${color2}DEV${font}
-${voffset 4}${color1}cpu${goto 80}${color}${execi 86400 grep -m1 'model name' /proc/cpuinfo | sed 's/.*: //; s/ with .*//'}${goto 280}${color1}python${goto 365}${color}${execi 3600 python --version | cut -d' ' -f2}
-${color1}gpu${goto 80}${color}${execi 86400 lspci | grep -m1 VGA | sed 's/.*\[//; s/\].*//'}${goto 280}${color1}gcc${goto 365}${color}${execi 3600 gcc -dumpfullversion}
-${color1}cores${goto 80}${color}${execi 86400 lscpu | grep "^Core(s) per socket" | grep -o "[0-9]*"}${color1} cores, ${color}${execi 86400 nproc}${color1} threads${goto 280}${color1}rust${goto 365}${color}${execi 3600 rustc --version | cut -d' ' -f2}
-${color1}gpu temp${goto 80}${color}${hwmon amdgpu temp 1}°C${goto 280}${color1}node${goto 365}${color}${execi 3600 node --version | tr -d v}
-${color1}display${goto 80}${color}${execi 3600 niri msg outputs | grep -A3 "(eDP-1)" | grep "Current mode" | sed "s/.*mode: //; s/ (.*//; s/\.[0-9]* Hz/ Hz/"}${goto 280}${color1}java${goto 365}${color}${execi 3600 java -version 2>&1 | head -1 | cut -d'"' -f2}
-${goto 280}${color1}claude${goto 365}${color}${execi 3600 claude --version | cut -d' ' -f1}
-]]
+${voffset 4}]] .. columns(hardware, dev) .. '\n'

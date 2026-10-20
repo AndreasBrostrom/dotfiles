@@ -3,8 +3,9 @@
 -- Live monitor, bottom right: CPU above memory (network is its own widget, conky_niri_net).
 -- Each section: history graph on the left, usage bar + busiest processes on the right.
 
--- Rounded panel helper lives next to this file (works from the dotfiles repo and /usr/share/conky)
+-- Helpers live next to this file (works from the dotfiles repo and /usr/share/conky)
 local dir = debug.getinfo(1, 'S').source:match('^@(.*)/') or '/usr/share/conky'
+local sys = dofile(dir .. '/conky_niri_sys.lua') -- temperature sensor for this machine
 
 conky.config = {
 	alignment = 'bottom_right',
@@ -50,8 +51,8 @@ conky.config = {
 -- back up with a negative voffset and draw the graph at the left edge beside it.
 -- Rows are ~12.8px: voffset back up = bar line + 6 rows (~96), graph a bit shorter (90).
 -- Graph args: height,width  start-colour end-colour (cpu/mem graphs are fixed 0-100%)
-conky.text = [[
-${font1}${color2}CPU${font}${goto 286}${color1}${hwmon k10temp temp 1}°C${alignr}${color}${cpu cpu0}%
+conky.text = ([[
+${font1}${color2}CPU${font}${goto 286}${color1}CPU_TEMP${alignr}${color}${cpu cpu0}%
 ${voffset 4}${goto 286}${color2}${cpubar cpu0 5,210}
 ${voffset 2}${goto 286}${color}${top name 1}${alignr}${color1}${top cpu 1}%
 ${goto 286}${color}${top name 2}${alignr}${color1}${top cpu 2}%
@@ -70,4 +71,4 @@ ${goto 286}${color}${top_mem name 4}${alignr}${color1}${top_mem mem_res 4}
 ${goto 286}${color}${top_mem name 5}${alignr}${color1}${top_mem mem_res 5}
 ${goto 286}${color}${top_mem name 6}${alignr}${color1}${top_mem mem_res 6}
 ${voffset -96}${memgraph 90,240 3d3a35 a8a294}
-]]
+]]):gsub('CPU_TEMP', sys.cpu_temp)
