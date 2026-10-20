@@ -87,35 +87,45 @@
     },
     "clock#date": {
         "format": "{:%Y-%m-%d (%a) w%V}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "tooltip-format": "<span color='#7aa6c4'><b>{:%B %Y}</b></span>\n<tt>{calendar}</tt>\n<span color='#8f8a80'><small>scroll to change month · right-click for year</small></span>",
         "calendar": {
             "mode": "month",
+            "mode-mon-col": 3,
+            "iso8601": true, // weeks start on Monday, ISO week numbers like the date block
             "weeks-pos": "left",
+            "on-scroll": 1,
             "format": {
-                "months": "<span color='#cdd6f4'><b>{}</b></span>",
-                "days": "<span color='#cdd6f4'>{}</span>",
-                "weeks": "<span color='#6c7086'>{}</span>",
-                "weekdays": "<span color='#89b4fa'>{}</span>",
-                "today": "<span color='#ffffff'><b>{}</b></span>"
+                "months": "<span color='#7aa6c4'><b>{}</b></span>",
+                "days": "<span color='#d8d2c4'>{}</span>",
+                "weeks": "<span color='#5c5a56'>{:%V}</span>",
+                "weekdays": "<span color='#8f8a80'>{}</span>",
+                "today": "<span color='#1f1f1f' background='#7aa6c4'><b>{}</b></span>"
             }
+        },
+        "actions": {
+            "on-click-right": "mode",
+            "on-scroll-up": "shift_down",
+            "on-scroll-down": "shift_up"
         }
     },
     "cpu": {
+        "tooltip-format": "<span color='#7aa6c4'><b>CPU</b></span>\n<span color='#8f8a80'>Usage</span>  {usage}%\n<span color='#8f8a80'>Load</span>  {load}\n<span color='#8f8a80'>Clock</span>  {avg_frequency} GHz avg · {max_frequency} GHz max",
         "format": "{usage}% ",
         "tooltip": true
     },
     "memory": {
+        "tooltip-format": "<span color='#7aa6c4'><b>Memory</b></span>\n<span color='#8f8a80'>Used</span>  {used:0.1f} / {total:0.1f} GiB  ({percentage}%)\n<span color='#8f8a80'>Free</span>  {avail:0.1f} GiB\n<span color='#8f8a80'>Swap</span>  {swapUsed:0.1f} / {swapTotal:0.1f} GiB",
         "format": "{}% ",
         "tooltip": true,
-        "tooltip-format": "Used: {used} / {total}\nAvailable: {avail} ({percentage}%)"
     },
     "disk": {
+        "tooltip-format": "<span color='#7aa6c4'><b>Disk</b></span>  <span color='#8f8a80'>{path}</span>\n<span color='#8f8a80'>Used</span>  {used} / {total}  ({percentage_used}%)\n<span color='#8f8a80'>Free</span>  {free}  ({percentage_free}%)",
         "interval": 30,
         "format": "{percentage_used}% ⛁",
         "path": "/",
-        "tooltip-format": "Used: {used} / {total}\nFree: {free} ({percentage_free}%)"
     },
     "temperature": {
+        "tooltip-format": "<span color='#7aa6c4'><b>Temperature</b></span>\n<span color='#8f8a80'>CPU</span>  {temperatureC}°C\n<span color='#8f8a80'><small>critical at 80°C</small></span>",
         // "thermal-zone": 2,
         // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
         "critical-threshold": 80,
@@ -128,6 +138,7 @@
         ]
     },
     "backlight": {
+        "tooltip-format": "Brightness  {percent}%\nscroll to adjust",
         // "device": "acpi_video1",
         "format": "{percent}% {icon}",
         "format-icons": [
@@ -143,15 +154,19 @@
         ]
     },
     "battery": {
+        "tooltip-format": "<span color='#7aa6c4'><b>Battery</b></span>\n<span color='#8f8a80'>Charge</span>  {capacity}%\n<span color='#8f8a80'>Time left</span>  {time}\n<span color='#8f8a80'>Power</span>  {power:0.1f} W\n<span color='#8f8a80'>Health</span>  {health}%\n<span color='#8f8a80'><small>click to toggle time left in the bar</small></span>",
+        "tooltip-format-charging": "<span color='#7aa6c4'><b>Battery</b></span>  <span color='#8aa57a'>charging</span>\n<span color='#8f8a80'>Charge</span>  {capacity}%\n<span color='#8f8a80'>Full in</span>  {time}\n<span color='#8f8a80'>Power</span>  {power:0.1f} W\n<span color='#8f8a80'>Health</span>  {health}%\n<span color='#8f8a80'><small>click to toggle time in the bar</small></span>",
+        "tooltip-format-plugged": "<span color='#7aa6c4'><b>Battery</b></span>  <span color='#8f8a80'>plugged in</span>\n<span color='#8f8a80'>Charge</span>  {capacity}%\n<span color='#8f8a80'>Health</span>  {health}%",
+        "tooltip-format-full": "<span color='#7aa6c4'><b>Battery</b></span>  <span color='#8f8a80'>full</span>\n<span color='#8f8a80'>Charge</span>  {capacity}%\n<span color='#8f8a80'>Health</span>  {health}%",
         "states": {
             // "good": 95,
             "warning": 30,
             "critical": 15
         },
         "format": "{capacity}% {icon}",
-        "format-full": "{capacity}%",
-        "format-charging": "{capacity}% CHAR",
-        "format-plugged": "{capacity}% POW",
+        "format-full": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
         "format-alt": "{time} {icon}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
@@ -167,8 +182,8 @@
         "bat": "BAT2"
     },
     "power-profiles-daemon": {
+        "tooltip-format": "<span color='#7aa6c4'><b>Power profile</b></span>\n<span color='#8f8a80'>Profile</span>  {profile}\n<span color='#8f8a80'>Driver</span>  {driver}",
         "format": "{icon}",
-        "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
         "tooltip": true,
         "format-icons": {
             "default": "",
@@ -178,15 +193,20 @@
         }
     },
     "network": {
+        // Used while toggled (format-alt): waybar skips the per-state tooltips then
+        "tooltip-format": "<span color='#7aa6c4'><b>Wi-Fi</b></span>  <span color='#8f8a80'>{ifname}</span>\n<span color='#8f8a80'>Network</span>  {essid}\n<span color='#8f8a80'>Signal</span>  {signalStrength}%  ({signaldBm} dBm, {frequency} GHz)\n<span color='#8f8a80'>Address</span>  {ipaddr}/{cidr}\n<span color='#8f8a80'>Gateway</span>  {gwaddr}\n<span color='#8f8a80'>Traffic</span>  ↓ {bandwidthDownBytes}  ↑ {bandwidthUpBytes}\n<span color='#8f8a80'><small>click to toggle address</small></span>",
+        "tooltip-format-wifi": "<span color='#7aa6c4'><b>Wi-Fi</b></span>  <span color='#8f8a80'>{ifname}</span>\n<span color='#8f8a80'>Network</span>  {essid}\n<span color='#8f8a80'>Signal</span>  {signalStrength}%  ({signaldBm} dBm, {frequency} GHz)\n<span color='#8f8a80'>Address</span>  {ipaddr}/{cidr}\n<span color='#8f8a80'>Gateway</span>  {gwaddr}\n<span color='#8f8a80'>Traffic</span>  ↓ {bandwidthDownBytes}  ↑ {bandwidthUpBytes}\n<span color='#8f8a80'><small>click to toggle address</small></span>",
+        "tooltip-format-ethernet": "<span color='#7aa6c4'><b>Ethernet</b></span>  <span color='#8f8a80'>{ifname}</span>\n<span color='#8f8a80'>Address</span>  {ipaddr}/{cidr}\n<span color='#8f8a80'>Gateway</span>  {gwaddr}\n<span color='#8f8a80'>Traffic</span>  ↓ {bandwidthDownBytes}  ↑ {bandwidthUpBytes}",
+        "tooltip-format-disconnected": "<span color='#7aa6c4'><b>Network</b></span>\n<span color='#b8625a'>Disconnected</span>",
         // "interface": "wlp2*", // (Optional) To force the use of this interface
         "format-wifi": "{essid} ({signalStrength}%) ",
         "format-ethernet": "{ipaddr}/{cidr} ",
-        "tooltip-format": "{ifname} via {gwaddr} ",
         "format-linked": "{ifname} (No IP) ",
         "format-disconnected": "Disconnected ⚠",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        "format-alt": "{ipaddr}/{cidr} "
     },
     "pulseaudio": {
+        "tooltip-format": "<span color='#7aa6c4'><b>Audio</b></span>\n<span color='#8f8a80'>Output</span>  {desc}\n<span color='#8f8a80'>Volume</span>  {volume}%\n<span color='#8f8a80'>Mic</span>  {source_volume}%  {source_desc}\n<span color='#8f8a80'><small>click for mixer</small></span>",
         // "scroll-step": 1, // %, can be a float
         "format": "{volume}% {icon} {format_source}",
         "format-bluetooth": "{volume}% {icon}  {format_source}",
@@ -225,7 +245,7 @@
         "format": "{}",
         "format-alt": "{alt}",
         "return-type": "json",
-        "interval": 1,
+        // No interval: the script runs continuously and ticks on each full second
         "exec": "$HOME/.config/waybar/scripts/datetime-combo.sh",
         "on-right-click": "$HOME/.config/waybar/scripts/datetime-copy.sh"
     },
@@ -266,5 +286,32 @@
             "wakeup": "adb -s 3A271JEHN06791 shell input keyevent 26",
             "restart": "adb -s 3A271JEHN06791 reboot"
         }
+    },
+    "custom/cpu": {
+        "return-type": "json",
+        "interval": 5,
+        "exec": "$HOME/.config/waybar/scripts/sysinfo.sh cpu"
+    },
+    "custom/memory": {
+        "return-type": "json",
+        "interval": 5,
+        "exec": "$HOME/.config/waybar/scripts/sysinfo.sh memory"
+    },
+    "custom/disk": {
+        "return-type": "json",
+        "interval": 30,
+        "exec": "$HOME/.config/waybar/scripts/sysinfo.sh disk"
+    },
+    "custom/temperature": {
+        "return-type": "json",
+        "interval": 5,
+        "exec": "$HOME/.config/waybar/scripts/sysinfo.sh temperature"
+    },
+    "custom/backlight": {
+        "return-type": "json",
+        "interval": 5,
+        "exec": "$HOME/.config/waybar/scripts/sysinfo.sh backlight",
+        "on-scroll-up": "brightnessctl -q set 5%+",
+        "on-scroll-down": "brightnessctl -q set 5%-"
     }
 }

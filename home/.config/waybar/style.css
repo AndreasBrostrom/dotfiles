@@ -1,3 +1,11 @@
+/* Grimdark (cold steel), shared with niri, rofi and conky_niri
+ *
+ * base    #1f1f1f #2a2a2a #2d2d2d #353535
+ * text    #d8d2c4 (bone)   dim #8f8a80
+ * accent  #598fb2 (steel)  dark #324147
+ * states  red #9e4a40  brass #9d824b  green #6f8a5e
+ */
+
 * {
     /* `otf-font-awesome` is required to be installed for icons */
     font-family: Roboto, "Font Awesome 7 Free", "Font Awesome 7 Brands", Helvetica, Arial, sans-serif;
@@ -5,9 +13,9 @@
 }
 
 window#waybar {
-    background-color: rgba(43, 48, 59, 0.5);
-    border-bottom: 3px solid rgba(100, 114, 125, 0.5);
-    color: #ffffff;
+    background-color: rgba(31, 31, 31, 0.92);
+    border-bottom: 2px solid #353535;
+    color: #d8d2c4;
     transition-property: background-color;
     transition-duration: .5s;
 }
@@ -16,27 +24,9 @@ window#waybar.hidden {
     opacity: 0.2;
 }
 
-/*
-window#waybar.empty {
-    background-color: transparent;
-}
-window#waybar.solo {
-    background-color: #FFFFFF;
-}
-*/
-
-window#waybar.termite {
-    background-color: #3F3F3F;
-}
-
-window#waybar.chromium {
-    background-color: #000000;
-    border: none;
-}
-
 button {
     /* Use box-shadow instead of border so the text isn't offset */
-    box-shadow: inset 0 -3px transparent;
+    box-shadow: inset 0 -2px transparent;
     /* Avoid rounded borders under each button name */
     border: none;
     border-radius: 0;
@@ -45,45 +35,42 @@ button {
 /* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
 button:hover {
     background: inherit;
-    box-shadow: inset 0 -3px #ffffff;
-}
-
-/* you can set a style on hover for any module like this */
-#pulseaudio:hover {
-    background-color: #a37800;
 }
 
 #workspaces button {
-    padding: 0 5px;
+    padding: 0 6px;
     background-color: transparent;
-    color: #ffffff;
+    color: #8f8a80;
 }
 
 #workspaces button:hover {
-    background: rgba(0, 0, 0, 0.2);
+    background: #2d2d2d;
+    color: #d8d2c4;
 }
 
 #workspaces button.focused, #workspaces button.active {
-    background-color: #64727D;
-    box-shadow: inset 0 -3px #ffffff;
+    background-color: #324147;
+    color: #d8d2c4;
+    box-shadow: inset 0 -2px #598fb2;
 }
 
 #workspaces button.urgent {
-    background-color: #eb4d4b;
+    background-color: #9e4a40;
+    color: #d8d2c4;
 }
 
 #mode {
-    background-color: #64727D;
-    box-shadow: inset 0 -3px #ffffff;
+    background-color: #324147;
+    box-shadow: inset 0 -2px #598fb2;
 }
 
 #clock,
 #battery,
-#cpu,
-#memory,
-#disk,
-#temperature,
-#backlight,
+#custom-cpu,
+#custom-memory,
+#custom-disk,
+#custom-temperature,
+#custom-backlight,
 #network,
 #pulseaudio,
 #wireplumber,
@@ -93,9 +80,16 @@ button:hover {
 #idle_inhibitor,
 #scratchpad,
 #power-profiles-daemon,
-#mpd {
+#mpd,
+#language,
+#custom-power,
+#custom-datetime,
+#custom-dotfiles,
+#custom-androidDevice,
+#custom-todo {
     padding: 0 10px;
-    color: #ffffff;
+    color: #d8d2c4;
+    background-color: transparent;
 }
 
 #window,
@@ -113,31 +107,83 @@ button:hover {
     margin-right: 0;
 }
 
+/* Timestamp, date and time share one quiet block, a step lighter than the bar */
+#custom-datetime,
 #clock {
-    background-color: #64727D;
+    background-color: #353535;
+    color: #d8d2c4;
 }
 
-#battery {
-    background-color: #ffffff;
-    color: #000000;
+/* Quiet modules: dim text, they only light up on state changes */
+#language,
+#idle_inhibitor,
+#scratchpad {
+    color: #8f8a80;
 }
 
-#battery.charging, #battery.plugged {
-    color: #ffffff;
-    background-color: #26A65B;
+/* Hover on every module, even ones without click actions */
+#clock:hover,
+#battery:hover,
+#custom-cpu:hover,
+#custom-memory:hover,
+#custom-disk:hover,
+#custom-temperature:hover,
+#custom-backlight:hover,
+#network:hover,
+#pulseaudio:hover,
+#wireplumber:hover,
+#custom-media:hover,
+#idle_inhibitor:hover,
+#scratchpad:hover,
+#power-profiles-daemon:hover,
+#mpd:hover,
+#language:hover,
+#custom-power:hover,
+#custom-datetime:hover,
+#custom-dotfiles:hover,
+#custom-androidDevice:hover,
+#custom-todo:hover {
+    background-color: #2d2d2d;
+}
+
+/* Blocks that already have a background step one lighter instead */
+#custom-datetime:hover,
+#clock:hover,
+#custom-power:hover {
+    background-color: #3f3f3f;
+}
+
+#custom-dotfiles.warning:hover {
+    background-color: #b0564b;
+}
+
+#pulseaudio.muted,
+#wireplumber.muted {
+    color: #5c5a56;
+}
+
+#network.disconnected {
+    color: #9e4a40;
+}
+
+#battery.charging {
+    color: #6f8a5e;
+}
+
+#battery.warning:not(.charging) {
+    color: #9d824b;
 }
 
 @keyframes blink {
     to {
-        background-color: #ffffff;
-        color: #000000;
+        background-color: #9e4a40;
+        color: #d8d2c4;
     }
 }
 
 /* Using steps() instead of linear as a timing function to limit cpu usage */
 #battery.critical:not(.charging) {
-    background-color: #f53c3c;
-    color: #ffffff;
+    color: #9e4a40;
     animation-name: blink;
     animation-duration: 0.5s;
     animation-timing-function: steps(12);
@@ -150,103 +196,23 @@ button:hover {
 }
 
 #power-profiles-daemon.performance {
-    background-color: #f53c3c;
-    color: #ffffff;
+    color: #9e4a40;
 }
 
 #power-profiles-daemon.balanced {
-    background-color: #2980b9;
-    color: #ffffff;
+    color: #598fb2;
 }
 
 #power-profiles-daemon.power-saver {
-    background-color: #2ecc71;
-    color: #000000;
+    color: #6f8a5e;
 }
 
 label:focus {
-    background-color: #000000;
+    background-color: #1f1f1f;
 }
 
-#cpu {
-    background-color: #2ecc71;
-    color: #000000;
-}
-
-#memory {
-    background-color: #9b59b6;
-}
-
-#disk {
-    background-color: #964B00;
-}
-
-#backlight {
-    background-color: #90b1b1;
-}
-
-#network {
-    background-color: #2980b9;
-}
-
-#network.disconnected {
-    background-color: #f53c3c;
-}
-
-#pulseaudio {
-    background-color: #f1c40f;
-    color: #000000;
-}
-
-#pulseaudio.muted {
-    background-color: #90b1b1;
-    color: #2a5c45;
-}
-
-#wireplumber {
-    background-color: #fff0f5;
-    color: #000000;
-}
-
-#wireplumber.muted {
-    background-color: #f53c3c;
-}
-
-#custom-media {
-    background-color: #66cc99;
-    color: #2a5c45;
-    min-width: 100px;
-}
-
-#custom-media.custom-spotify {
-    background-color: #66cc99;
-}
-
-#custom-media.custom-vlc {
-    background-color: #ffa000;
-}
-
-#custom-power {
-    padding: 0px 10px;
-    color: #ffffff;
-    background-color: #212121;
-}
-
-#custom-datetime {
-    background-color: #64727D;
-    padding: 0 10px;
-}
-
-#temperature {
-    background-color: #f0932b;
-}
-
-#temperature.critical {
-    background-color: #eb4d4b;
-}
-
-#tray {
-    background-color: #2980b9;
+#custom-temperature.critical {
+    background-color: #9e4a40;
 }
 
 #tray > .passive {
@@ -255,46 +221,24 @@ label:focus {
 
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
-    background-color: #eb4d4b;
-}
-
-#idle_inhibitor {
-    background-color: #2d3436;
+    background-color: #9e4a40;
 }
 
 #idle_inhibitor.activated {
-    background-color: #ecf0f1;
-    color: #2d3436;
-}
-
-#mpd {
-    background-color: #66cc99;
-    color: #2a5c45;
+    background-color: #324147;
+    color: #d8d2c4;
 }
 
 #mpd.disconnected {
-    background-color: #f53c3c;
+    color: #9e4a40;
 }
 
-#mpd.stopped {
-    background-color: #90b1b1;
-}
-
+#mpd.stopped,
 #mpd.paused {
-    background-color: #51a37a;
-}
-
-#language {
-    background: #00b093;
-    color: #740864;
-    padding: 0 5px;
-    margin: 0 5px;
-    min-width: 16px;
+    color: #8f8a80;
 }
 
 #keyboard-state {
-    background: #97e1ad;
-    color: #000000;
     padding: 0 0px;
     margin: 0 5px;
     min-width: 16px;
@@ -305,15 +249,11 @@ label:focus {
 }
 
 #keyboard-state > label.locked {
-    background: rgba(0, 0, 0, 0.2);
-}
-
-#scratchpad {
-    background: rgba(0, 0, 0, 0.2);
+    background: #324147;
 }
 
 #scratchpad.empty {
-	background-color: transparent;
+    background-color: transparent;
 }
 
 #privacy {
@@ -322,59 +262,54 @@ label:focus {
 
 #privacy-item {
     padding: 0 5px;
-    color: white;
+    color: #d8d2c4;
 }
 
 #privacy-item.screenshare {
-    background-color: #cf5700;
+    background-color: #9e4a40;
 }
 
 #privacy-item.audio-in {
-    background-color: #1ca000;
+    background-color: #6f8a5e;
 }
 
 #privacy-item.audio-out {
-    background-color: #0069d4;
+    background-color: #324147;
 }
 
-#custom-dotfiles {
-    padding: 0 10px;
-    color: #ffffff;
+#custom-power {
+    background-color: #2d2d2d;
 }
 
 #custom-dotfiles.warning {
-    background-color: #f53c3c;
-    color: #ffffff;
+    background-color: #9e4a40;
 }
 
 #custom-dotfiles.clean {
     background-color: transparent;
 }
 
-#custom-androidDevice {
-    padding: 0 10px;
-    color: #ffffff;
-}
-
 #custom-androidDevice.connected {
-    background-color: #2ecc71;
-    color: #000000;
+    color: #d8d2c4;
 }
 
-#custom-androidDevice.disconnected {
-    background-color: transparent;
-}
-
+#custom-androidDevice.disconnected,
 #custom-androidDevice.no-server {
     background-color: transparent;
 }
 
-#custom-todo {
-    padding: 0 10px;
-    color: #ffffff;
+#custom-todo.active {
+    background-color: #9d824b;
+    color: #1f1f1f;
 }
 
-#custom-todo.active {
-    background-color: #e67e22;
-    color: #000000;
+tooltip {
+    background-color: #1f1f1f;
+    border: 1px solid #353535;
+    border-radius: 0;
+}
+
+tooltip label {
+    color: #d8d2c4;
+    padding: 4px;
 }
