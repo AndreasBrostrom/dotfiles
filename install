@@ -223,7 +223,7 @@ if [ -d $SCRIPT_DIR/bin ]; then
                 echo -e " \033[2m[dry-run] Would copy $FILE to ~/../usr/bin\033[0m"
             else
                 echo -e " \033[2mCopying $FILE to ~/../usr/bin\033[0m"
-                cp -f $FILE /data/data/com.termux/files/usr/bin/$FILE
+                install -m755 $FILE /data/data/com.termux/files/usr/bin/$FILE
             fi
             continue
         fi
@@ -234,7 +234,7 @@ if [ -d $SCRIPT_DIR/bin ]; then
         fi
 
         echo -e " \033[2mCopying $FILE to $DEST\033[0m"
-        sudo cp -f $FILE $DEST/$FILE
+        sudo install -Dm755 $FILE $DEST/$FILE
     done
 fi
 
@@ -255,8 +255,7 @@ if [ -d $SCRIPT_DIR/etc ]; then
         fi
 
         echo -e " \033[2mCopying $ENTRY to $DEST/$FILE\033[0m"
-        [ ! -d $(dirname "$DEST/$FILE") ] && sudo mkdir -p $(dirname "$DEST/$FILE")
-        sudo cp -f "$SCRIPT_DIR/$ENTRY" "$DEST/$FILE"
+        sudo install -Dm644 "$SCRIPT_DIR/$ENTRY" "$DEST/$FILE"
     done
 fi
 
@@ -276,8 +275,7 @@ if [ -d $SCRIPT_DIR/usr ]; then
         fi
 
         echo -e " \033[2mCopying $FILE to $DEST\033[0m"
-        [ ! -d $(dirname "$DEST/$FILE") ] && sudo mkdir -p $(dirname "$DEST/$FILE")
-        sudo cp -rf $FILE "$DEST/$FILE"
+        sudo install -Dm644 $FILE "$DEST/$FILE"
     done
 fi
 
