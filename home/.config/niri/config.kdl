@@ -431,7 +431,7 @@ binds {
 
     // Program
     Mod+N           hotkey-overlay-title="Open File Manager"    { spawn "thunar"; }
-    Mod+P           hotkey-overlay-title="Display Settings"     { spawn-sh "nwg-displays -m ~/.config/niri/config_monitor.kdl"; }
+    Mod+P           hotkey-overlay-title="Display Settings"     { spawn "nwg-displays"; }
     Mod+Shift+C     hotkey-overlay-title="Open Code"            { spawn "code"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
