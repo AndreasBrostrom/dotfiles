@@ -1,0 +1,59 @@
+-- Grimdark (cold steel), shared with niri, waybar and rofi
+-- bone #d8d2c4, dim #8f8a80, light steel #7aa6c4, panel #1f1f1f
+-- Network monitor, bottom, left of the CPU/memory widget (conky_niri_cpu).
+-- Heading, signal bar, download/upload graphs, then details.
+
+-- Rounded panel helper lives next to this file (works from the dotfiles repo and /usr/share/conky)
+local dir = debug.getinfo(1, 'S').source:match('^@(.*)/') or '/usr/share/conky'
+
+conky.config = {
+	alignment = 'bottom_right',
+	gap_x = 552, -- 20 + conky_niri_cpu (480 + 2 * 16 margin) + 20
+	gap_y = 30,
+	minimum_width = 280,
+	maximum_width = 280,
+	background = true,
+	update_interval = 1.0,
+	net_avg_samples = 1,
+	no_buffers = true,
+	double_buffer = true,
+	disable_auto_reload = true, -- a reload reopens the window on the focused output
+
+	output_backend = 'wayland',
+	own_window = true,
+	own_window_type = 'desktop',
+	own_window_hints = 'below',
+	own_window_color = '#00000000', -- transparent; the rounded panel is drawn in Lua
+	border_inner_margin = 16,
+
+	draw_shades = false,
+	draw_outline = false,
+	draw_borders = false,
+
+	lua_load = dir .. '/conky_niri_panel.lua',
+	lua_draw_hook_pre = 'panel 18,64,124,50 172,64,124,50', -- graph boxes: x,y,w,h (measured)
+	draw_graph_borders = false,
+	show_graph_scale = false,
+	show_graph_range = false,
+
+	default_color = 'd8d2c4', -- bone
+	color1 = '8f8a80',        -- dim
+	color2 = '7aa6c4',        -- light steel
+
+	font = 'Roboto Mono:size=8',
+	font1 = 'Roboto:bold:size=8',
+}
+
+-- Graph args: height,width  start-colour end-colour
+conky.text = [[
+${font1}${color2}NETWORK${font}${goto 86}${color1}${wireless_essid wlan0}${alignr}${addr wlan0}
+${voffset 4}${color2}${wireless_link_bar 5,280 wlan0}
+${voffset 6}${downspeedgraph wlan0 50,124 3a5566 7aa6c4}${goto 172}${upspeedgraph wlan0 50,124 5a5650 d8d2c4}
+${voffset 6}${color2}download${goto 172}${color1}upload
+${voffset 6}${color1}down${alignr}${color}${downspeed wlan0}
+${color1}up${alignr}${color}${upspeed wlan0}
+${color1}total down${alignr}${color1}${totaldown wlan0}
+${color1}total up${alignr}${color1}${totalup wlan0}
+${color1}bitrate${alignr}${color1}${wireless_bitrate wlan0}
+${color1}gateway${alignr}${color1}${gw_ip}
+]]

@@ -1,0 +1,73 @@
+-- Grimdark (cold steel), shared with niri, waybar and rofi
+-- bone #d8d2c4, dim #8f8a80, light steel #7aa6c4, panel #1f1f1f
+-- Live monitor, bottom right: CPU above memory (network is its own widget, conky_niri_net).
+-- Each section: history graph on the left, usage bar + busiest processes on the right.
+
+-- Rounded panel helper lives next to this file (works from the dotfiles repo and /usr/share/conky)
+local dir = debug.getinfo(1, 'S').source:match('^@(.*)/') or '/usr/share/conky'
+
+conky.config = {
+	alignment = 'bottom_right',
+	gap_x = 20,
+	gap_y = 30,
+	minimum_width = 480,
+	maximum_width = 480,
+	background = true,
+	update_interval = 1.0,
+	cpu_avg_samples = 1,
+	net_avg_samples = 1,
+	no_buffers = true,
+	double_buffer = true,
+	top_name_width = 16,
+	disable_auto_reload = true, -- a reload reopens the window on the focused output
+
+	output_backend = 'wayland',
+	own_window = true,
+	own_window_type = 'desktop',
+	own_window_hints = 'below',
+	own_window_color = '#00000000', -- transparent; the rounded panel is drawn in Lua
+	border_inner_margin = 16,
+
+	draw_shades = false,
+	draw_outline = false,
+	draw_borders = false,
+
+	lua_load = dir .. '/conky_niri_panel.lua',
+	lua_draw_hook_pre = 'panel 18,55,240,90 18,205,240,90', -- graph boxes: x,y,w,h (measured)
+	draw_graph_borders = false,
+	show_graph_scale = false,
+	show_graph_range = false,
+
+	default_color = 'd8d2c4', -- bone
+	color1 = '8f8a80',        -- dim
+	color2 = '7aa6c4',        -- light steel
+
+	font = 'Roboto Mono:size=8',
+	font1 = 'Roboto:bold:size=8',
+}
+
+-- Layout trick: write the right-hand list first (goto 286 = 16 margin + 270), then jump
+-- back up with a negative voffset and draw the graph at the left edge beside it.
+-- Rows are ~12.8px: voffset back up = bar line + 6 rows (~96), graph a bit shorter (90).
+-- Graph args: height,width  start-colour end-colour (cpu/mem graphs are fixed 0-100%)
+conky.text = [[
+${font1}${color2}CPU${font}${goto 286}${color1}${hwmon k10temp temp 1}°C${alignr}${color}${cpu cpu0}%
+${voffset 4}${goto 286}${color2}${cpubar cpu0 5,210}
+${voffset 2}${goto 286}${color}${top name 1}${alignr}${color1}${top cpu 1}%
+${goto 286}${color}${top name 2}${alignr}${color1}${top cpu 2}%
+${goto 286}${color}${top name 3}${alignr}${color1}${top cpu 3}%
+${goto 286}${color}${top name 4}${alignr}${color1}${top cpu 4}%
+${goto 286}${color}${top name 5}${alignr}${color1}${top cpu 5}%
+${goto 286}${color}${top name 6}${alignr}${color1}${top cpu 6}%
+${voffset -96}${cpugraph cpu0 90,240 3a5566 7aa6c4}
+#
+${voffset 14}${font1}${color2}MEMORY${font}${goto 286}${color1}${memperc}%${alignr}${color}${mem}${color1} / ${memmax}
+${voffset 4}${goto 286}${color}${membar 5,210}
+${voffset 2}${goto 286}${color}${top_mem name 1}${alignr}${color1}${top_mem mem_res 1}
+${goto 286}${color}${top_mem name 2}${alignr}${color1}${top_mem mem_res 2}
+${goto 286}${color}${top_mem name 3}${alignr}${color1}${top_mem mem_res 3}
+${goto 286}${color}${top_mem name 4}${alignr}${color1}${top_mem mem_res 4}
+${goto 286}${color}${top_mem name 5}${alignr}${color1}${top_mem mem_res 5}
+${goto 286}${color}${top_mem name 6}${alignr}${color1}${top_mem mem_res 6}
+${voffset -96}${memgraph 90,240 3d3a35 a8a294}
+]]

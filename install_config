@@ -27,7 +27,13 @@ niri=(
   ".config/waybar"
   ".config/fuzzel"
   ".config/rofi" # Used in niri
+  "bin/start_conky_niri"
   "/usr/share/conky/conky_niri"
+  "/usr/share/conky/conky_niri_cpu"
+  "/usr/share/conky/conky_niri_net"
+  "/usr/share/conky/conky_niri_info"
+  "/usr/share/conky/conky_niri_calendar.lua"
+  "/usr/share/conky/conky_niri_panel.lua"
 )
 
 android=(

@@ -1,0 +1,36 @@
+#!/bin/bash
+# Start the niri conky windows on the laptop screen.
+# On Wayland conky opens on whichever output has focus, so focus the laptop
+# screen, wait for each window to show up there, then give focus back.
+# Usage: start_conky_niri [config dir]   (default /usr/share/conky)
+
+OUTPUT=eDP-1
+CONF_DIR=${1:-/usr/share/conky}
+CONFIGS=(conky_niri conky_niri_cpu conky_niri_net conky_niri_info)
+
+conky_count() {
+    niri msg --json layers | jq "[.[] | select(.namespace == \"conky\" and .output == \"$OUTPUT\")] | length"
+}
+
+# Restart cleanly if already running
+for conf in "${CONFIGS[@]}"; do
+    pkill -f "conky .*-c $CONF_DIR/$conf\$"
+done
+sleep 0.5
+
+prev=$(niri msg --json focused-output | jq -r '.name // empty')
+niri msg --json outputs | jq -e "has(\"$OUTPUT\")" >/dev/null && niri msg action focus-monitor "$OUTPUT"
+
+for conf in "${CONFIGS[@]}"; do
+    before=$(conky_count)
+    conky -q -c "$CONF_DIR/$conf"
+    # Wait (max 5s) for the window before focus can move anywhere else
+    for _ in $(seq 50); do
+        (( $(conky_count) > before )) && break
+        sleep 0.1
+    done
+done
+
+[[ -n $prev && $prev != "$OUTPUT" ]] && niri msg action focus-monitor "$prev"
+
+exit 0
