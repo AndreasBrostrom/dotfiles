@@ -40,33 +40,42 @@ side_pick() {
 # Stack each side widget under the previous one, using its window's real height
 # (the calendar grows a row in six-week months)
 start_side() {
-    local side_head side_output y=30 conf before win height
+    local side_head side_output y=30 conf before win height last
     read -r side_head side_output _ <<<"$1"
     for conf in "${SIDE_CONFIGS[@]}"; do
         before=$(xdotool search --class conky | sort)
         CONKY_HEAD=$side_head CONKY_OUTPUT=$side_output conky -q -a top_right -x 20 -y $y -c "$CONF_DIR/$conf"
-        height=
+        # A new window starts tiny and grows to fit its text: wait for two equal readings
+        height= last=
         for _ in $(seq 50); do
             win=$(comm -13 <(echo "$before") <(xdotool search --class conky | sort) | head -1)
             [[ -n $win ]] && height=$(xdotool getwindowgeometry --shell "$win" | sed -n 's/^HEIGHT=//p')
-            [[ -n $height ]] && break
-            sleep 0.1
+            [[ -n $height && $height -gt 20 && $height == "$last" ]] && break
+            last=$height
+            sleep 0.2
         done
         (( y += ${height:-300} + SIDE_GAP ))
     done
 }
 
-# Restart cleanly if already running, including a wait for the side screen
+# Restart cleanly: stop the wait for the side screen and every conky of this user, also
+# ones left from a niri or i3 session or a previous login. Those lose their display,
+# spin at 100% CPU and ignore SIGTERM, so force-kill stragglers.
 WAIT_PID=${XDG_RUNTIME_DIR:-/tmp}/start_conky_xfce.wait
 [[ -f $WAIT_PID ]] && kill "$(cat "$WAIT_PID")" 2>/dev/null
 rm -f "$WAIT_PID"
-for conf in "${CONFIGS[@]}" "${SIDE_CONFIGS[@]}"; do
-    pkill -f "conky .*-c $CONF_DIR/$conf\$"
-done
+pkill -x -u "$USER" conky
 sleep 0.5
+pkill -9 -x -u "$USER" conky
 
 for conf in "${CONFIGS[@]}"; do
     CONKY_HEAD=${head:-0} CONKY_OUTPUT=$output conky -q -c "$CONF_DIR/$conf"
+done
+
+# Let the main widgets' windows show up first, so stacking doesn't measure one of them
+for _ in $(seq 50); do
+    (( $(xdotool search --class conky | wc -l) >= ${#CONFIGS[@]} )) && break
+    sleep 0.1
 done
 
 side=$(side_pick)
@@ -76,7 +85,8 @@ elif [[ ! -v CONKY_SIDE && $output != eDP* ]]; then
     (
         until [[ -n $side ]]; do
             sleep 10
-            monitors=$(xrandr --listmonitors | awk 'NR > 1 {sub(":", "", $1); print $1, $NF, ($2 ~ /\*/)}')
+            list=$(xrandr --listmonitors) || exit # display gone: logged out
+            monitors=$(awk 'NR > 1 {sub(":", "", $1); print $1, $NF, ($2 ~ /\*/)}' <<<"$list")
             side=$(side_pick)
         done
         rm -f "$WAIT_PID"

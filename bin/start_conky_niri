@@ -68,15 +68,15 @@ start() {
     done
 }
 
-# Restart cleanly if already running. Widgets left over from a previous niri session
-# lose their display, spin at 100% CPU and ignore SIGTERM, so force-kill stragglers.
-for conf in "${CONFIGS[@]}"; do
-    pkill -f "conky .*-c $CONF_DIR/$conf\$"
-done
+# Restart cleanly: stop every conky of this user, also ones left from an Xfce or i3
+# session or a previous login. Those lose their display, spin at 100% CPU and ignore
+# SIGTERM, so force-kill stragglers. Xfce's wait for its side screen goes too.
+WAIT_PID=${XDG_RUNTIME_DIR:-/tmp}/start_conky_xfce.wait
+[[ -f $WAIT_PID ]] && kill "$(cat "$WAIT_PID")" 2>/dev/null
+rm -f "$WAIT_PID"
+pkill -x -u "$USER" conky
 sleep 0.5
-for conf in "${CONFIGS[@]}"; do
-    pkill -9 -f "conky .*-c $CONF_DIR/$conf\$"
-done
+pkill -9 -x -u "$USER" conky
 
 prev=$(niri msg --json focused-output | jq -r '.name // empty')
 
