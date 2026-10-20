@@ -9,14 +9,17 @@ etc=(
 i3=(
   "bin/e-scrot"
   "bin/dmenu_recent"
+  "bin/start_conky_i3"
   ".config/i3/config"
   ".config/i3-scrot.conf"
+  ".config/i3status"
+  ".config/picom.conf"
   ".config/morc_menu/morc_menu_v1.conf"
   "Programs/src/monitor/i3status_androidDevice"
   "Programs/src/monitor/i3status_dotfilestatus"
   "Programs/src/monitor/i3status_monitor_isc"
-  "/usr/share/conky/conky_evul"
-  "/usr/share/conky/conky_shortcuts_evul"
+  "/usr/share/conky/conky_i3"
+  "/usr/share/conky/conky_shortcuts_i3"
 )
 
 niri=(
@@ -36,4 +39,5 @@ wsl=(
 
 xfce=(
   ".config/xfce4"
+  "Programs/src/monitor/network_device_ip_speed"
 )
