@@ -16,4 +16,4 @@ configuration {
     show-match: true;
 }
 
-@theme "Arc-Dark"
+@theme "grimdark"

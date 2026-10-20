@@ -1,0 +1,116 @@
+/* Grimdark (cold steel), shared with niri, waybar and conky_niri */
+
+* {
+    bg0:    #1f1f1f;
+    bg1:    #2a2a2a;
+    bg2:    #2d2d2d;
+    bg3:    #353535;
+    fg:     #d8d2c4;
+    dim:    #8f8a80;
+    steel:  #598fb2;
+    steeld: #324147;
+    red:    #9e4a40;
+
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+window {
+    width:            40%;
+    background-color: @bg1;
+    border:           2px;
+    border-color:     @steel;
+    border-radius:    0;
+}
+
+mainbox {
+    padding:  12px;
+    spacing:  10px;
+}
+
+inputbar {
+    padding:          8px 10px;
+    spacing:          8px;
+    background-color: @bg0;
+    border:           0 0 2px 0;
+    border-color:     @bg3;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color: @steel;
+}
+
+entry {
+    placeholder:       "Search";
+    placeholder-color: @dim;
+    cursor:            text;
+}
+
+listview {
+    lines:     10;
+    spacing:   2px;
+    scrollbar: false;
+}
+
+element {
+    padding:  6px 10px;
+    spacing:  10px;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element selected.normal {
+    background-color: @steeld;
+    text-color:       @fg;
+    border:           0 0 0 2px;
+    border-color:     @steel;
+}
+
+element normal.urgent,
+element alternate.urgent {
+    text-color: @red;
+}
+
+element selected.urgent {
+    background-color: @red;
+    text-color:       @fg;
+}
+
+element normal.active,
+element alternate.active {
+    text-color: @steel;
+}
+
+element-icon {
+    size: 1.2em;
+}
+
+element-text, element-icon {
+    background-color: inherit;
+    text-color:       inherit;
+}
+
+mode-switcher {
+    spacing: 0;
+}
+
+button {
+    padding:          6px;
+    background-color: @bg2;
+    text-color:       @dim;
+}
+
+button selected {
+    background-color: @steeld;
+    text-color:       @fg;
+}
+
+message {
+    padding:          6px 10px;
+    background-color: @bg2;
+}
