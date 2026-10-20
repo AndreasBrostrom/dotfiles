@@ -80,14 +80,17 @@
         // }
     },
     "clock": {
-        // "timezone": "America/New_York",
         "format": "{:%H:%M:%S}",
         "interval": 1,
-        "tooltip": false
+        // First entry is the local zone shown in the bar, the rest are listed in the tooltip
+        "timezones": ["", "Etc/UTC", "Europe/London", "America/New_York", "America/Los_Angeles", "Asia/Tokyo"],
+        "tooltip-format": "<span color='#7aa6c4'><b>World clock</b></span>\n<b>{0:%H:%M}</b>  <span color='#8f8a80'>{0:%Z} · local</span>\n{tz_list}",
+        // {0:...}: waybar passes one time value, so every placeholder must point at it explicitly
+        "timezone-tooltip-format": "{0:%H:%M}  <span color='#8f8a80'>{0:%Z · %a}</span>"
     },
     "clock#date": {
         "format": "{:%Y-%m-%d (%a) w%V}",
-        "tooltip-format": "<span color='#7aa6c4'><b>{:%B %Y}</b></span>\n<tt>{calendar}</tt>\n<span color='#8f8a80'><small>scroll to change month · right-click for year</small></span>",
+        "tooltip-format": "<tt>{calendar}</tt>\n<span color='#8f8a80'><small>scroll to change month · right-click for year</small></span>",
         "calendar": {
             "mode": "month",
             "mode-mon-col": 3,
