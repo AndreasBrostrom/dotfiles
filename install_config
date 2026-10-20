@@ -1,5 +1,6 @@
 etc=(
   "etc/lightdm/lightdm.conf"
+  "etc/lightdm/lightdm-gtk-greeter.conf"
   "etc/modprobe.d/nobeep.conf"
   "etc/pacman.conf"
   "etc/X11/xorg.conf.d/00-keyboard.conf"
