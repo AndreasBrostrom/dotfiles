@@ -27,6 +27,7 @@ niri=(
   ".config/waybar"
   ".config/fuzzel"
   ".config/rofi" # Used in niri
+  "/usr/share/conky/conky_niri"
 )
 
 android=(
