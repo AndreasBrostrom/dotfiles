@@ -41,6 +41,5 @@ wsl=(
 xfce=(
   "bin/start_conky_xfce"
   ".config/autostart/conky.desktop"
-  ".config/xfce4"
   "Programs/src/monitor/network_device_ip_speed"
 )
