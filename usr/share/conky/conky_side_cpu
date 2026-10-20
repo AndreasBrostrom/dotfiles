@@ -1,0 +1,84 @@
+-- Grimdark (cold steel), shared with niri, waybar and rofi
+-- bone #d8d2c4, dim #8f8a80, light steel #7aa6c4, panel #1f1f1f
+-- Side screen, right edge under the clock: CPU usage graph, every core, then the busiest
+-- processes. Memory (conky_side_mem) and network (conky_side_net) follow below it.
+
+-- Helpers live next to this file (works from the dotfiles repo and /usr/share/conky)
+local dir = debug.getinfo(1, 'S').source:match('^@(.*)/') or '/usr/share/conky'
+local wayland = os.getenv('WAYLAND_DISPLAY') ~= nil
+local sys = dofile(dir .. '/conky_sys.lua') -- cpu model, threads and temperature sensor
+
+conky.config = {
+	alignment = 'top_right', -- start_conky_xfce stacks the side widgets with -y
+	gap_x = 20,
+	gap_y = 30,
+	minimum_width = 440,
+	maximum_width = 440,
+	background = true,
+	update_interval = 1.0,
+	cpu_avg_samples = 1,
+	no_buffers = true,
+	double_buffer = true,
+	top_name_width = 24,
+	pad_percents = 3,
+	disable_auto_reload = true, -- a reload reopens the window on the focused output
+
+	-- niri (Wayland) or Xfce (X11); on X11 a 'desktop' window hides behind xfdesktop
+	output_backend = wayland and 'wayland' or 'x11',
+	xinerama_head = tonumber(os.getenv('CONKY_HEAD')) or 0, -- X11 screen, set by start_conky_xfce
+	own_window = true,
+	own_window_type = wayland and 'desktop' or 'normal',
+	own_window_hints = wayland and 'below' or 'undecorated,below,sticky,skip_taskbar,skip_pager',
+	use_xft = true, -- X11 only; Wayland always uses fontconfig
+	own_window_color = '#00000000', -- transparent; the rounded panel is drawn in Lua
+	border_inner_margin = 16,
+
+	draw_shades = false,
+	draw_outline = false,
+	draw_borders = false,
+
+	lua_load = dir .. '/conky_panel.lua',
+	lua_draw_hook_pre = 'panel 18,61,440,60', -- graph box: x,y,w,h (measured)
+	draw_graph_borders = false,
+	show_graph_scale = false,
+	show_graph_range = false,
+
+	default_color = 'd8d2c4', -- bone
+	color1 = '8f8a80',        -- dim
+	color2 = '7aa6c4',        -- light steel
+
+	font = 'Roboto Mono:size=8',
+	font1 = 'Roboto:bold:size=8',
+}
+
+-- Cores in two columns (cpu1..n/2 left, the rest right), each: number, bar, usage, GHz
+local function core(n, x)
+	return ('${goto %d}${color1}%02d${goto %d}${color2}${cpubar cpu%d 5,100}'
+		.. '${goto %d}${color}${cpu cpu%d}%%${goto %d}${color1}${freq_g %d}')
+		:format(x, n, x + 24, n, x + 132, n, x + 172, n)
+end
+local threads = tonumber(sys.threads) or 1
+local half = math.ceil(threads / 2)
+local cores = {}
+for i = 1, half do
+	local line = core(i, 18)
+	if i + half <= threads then line = line .. core(i + half, 248) end
+	cores[#cores + 1] = line
+end
+
+local procs = {}
+for i = 1, 10 do
+	procs[i] = ('${color}${top name %d}${goto 270}${color1}${top pid %d}'
+		.. '${goto 340}${color}${top cpu %d}%%${alignr}${color1}${top mem_res %d}'):format(i, i, i, i)
+end
+
+-- Graph args: height,width  start-colour end-colour (cpu graph is fixed 0-100%)
+conky.text = [[
+${font1}${color2}CPU${font}${goto 60}${color1}]] .. sys.cpu .. [[${alignr}${color1}]] .. sys.cpu_temp .. [[  ${color}${cpu cpu0}%
+${color1}freq ${color}${freq_g}${color1} GHz${goto 160}load ${color}${loadavg}${alignr}${color1}tasks ${color}${running_processes}${color1} / ${processes}
+${voffset 6}${cpugraph cpu0 60,440 3a5566 7aa6c4}
+${voffset 8}${font1}${color2}CORES${font}${goto 60}${color1}]] .. sys.cores .. ' cores, ' .. sys.threads .. [[ threads
+${voffset 2}]] .. table.concat(cores, '\n') .. [[
+
+${voffset 8}${font1}${color2}PROCESSES${font}${goto 270}${color1}pid${goto 340}cpu${alignr}memory
+${voffset 2}]] .. table.concat(procs, '\n') .. '\n'

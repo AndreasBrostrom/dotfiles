@@ -3,10 +3,18 @@
 # Screen: the laptop screen (eDP*) if there is one, else the primary, else the first.
 # Override with an output name from `xrandr --listmonitors`, e.g. CONKY_OUTPUT=HDMI-A-0.
 #
+# With a second screen (home desktop), the side widgets go on it, stacked down the right
+# edge: clock and calendar, CPU with every core, memory and swap, then network. That's
+# the first screen that isn't the main one; pick it with CONKY_SIDE=<output>, or set
+# CONKY_SIDE= (empty) to leave it out. On a desktop (no laptop screen) where the second
+# screen is still off, the script waits in the background and starts them once it's on.
+#
 # Usage: start_conky_xfce [config dir]   (default /usr/share/conky)
 
 CONF_DIR=${1:-/usr/share/conky}
 CONFIGS=(conky_clock conky_cpu conky_net conky_info)
+SIDE_CONFIGS=(conky_clock conky_side_cpu conky_side_mem conky_side_net)
+SIDE_GAP=10 # between stacked side widgets
 
 # "<index> <name> <primary>" per monitor, from lines like " 0: +*eDP 1920/302x1200/189+0+0  eDP"
 monitors=$(xrandr --listmonitors | awk 'NR > 1 {sub(":", "", $1); print $1, $NF, ($2 ~ /\*/)}')
@@ -20,8 +28,39 @@ else
 fi
 read -r head output _ <<<"$pick"
 
-# Restart cleanly if already running
-for conf in "${CONFIGS[@]}"; do
+# "<index> <name>" of the side screen, empty when it isn't connected (or not wanted)
+side_pick() {
+    if [[ -v CONKY_SIDE ]]; then
+        [[ -n $CONKY_SIDE ]] && awk -v o="$CONKY_SIDE" '$2 == o' <<<"$monitors"
+    else
+        awk -v o="$output" '$2 != o' <<<"$monitors" | head -1
+    fi
+}
+
+# Stack each side widget under the previous one, using its window's real height
+# (the calendar grows a row in six-week months)
+start_side() {
+    local side_head side_output y=30 conf before win height
+    read -r side_head side_output _ <<<"$1"
+    for conf in "${SIDE_CONFIGS[@]}"; do
+        before=$(xdotool search --class conky | sort)
+        CONKY_HEAD=$side_head CONKY_OUTPUT=$side_output conky -q -a top_right -x 20 -y $y -c "$CONF_DIR/$conf"
+        height=
+        for _ in $(seq 50); do
+            win=$(comm -13 <(echo "$before") <(xdotool search --class conky | sort) | head -1)
+            [[ -n $win ]] && height=$(xdotool getwindowgeometry --shell "$win" | sed -n 's/^HEIGHT=//p')
+            [[ -n $height ]] && break
+            sleep 0.1
+        done
+        (( y += ${height:-300} + SIDE_GAP ))
+    done
+}
+
+# Restart cleanly if already running, including a wait for the side screen
+WAIT_PID=${XDG_RUNTIME_DIR:-/tmp}/start_conky_xfce.wait
+[[ -f $WAIT_PID ]] && kill "$(cat "$WAIT_PID")" 2>/dev/null
+rm -f "$WAIT_PID"
+for conf in "${CONFIGS[@]}" "${SIDE_CONFIGS[@]}"; do
     pkill -f "conky .*-c $CONF_DIR/$conf\$"
 done
 sleep 0.5
@@ -29,5 +68,22 @@ sleep 0.5
 for conf in "${CONFIGS[@]}"; do
     CONKY_HEAD=${head:-0} CONKY_OUTPUT=$output conky -q -c "$CONF_DIR/$conf"
 done
+
+side=$(side_pick)
+if [[ -n $side ]]; then
+    start_side "$side"
+elif [[ ! -v CONKY_SIDE && $output != eDP* ]]; then
+    (
+        until [[ -n $side ]]; do
+            sleep 10
+            monitors=$(xrandr --listmonitors | awk 'NR > 1 {sub(":", "", $1); print $1, $NF, ($2 ~ /\*/)}')
+            side=$(side_pick)
+        done
+        rm -f "$WAIT_PID"
+        sleep 3 # let Xfce finish placing the screen
+        start_side "$side"
+    ) &
+    echo $! >"$WAIT_PID"
+fi
 
 exit 0

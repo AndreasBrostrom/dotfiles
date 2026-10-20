@@ -1,0 +1,87 @@
+-- Grimdark (cold steel), shared with niri, waybar and rofi
+-- bone #d8d2c4, dim #8f8a80, light steel #7aa6c4, panel #1f1f1f
+-- Side screen, right edge under the CPU widget: memory usage graph and breakdown, swap
+-- per device, then the processes using the most memory. Network (conky_side_net) follows.
+
+-- Helpers live next to this file (works from the dotfiles repo and /usr/share/conky)
+local dir = debug.getinfo(1, 'S').source:match('^@(.*)/') or '/usr/share/conky'
+local wayland = os.getenv('WAYLAND_DISPLAY') ~= nil
+
+conky.config = {
+	alignment = 'top_right', -- start_conky_xfce stacks the side widgets with -y
+	gap_x = 20,
+	gap_y = 30,
+	minimum_width = 440,
+	maximum_width = 440,
+	background = true,
+	update_interval = 1.0,
+	no_buffers = true,
+	double_buffer = true,
+	top_name_width = 24,
+	pad_percents = 3,
+	disable_auto_reload = true, -- a reload reopens the window on the focused output
+
+	-- niri (Wayland) or Xfce (X11); on X11 a 'desktop' window hides behind xfdesktop
+	output_backend = wayland and 'wayland' or 'x11',
+	xinerama_head = tonumber(os.getenv('CONKY_HEAD')) or 0, -- X11 screen, set by start_conky_xfce
+	own_window = true,
+	own_window_type = wayland and 'desktop' or 'normal',
+	own_window_hints = wayland and 'below' or 'undecorated,below,sticky,skip_taskbar,skip_pager',
+	use_xft = true, -- X11 only; Wayland always uses fontconfig
+	own_window_color = '#00000000', -- transparent; the rounded panel is drawn in Lua
+	border_inner_margin = 16,
+
+	draw_shades = false,
+	draw_outline = false,
+	draw_borders = false,
+
+	lua_load = dir .. '/conky_panel.lua',
+	lua_draw_hook_pre = 'panel 18,65,440,50', -- graph box: x,y,w,h (measured)
+	draw_graph_borders = false,
+	show_graph_scale = false,
+	show_graph_range = false,
+
+	default_color = 'd8d2c4', -- bone
+	color1 = '8f8a80',        -- dim
+	color2 = '7aa6c4',        -- light steel
+
+	font = 'Roboto Mono:size=8',
+	font1 = 'Roboto:bold:size=8',
+}
+
+-- One line per swap device (zram, swap file, partition), read once from /proc/swaps;
+-- usage is refreshed by execi (/proc/swaps counts KiB)
+local swaps = {}
+local f = io.open('/proc/swaps')
+if f then
+	f:read('*l') -- header
+	for line in f:lines() do
+		local name, kind, size = line:match('^(%S+)%s+(%S+)%s+(%d+)')
+		if name then
+			swaps[#swaps + 1] = ([[${color1}%s${goto 160}%s${alignr}${color}${execi 10 grep '^%s ' /proc/swaps | tr -s ' \t' ' ' | cut -d' ' -f4 | numfmt --from-unit=1024 --to=iec}${color1} / %s]])
+				:format(name:match('[^/]+$'), kind, name, ('%.1fG'):format(size / 1048576))
+		end
+	end
+	f:close()
+end
+if #swaps == 0 then swaps[1] = '${color1}no swap devices' end
+
+local procs = {}
+for i = 1, 10 do
+	procs[i] = ('${color}${top_mem name %d}${goto 270}${color1}${top_mem pid %d}'
+		.. '${goto 340}${color}${top_mem mem %d}%%${alignr}${color1}${top_mem mem_res %d}'):format(i, i, i, i)
+end
+
+-- Graph args: height,width  start-colour end-colour (memory graph is fixed 0-100%)
+conky.text = [[
+${font1}${color2}MEMORY${font}${goto 80}${color1}${memperc}%${alignr}${color}${mem}${color1} / ${memmax}
+${voffset 4}${color2}${membar 5,440}
+${voffset 6}${memgraph 50,440 3d3a35 a8a294}
+${voffset 6}${color1}available${goto 80}${color}${memeasyfree}${goto 248}${color1}cached${goto 320}${color}${cached}
+${color1}free${goto 80}${color}${memfree}${goto 248}${color1}buffers${goto 320}${color}${buffers}
+${voffset 8}${font1}${color2}SWAP${font}${goto 80}${color1}${swapperc}%${alignr}${color}${swap}${color1} / ${swapmax}
+${voffset 4}${color2}${swapbar 5,440}
+${voffset 4}]] .. table.concat(swaps, '\n') .. [[
+
+${voffset 8}${font1}${color2}PROCESSES${font}${goto 270}${color1}pid${goto 340}mem${alignr}resident
+${voffset 2}]] .. table.concat(procs, '\n') .. '\n'
