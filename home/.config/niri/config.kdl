@@ -287,6 +287,9 @@ layout {
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "waybar"
 
+// Polkit agent so apps (blueman etc.) can ask for a password
+spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+
 // Match the XFCE look (theme/icons/cursor) for GTK apps under niri
 spawn-sh-at-startup "gsettings set org.gnome.desktop.interface gtk-theme Breeze-Dark; gsettings set org.gnome.desktop.interface icon-theme Black-BigSur-dark; gsettings set org.gnome.desktop.interface cursor-theme Adwaita; gsettings set org.gnome.desktop.interface cursor-size 28; gsettings set org.gnome.desktop.interface color-scheme prefer-dark"
 
