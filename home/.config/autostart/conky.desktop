@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Conky
+Comment=Clock, cpu/memory, network and info widgets (see bin/start_conky_xfce)
+Exec=sh -c "sleep 3 && start_conky_xfce"
+OnlyShowIn=XFCE;
+X-GNOME-Autostart-enabled=true

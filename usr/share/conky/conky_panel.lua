@@ -6,6 +6,8 @@
 -- The whole-widget panel (#151515 at ~30%, 8px corners) can be switched off with PANEL.
 
 require 'cairo'
+local wayland = os.getenv('WAYLAND_DISPLAY') ~= nil
+if not wayland then require 'cairo_xlib' end
 
 local PANEL = false -- testing without the widget backdrop; true brings it back
 local PANEL_RADIUS = 8
@@ -28,7 +30,8 @@ end
 function conky_panel(...)
 	if conky_window == nil then return end
 	-- Wayland: conky_surface() hands out the window's surface; X11: build an xlib one
-	local owned = conky_surface == nil
+	-- (conky_surface exists on X11 too, but drawing to it there shows nothing)
+	local owned = not wayland
 	local surface = owned
 		and cairo_xlib_surface_create(conky_window.display, conky_window.drawable,
 			conky_window.visual, conky_window.width, conky_window.height)

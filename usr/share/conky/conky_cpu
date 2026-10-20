@@ -1,11 +1,12 @@
 -- Grimdark (cold steel), shared with niri, waybar and rofi
 -- bone #d8d2c4, dim #8f8a80, light steel #7aa6c4, panel #1f1f1f
--- Live monitor, bottom right: CPU above memory (network is its own widget, conky_niri_net).
+-- Live monitor, bottom right: CPU above memory (network is its own widget, conky_net).
 -- Each section: history graph on the left, usage bar + busiest processes on the right.
 
 -- Helpers live next to this file (works from the dotfiles repo and /usr/share/conky)
 local dir = debug.getinfo(1, 'S').source:match('^@(.*)/') or '/usr/share/conky'
-local sys = dofile(dir .. '/conky_niri_sys.lua') -- temperature sensor for this machine
+local wayland = os.getenv('WAYLAND_DISPLAY') ~= nil
+local sys = dofile(dir .. '/conky_sys.lua') -- temperature sensor for this machine
 
 conky.config = {
 	alignment = 'bottom_right',
@@ -22,10 +23,13 @@ conky.config = {
 	top_name_width = 16,
 	disable_auto_reload = true, -- a reload reopens the window on the focused output
 
-	output_backend = 'wayland',
+	-- niri (Wayland) or Xfce (X11); on X11 a 'desktop' window hides behind xfdesktop
+	output_backend = wayland and 'wayland' or 'x11',
+	xinerama_head = tonumber(os.getenv('CONKY_HEAD')) or 0, -- X11 screen, set by start_conky_xfce
 	own_window = true,
-	own_window_type = 'desktop',
-	own_window_hints = 'below',
+	own_window_type = wayland and 'desktop' or 'normal',
+	own_window_hints = wayland and 'below' or 'undecorated,below,sticky,skip_taskbar,skip_pager',
+	use_xft = true, -- X11 only; Wayland always uses fontconfig
 	own_window_color = '#00000000', -- transparent; the rounded panel is drawn in Lua
 	border_inner_margin = 16,
 
@@ -33,7 +37,7 @@ conky.config = {
 	draw_outline = false,
 	draw_borders = false,
 
-	lua_load = dir .. '/conky_niri_panel.lua',
+	lua_load = dir .. '/conky_panel.lua',
 	lua_draw_hook_pre = 'panel 18,55,240,90 18,205,240,90', -- graph boxes: x,y,w,h (measured)
 	draw_graph_borders = false,
 	show_graph_scale = false,

@@ -28,13 +28,6 @@ niri=(
   ".config/fuzzel"
   ".config/rofi" # Used in niri
   "bin/start_conky_niri"
-  "/usr/share/conky/conky_niri"
-  "/usr/share/conky/conky_niri_cpu"
-  "/usr/share/conky/conky_niri_net"
-  "/usr/share/conky/conky_niri_info"
-  "/usr/share/conky/conky_niri_calendar.lua"
-  "/usr/share/conky/conky_niri_panel.lua"
-  "/usr/share/conky/conky_niri_sys.lua"
 )
 
 android=(
@@ -46,6 +39,8 @@ wsl=(
 )
 
 xfce=(
+  "bin/start_conky_xfce"
+  ".config/autostart/conky.desktop"
   ".config/xfce4"
   "Programs/src/monitor/network_device_ip_speed"
 )

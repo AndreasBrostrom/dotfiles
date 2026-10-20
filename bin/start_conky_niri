@@ -16,7 +16,7 @@
 # Usage: start_conky_niri [config dir]   (default /usr/share/conky)
 
 CONF_DIR=${1:-/usr/share/conky}
-CONFIGS=(conky_niri conky_niri_cpu conky_niri_net conky_niri_info)
+CONFIGS=(conky_clock conky_cpu conky_net conky_info)
 
 outputs=$(niri msg --json outputs)
 
@@ -81,12 +81,12 @@ done
 prev=$(niri msg --json focused-output | jq -r '.name // empty')
 
 if [[ -n $side && $side != "$main" ]]; then
-    start conky_niri "$main"
-    start conky_niri "$side"
-    start conky_niri_cpu "$side"
-    start conky_niri_net "$side"
+    start conky_clock "$main"
+    start conky_clock "$side"
+    start conky_cpu "$side"
+    start conky_net "$side"
     # Top right, under the clock (~260px tall at gap_y 30)
-    start conky_niri_info "$side" -a top_right -y 320
+    start conky_info "$side" -a top_right -y 320
 else
     for conf in "${CONFIGS[@]}"; do
         start "$conf" "$main"

@@ -1,4 +1,4 @@
--- Month calendar for conky_niri: ${lua_parse calendar}
+-- Month calendar for conky_clock: ${lua_parse calendar}
 -- Monday first, ISO week numbers, today in light steel, weekend dimmed.
 -- Each line starts with ${alignr} so it hugs the right edge (needs a mono font).
 

@@ -3,7 +3,7 @@
 -- Fields:
 --   iface, wireless    network interface with the default route, and whether it is Wi-Fi
 --   cpu_temp, gpu_temp conky snippets for the temperatures ('' when there is no sensor)
---   host, bios, cpu, gpu, cores, threads, display   static info for conky_niri_info
+--   host, bios, cpu, gpu, cores, threads, display, desktop   static info for conky_info
 --   has(cmd)           whether a command is installed
 
 local M = {}
@@ -71,12 +71,26 @@ M.gpu = sh("lspci | grep -m1 -E 'VGA|3D|Display' | sed 's/.*: //; s/.*\\[\\(.*\\
 M.threads = sh('nproc')
 M.cores = sh("lscpu | awk -F: '/^Core\\(s\\) per socket/ {gsub(/ /, \"\", $2); print $2}'")
 
--- Display: mode of the output this widget runs on (start_conky_niri sets CONKY_OUTPUT)
+-- Display: mode of the output this widget runs on (start_conky_niri/start_conky_xfce set CONKY_OUTPUT)
 local output = os.getenv('CONKY_OUTPUT') or ''
+local wayland = os.getenv('WAYLAND_DISPLAY') ~= nil
 M.display = ''
-if output ~= '' then
+if output ~= '' and wayland then
 	M.display = sh("niri msg --json outputs | jq -r --arg o '" .. output .. "' "
 		.. "'.[$o] | .modes[.current_mode] as $m | \"\\($m.width)x\\($m.height) @ \\($m.refresh_rate / 1000 | floor) Hz\"'")
+elseif output ~= '' then
+	M.display = sh("xrandr | awk -v o='" .. output .. "' '$1 == o {f = 1; next} "
+		.. "f && /\\*/ {print $1 \" @ \" int($2) \" Hz\"; exit} f && !/^ / {exit}'")
+end
+
+-- Desktop: compositor or desktop environment and its version, for the info header
+local desktop = os.getenv('XDG_CURRENT_DESKTOP') or ''
+if desktop:match('niri') then
+	M.desktop = 'niri ' .. sh("niri --version | cut -d' ' -f2")
+elseif desktop:match('XFCE') then
+	M.desktop = 'Xfce ' .. sh("xfce4-session --version | head -1 | sed 's/.*(Xfce \\(.*\\))/\\1/'")
+else
+	M.desktop = desktop
 end
 
 return M

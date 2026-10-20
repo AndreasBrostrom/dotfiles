@@ -1,0 +1,33 @@
+#!/bin/bash
+# Start the conky widgets (clock, cpu/memory, network, info) on one screen in Xfce (X11).
+# Screen: the laptop screen (eDP*) if there is one, else the primary, else the first.
+# Override with an output name from `xrandr --listmonitors`, e.g. CONKY_OUTPUT=HDMI-A-0.
+#
+# Usage: start_conky_xfce [config dir]   (default /usr/share/conky)
+
+CONF_DIR=${1:-/usr/share/conky}
+CONFIGS=(conky_clock conky_cpu conky_net conky_info)
+
+# "<index> <name> <primary>" per monitor, from lines like " 0: +*eDP 1920/302x1200/189+0+0  eDP"
+monitors=$(xrandr --listmonitors | awk 'NR > 1 {sub(":", "", $1); print $1, $NF, ($2 ~ /\*/)}')
+
+if [[ -n $CONKY_OUTPUT ]]; then
+    pick=$(awk -v o="$CONKY_OUTPUT" '$2 == o' <<<"$monitors")
+else
+    pick=$(awk '$2 ~ /^eDP/' <<<"$monitors")
+    [[ -z $pick ]] && pick=$(awk '$3 == 1' <<<"$monitors")
+    [[ -z $pick ]] && pick=$(head -1 <<<"$monitors")
+fi
+read -r head output _ <<<"$pick"
+
+# Restart cleanly if already running
+for conf in "${CONFIGS[@]}"; do
+    pkill -f "conky .*-c $CONF_DIR/$conf\$"
+done
+sleep 0.5
+
+for conf in "${CONFIGS[@]}"; do
+    CONKY_HEAD=${head:-0} CONKY_OUTPUT=$output conky -q -c "$CONF_DIR/$conf"
+done
+
+exit 0
