@@ -3,7 +3,6 @@ set --export TERMINAL kitty
 
 set --export EDITOR nvim
 set --export GIT_EDITOR nvim
-set --export DISPLAY :0
 
 # SSH Agent (set by gnome-keyring via systemd)
 if test -z "$SSH_AUTH_SOCK"
