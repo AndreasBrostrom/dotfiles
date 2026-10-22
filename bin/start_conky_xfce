@@ -4,10 +4,11 @@
 # Override with an output name from `xrandr --listmonitors`, e.g. CONKY_OUTPUT=HDMI-A-0.
 #
 # With a second screen (home desktop), the side widgets go on it, stacked down the right
-# edge: clock and calendar, CPU with every core, memory and swap, then network. That's
-# the first screen that isn't the main one; pick it with CONKY_SIDE=<output>, or set
-# CONKY_SIDE= (empty) to leave it out. On a desktop (no laptop screen) where the second
-# screen is still off, the script waits in the background and starts them once it's on.
+# edge: clock and calendar, CPU with every core, memory and swap, then network, plus the
+# systemctl status header at its bottom left. That's the first screen that isn't the main
+# one; pick it with CONKY_SIDE=<output>, or set CONKY_SIDE= (empty) to leave it out. On a
+# desktop (no laptop screen) where the second screen is still off, the script waits in
+# the background and starts them once it's on.
 #
 # Usage: start_conky_xfce [config dir]   (default /usr/share/conky)
 
@@ -56,6 +57,8 @@ start_side() {
         done
         (( y += ${height:-300} + SIDE_GAP ))
     done
+    # systemctl status header, bottom left of the same screen
+    CONKY_HEAD=$side_head CONKY_OUTPUT=$side_output conky -q -a bottom_left -x 20 -y 30 -c "$CONF_DIR/conky_systemd"
 }
 
 # Restart cleanly: stop the wait for the side screen and every conky of this user, also
