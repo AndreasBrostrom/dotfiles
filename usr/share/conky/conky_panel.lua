@@ -18,6 +18,11 @@ local BOX_RADIUS = 4
 local BOX_FILL = { 0.05, 0.05, 0.05, 0.45 }
 local BOX_LINE = { 0.75, 0.75, 0.75, 0.12 }
 
+-- start_conky_niri stacks widgets with their real heights: when CONKY_SIZE_FILE is set,
+-- the window height is written there (only when it changes)
+local size_file = os.getenv('CONKY_SIZE_FILE')
+local last_height
+
 local function rounded_rect(cr, x, y, w, h, r)
 	cairo_new_sub_path(cr)
 	cairo_arc(cr, x + w - r, y + r, r, -math.pi / 2, 0)
@@ -29,6 +34,11 @@ end
 
 function conky_panel(...)
 	if conky_window == nil then return end
+	if size_file and conky_window.height ~= last_height then
+		last_height = conky_window.height
+		local f = io.open(size_file, 'w')
+		if f then f:write(last_height, '\n'); f:close() end
+	end
 	-- Wayland: conky_surface() hands out the window's surface; X11: build an xlib one
 	-- (conky_surface exists on X11 too, but drawing to it there shows nothing)
 	local owned = not wayland

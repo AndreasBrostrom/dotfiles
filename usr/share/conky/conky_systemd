@@ -1,0 +1,67 @@
+-- Grimdark (cold steel), shared with niri, waybar and rofi
+-- bone #d8d2c4, dim #8f8a80, light steel #7aa6c4, panel #1f1f1f
+-- systemctl status header (state, units, jobs, failed, since, systemd version), top left
+-- of the office's standing screen, see start_conky_niri.
+
+-- Helpers live next to this file (works from the dotfiles repo and /usr/share/conky)
+local dir = debug.getinfo(1, 'S').source:match('^@(.*)/') or '/usr/share/conky'
+local wayland = os.getenv('WAYLAND_DISPLAY') ~= nil
+
+conky.config = {
+	alignment = 'top_left',
+	gap_x = 20,
+	gap_y = 30,
+	minimum_width = 340,
+	maximum_width = 340,
+	background = true,
+	update_interval = 5.0,
+	double_buffer = true,
+	disable_auto_reload = true, -- a reload reopens the window on the focused output
+
+	-- niri (Wayland) or Xfce (X11); on X11 a 'desktop' window hides behind xfdesktop
+	output_backend = wayland and 'wayland' or 'x11',
+	out_to_wayland = wayland, out_to_x = not wayland, -- conky 1.24 and older name these instead of output_backend
+	xinerama_head = tonumber(os.getenv('CONKY_HEAD')) or 0, -- X11 screen, set by start_conky_xfce
+	own_window = true,
+	own_window_type = wayland and 'desktop' or 'normal',
+	own_window_hints = wayland and 'below' or 'undecorated,below,sticky,skip_taskbar,skip_pager',
+	use_xft = true, -- X11 only; Wayland always uses fontconfig
+	own_window_color = '#00000000', -- transparent; the rounded panel is drawn in Lua
+	own_window_colour = '#00000000', -- conky 1.24 and older spell it this way
+	border_inner_margin = 16,
+
+	draw_shades = false,
+	draw_outline = false,
+	draw_borders = false,
+
+	lua_load = dir .. '/conky_panel.lua',
+	lua_draw_hook_pre = 'panel',
+
+	default_color = 'd8d2c4', -- bone
+	color1 = '8f8a80',        -- dim
+	color2 = '7aa6c4',        -- light steel
+	color3 = 'c4857a',        -- warning (muted rust)
+
+	font = 'Roboto Mono:size=8',
+	font1 = 'Roboto:bold:size=8',
+}
+
+-- One field of `systemctl status`, e.g. field('State') -> running
+local function field(name, interval)
+	return "${execi " .. (interval or 10) .. " systemctl status --no-pager --lines=0 | sed -n 's/^ *" .. name .. ": //p'}"
+end
+
+local function row(label, value)
+	return '${color1}' .. label .. '${goto 80}${color}' .. value
+end
+
+conky.text = [[
+${font1}${color2}${execi 86400 systemctl status --no-pager --lines=0 | head -1}${font}
+${voffset 4}]] .. table.concat({
+	row('state', '${if_match "' .. field('State') .. '" != "running"}${color3}${endif}' .. field('State')),
+	row('units', field('Units')),
+	row('jobs', field('Jobs')),
+	row('failed', '${if_match "${execi 10 systemctl --failed --no-legend --no-pager | wc -l}" != "0"}${color3}${endif}' .. field('Failed')),
+	row('since', field('Since', 30)),
+	row('systemd', field('systemd', 86400)),
+}, '\n') .. '\n'

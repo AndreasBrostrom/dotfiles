@@ -22,12 +22,14 @@ conky.config = {
 
 	-- niri (Wayland) or Xfce (X11); on X11 a 'desktop' window hides behind xfdesktop
 	output_backend = wayland and 'wayland' or 'x11',
+	out_to_wayland = wayland, out_to_x = not wayland, -- conky 1.24 and older name these instead of output_backend
 	xinerama_head = tonumber(os.getenv('CONKY_HEAD')) or 0, -- X11 screen, set by start_conky_xfce
 	own_window = true,
 	own_window_type = wayland and 'desktop' or 'normal',
 	own_window_hints = wayland and 'below' or 'undecorated,below,sticky,skip_taskbar,skip_pager',
 	use_xft = true, -- X11 only; Wayland always uses fontconfig
 	own_window_color = '#00000000', -- transparent; the rounded panel is drawn in Lua
+	own_window_colour = '#00000000', -- conky 1.24 and older spell it this way
 	border_inner_margin = 16,
 
 	draw_shades = false,

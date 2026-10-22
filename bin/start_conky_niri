@@ -7,16 +7,34 @@
 #   laptop           A laptop screen (eDP-1) exists: everything on it, whatever else
 #                    is plugged in.
 #   standing screen  No laptop screen but a portrait (rotated) output, like the office
-#                    desktop: clock on the main (center) screen; clock, info (top right,
-#                    below the clock), CPU/memory and network on the right-most portrait.
+#                    desktop, three screens: clock on the main (center) screen; clock and
+#                    calendar on top of the right-most portrait with the wide CPU (every
+#                    core), memory and network widgets stacked at its bottom; CPU/memory,
+#                    network and info as on the home screen, plus a clock at the top left,
+#                    on the left-most screen. With no left screen those go on the main one.
 #   otherwise        Everything on the largest screen.
-# Override the choice with output names from `niri msg outputs`, e.g. in niri:
+# Override the choice with output names from `niri msg outputs` (CONKY_LEFT only matters
+# for the standing screen layout), e.g. in niri:
 #   spawn-sh-at-startup "CONKY_MAIN=DP-1 CONKY_SIDE=DP-2 start_conky_niri"
 #
-# Usage: start_conky_niri [config dir]   (default /usr/share/conky)
+# Usage: start_conky_niri [config dir]
+#   Default config dir: the widgets next to this script when it runs from the dotfiles
+#   checkout (./bin/start_conky_niri), else the installed /usr/share/conky.
 
-CONF_DIR=${1:-/usr/share/conky}
+REPO_CONF=$(dirname "$(readlink -f "$0")")/../usr/share/conky
+if [[ -d $REPO_CONF ]]; then
+    REPO_CONF=$(readlink -f "$REPO_CONF")
+    # Running the checkout while /usr/share/conky is out of date: say so, the autostart
+    # (the installed copy of this script) would still start the old widgets
+    if diff -rq -x '*i3' "$REPO_CONF" /usr/share/conky 2>/dev/null | grep -qv '^Only in /usr/share/conky'; then
+        echo "start_conky_niri: /usr/share/conky is out of date, run ./install --niri" >&2
+    fi
+    CONF_DIR=${1:-$REPO_CONF}
+else
+    CONF_DIR=${1:-/usr/share/conky}
+fi
 CONFIGS=(conky_clock conky_cpu conky_net conky_info)
+SIDE_GAP=10 # between stacked side widgets
 
 outputs=$(niri msg --json outputs)
 
@@ -50,6 +68,13 @@ else
     main=$(pick "$largest")
 fi
 
+# Left-most other landscape screen, where the stats go (the main one when there is none)
+if [[ -n $CONKY_LEFT ]]; then
+    left=$CONKY_LEFT
+elif [[ -n $side ]]; then
+    left=$(pick "map(select(.key != \"$side\" and .key != \"$main\")) | $landscape | min_by(.value.logical.x)")
+fi
+
 conky_count() {
     niri msg --json layers | jq "[.[] | select(.namespace == \"conky\" and .output == \"$1\")] | length"
 }
@@ -81,12 +106,38 @@ pkill -9 -x -u "$USER" conky
 prev=$(niri msg --json focused-output | jq -r '.name // empty')
 
 if [[ -n $side && $side != "$main" ]]; then
-    start conky_clock "$main"
+    # Right-most (portrait): clock and calendar on top; network, memory and CPU stacked up
+    # from the bottom (CPU highest). Each widget reports its real height (CONKY_SIZE_FILE,
+    # see conky_panel.lua), so the stack fits however many cores or swap devices there are.
     start conky_clock "$side"
-    start conky_cpu "$side"
-    start conky_net "$side"
-    # Top right, under the clock (~260px tall at gap_y 30)
-    start conky_info "$side" -a top_right -y 320
+    y=30
+    for conf in conky_side_net conky_side_mem conky_side_cpu; do
+        size_file=$(mktemp -u "${XDG_RUNTIME_DIR:-/tmp}/conky_size.XXXXXX")
+        CONKY_SIZE_FILE=$size_file start "$conf" "$side" -a bottom_right -y $y
+        # The window grows to fit its text: wait (max 5s) for two equal readings
+        height= last=
+        for _ in $(seq 25); do
+            height=$(cat "$size_file" 2>/dev/null)
+            [[ -n $height && $height -gt 20 && $height == "$last" ]] && break
+            last=$height
+            sleep 0.2
+        done
+        rm -f "$size_file"
+        (( y += ${height:-400} + SIDE_GAP ))
+    done
+    # systemctl status header, top left of the same screen
+    start conky_systemd "$side"
+    if [[ -n $left && $left != "$main" ]]; then
+        start conky_clock "$main"
+        CONKY_CLOCK_LEFT=1 start conky_clock "$left" -a top_left
+        start conky_cpu "$left"
+        start conky_net "$left"
+        start conky_info "$left"
+    else
+        for conf in "${CONFIGS[@]}"; do
+            start "$conf" "$main"
+        done
+    fi
 else
     for conf in "${CONFIGS[@]}"; do
         start "$conf" "$main"
