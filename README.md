@@ -34,3 +34,23 @@ sudo cp etc/X11/xorg.conf.d/91-monitor-office.conf     /etc/X11/xorg.conf.d/91-m
 sudo cp etc/X11/xorg.conf.d/92-xpra-virtual.conf       /etc/X11/xorg.conf.d/92-xpra-virtual.conf
 
 ```
+
+## Themes
+
+The dark look in the GTK settings, `.gtkrc-2.0`, niri and the LightDM greeter needs these themes:
+
+| Theme | Used as | Arch package |
+|---|---|---|
+| Breeze-Dark | GTK theme (GTK 2/3/4, greeter, niri) | `breeze-gtk` |
+| Black-BigSur-dark | Icon theme (GTK, niri) | none, put it in `~/.icons/Black-BigSur-dark` by hand |
+| Papirus-Dark | Icon theme (LightDM greeter) | `papirus-icon-theme` |
+| Adwaita | Cursor theme, size 28 | `adwaita-cursors` |
+| ocean | Sound theme | `ocean-sound-theme` |
+| Noto Sans | UI font | `noto-fonts` |
+
+```bash
+paru -S breeze-gtk papirus-icon-theme adwaita-cursors ocean-sound-theme noto-fonts \
+        qt5ct qt6ct numix-circle-icon-theme-git
+```
+
+`qt5ct`, `qt6ct` and `numix-circle-icon-theme-git` (AUR) are for Qt apps under niri.
