@@ -1,8 +1,8 @@
 -- Grimdark (cold steel), shared with niri, waybar and rofi
 -- bone #d8d2c4, dim #8f8a80, light steel #7aa6c4, panel #1f1f1f
 -- systemctl status header (state, units, jobs, failed, since, systemd version), top left
--- of the office's standing screen (start_conky_niri), bottom left of the home desktop's
--- right screen (start_conky_xfce).
+-- of the office's standing screen (right of the info widget on the laptop, see
+-- start_conky_niri), bottom left of the home desktop's right screen (start_conky_xfce).
 
 -- Helpers live next to this file (works from the dotfiles repo and /usr/share/conky)
 local dir = debug.getinfo(1, 'S').source:match('^@(.*)/') or '/usr/share/conky'

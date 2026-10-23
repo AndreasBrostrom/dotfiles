@@ -5,7 +5,7 @@
 #
 # Layout, picked from the connected outputs:
 #   laptop           A laptop screen (eDP-1) exists: everything on it, whatever else
-#                    is plugged in.
+#                    is plugged in, with the systemd header right of the info widget.
 #   standing screen  No laptop screen but a portrait (rotated) output, like the office
 #                    desktop, three screens: clock on the main (center) screen; clock and
 #                    calendar on top of the right-most portrait with the wide CPU (every
@@ -142,6 +142,9 @@ else
     for conf in "${CONFIGS[@]}"; do
         start "$conf" "$main"
     done
+    # Laptop: systemctl status header right of the info widget, bottoms lined up
+    # (x: 20 + conky_info (580 + 2 * 16 margin) + 20)
+    [[ -n $laptop && $main == "$laptop" ]] && start conky_systemd "$main" -a bottom_left -x 652
 fi
 
 [[ -n $prev ]] && niri msg action focus-monitor "$prev"
