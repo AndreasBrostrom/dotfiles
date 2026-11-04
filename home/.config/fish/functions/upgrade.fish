@@ -18,6 +18,7 @@ function upgrade
                     echo -e "  - Automatically upgrades Flatpak packages if installed"
                     echo -e "  - Automatically upgrades Snap packages if installed"
                     echo -e "  - Runs sitrep (dotfiles manager) if installed"
+                    echo -e "  - Lists packages held back by IgnorePkg/IgnoreGroup with installed and available versions (Arch-based systems)"
                     echo -e "  - Lists orphaned packages (Arch-based systems)"
                     echo -e "  - Recommends cache cleaning when package caches exceed 10 GiB (Arch-based systems)"
                     echo -e ""
@@ -33,6 +34,7 @@ function upgrade
         functions -e _fn_upgrade_snap
         functions -e _fn_upgrade_dotfiles
         functions -e _fn_upgrade_cache_hint
+        functions -e _fn_upgrade_ignored
         functions -e _fn_upgrade_deconstructor
     end
 
@@ -96,6 +98,44 @@ function upgrade
         end
     end
 
+    # Lists packages held back by IgnorePkg/IgnoreGroup in pacman.conf (globs allowed),
+    # with the installed version and the version the repos (or the AUR) offer.
+    # Usage: _fn_upgrade_ignored paru|yay|pacman
+    function _fn_upgrade_ignored
+        exist pacman-conf; or return
+        set -l helper $argv[1]
+        set -l patterns (pacman-conf IgnorePkg 2>/dev/null)
+        for group in (pacman-conf IgnoreGroup 2>/dev/null)
+            set -a patterns (pacman -Sgq $group 2>/dev/null)
+        end
+        test (count $patterns) -gt 0; or return
+
+        # Only installed packages matter; string match treats each pattern as a glob
+        set -l installed (pacman -Qq)
+        set -l names
+        for pat in $patterns
+            set -a names (string match -- $pat $installed)
+        end
+        test (count $names) -gt 0; or return
+        set names (printf '%s\n' $names | sort -u)
+
+        echo -e '\033[1mIgnored packages:\033[0m'
+        for name in $names
+            set -l inst (pacman -Q $name | string split -f2 ' ')
+            set -l avail (env LC_ALL=C pacman -Si $name 2>/dev/null | string match -rg '^Version\s*:\s*(\S+)')[1]
+            if test -z "$avail"; and test "$helper" != pacman
+                set avail (env LC_ALL=C $helper -Si $name 2>/dev/null | string match -rg '^Version\s*:\s*(\S+)')[1]
+            end
+            if test -z "$avail"
+                echo -e " $name-$inst \033[2m(no repo version found)\033[0m"
+            else if test "$avail" = "$inst"
+                echo -e " $name-$inst \033[2m(up to date)\033[0m"
+            else
+                echo -e " \033[1;33m$name-$avail\033[0m (Installed: $name-$inst)"
+            end
+        end
+    end
+
     echo -e '\033[1mFully upgrading system and packages...\033[0m'
 
     # Arch
@@ -105,6 +145,7 @@ function upgrade
             sudo -v
             echo -e '\033[1;32mparu\033[0m'
             paru -Syyu --sudoloop --noconfirm --color=always
+            _fn_upgrade_ignored paru
             _fn_upgrade_flatpak
             _fn_upgrade_snap
             _fn_upgrade_dotfiles
@@ -128,6 +169,7 @@ function upgrade
             echo -e '\033[1mFully upgrading system and packages...\033[0m'
             echo -e '\033[1;32myay\033[0m'
             yay -Syyu --sudoloop --noconfirm --color=always
+            _fn_upgrade_ignored yay
             exist flatpak && _fn_upgrade_flatpak
             exist snap && _fn_upgrade_snap
             _fn_upgrade_dotfiles
@@ -149,6 +191,7 @@ function upgrade
         # pacman (default)
         echo -e '\033[1;32mpacman\033[0m'
         sudo pacman -Syyu --noconfirm --color=always
+        _fn_upgrade_ignored pacman
         _fn_upgrade_flatpak
         _fn_upgrade_snap
         _fn_upgrade_dotfiles
