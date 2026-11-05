@@ -143,8 +143,13 @@ else
         start "$conf" "$main"
     done
     # Laptop: systemctl status header right of the info widget, bottoms lined up
-    # (x: 20 + conky_info (580 + 2 * 16 margin) + 20)
-    [[ -n $laptop && $main == "$laptop" ]] && start conky_systemd "$main" -a bottom_left -x 652
+    # (x: 20 + conky_info (580 + 2 * 16 margin) + 20). Only when the whole bottom row
+    # fits: info, systemd (340 + 32), net (280 + 32) and cpu (480 + 32) plus the gaps
+    # need 1908 logical px. Narrower (e.g. scale 1.25 on a 1920 panel): leave it out.
+    if [[ -n $laptop && $main == "$laptop" ]]; then
+        width=$(jq -r ".[\"$main\"].logical.width" <<<"$outputs")
+        (( width >= 1908 )) && start conky_systemd "$main" -a bottom_left -x 652
+    fi
 fi
 
 [[ -n $prev ]] && niri msg action focus-monitor "$prev"
