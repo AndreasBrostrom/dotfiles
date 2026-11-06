@@ -10,6 +10,3 @@ end
 
 # set object colors for ls
 eval (dircolors -c ~/.config/dir_colors)
-
-# fnm (Node version manager)
-fnm env --use-on-cd --shell fish | source
