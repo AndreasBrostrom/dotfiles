@@ -1,0 +1,106 @@
+#!/bin/bash
+# install-font: unzip and install fonts into the user's home font directory.
+#
+# Usage: install-font [-f] <font.zip|font.ttf|font.otf>...
+#   -f  overwrite fonts that are already installed
+#
+# Each archive is installed into its own folder:
+#   ~/.local/share/fonts/<archive name>/
+
+FONT_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/fonts"
+FORCE=0
+
+usage() {
+  echo "Usage: $(basename "$0") [-f] <font.zip|font.ttf|font.otf>..."
+  echo "  -f  overwrite fonts that are already installed"
+  echo "Fonts are installed to $FONT_DIR"
+}
+
+while getopts ":fh" opt; do
+  case $opt in
+    f) FORCE=1 ;;
+    h) usage; exit 0 ;;
+    *) usage; exit 1 ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+if [ $# -eq 0 ]; then
+  usage
+  exit 1
+fi
+
+command -v unzip >/dev/null || { echo "install-font: unzip is not installed"; exit 1; }
+
+TMP_DIR=$(mktemp -d)
+trap 'rm -rf "$TMP_DIR"' EXIT
+
+installed=0
+failed=0
+
+# copy_font <source file> <destination dir>
+copy_font() {
+  local src="$1" dest="$2" name
+  name=$(basename "$src")
+  if [ -e "$dest/$name" ] && [ $FORCE -eq 0 ]; then
+    echo -e "  \033[33m-> $name already installed, skipping (use -f to overwrite)\033[0m"
+    return
+  fi
+  mkdir -p "$dest"
+  install -m 644 "$src" "$dest/$name"
+  echo -e "  \033[32m-> $name\033[0m"
+  installed=$((installed + 1))
+}
+
+for arg in "$@"; do
+  if [ ! -f "$arg" ]; then
+    echo -e "\033[31minstall-font: '$arg' not found\033[0m"
+    failed=$((failed + 1))
+    continue
+  fi
+
+  file=$(basename "$arg")
+  case "${file,,}" in
+    *.zip)
+      name="${file%.*}"
+      echo -e "\033[1mInstalling $name\033[0m"
+      extract="$TMP_DIR/$name"
+      mkdir -p "$extract"
+      if ! unzip -qq -o "$arg" -d "$extract"; then
+        echo -e "  \033[31m-> failed to unzip $file\033[0m"
+        failed=$((failed + 1))
+        continue
+      fi
+      found=0
+      while IFS= read -r -d '' font; do
+        copy_font "$font" "$FONT_DIR/$name"
+        found=1
+      done < <(find "$extract" -type f \
+                 \( -iname '*.ttf' -o -iname '*.otf' -o -iname '*.ttc' \
+                    -o -iname '*.woff' -o -iname '*.woff2' -o -iname '*.pcf' \
+                    -o -iname '*.pcf.gz' -o -iname '*.bdf' \) \
+                 -not -path '*/__MACOSX/*' -print0)
+      if [ $found -eq 0 ]; then
+        echo -e "  \033[31m-> no font files found in $file\033[0m"
+        failed=$((failed + 1))
+      fi
+      ;;
+    *.ttf|*.otf|*.ttc|*.woff|*.woff2|*.pcf|*.pcf.gz|*.bdf)
+      name="${file%.*}"
+      echo -e "\033[1mInstalling $name\033[0m"
+      copy_font "$arg" "$FONT_DIR/$name"
+      ;;
+    *)
+      echo -e "\033[31minstall-font: '$file' is not a zip or font file\033[0m"
+      failed=$((failed + 1))
+      ;;
+  esac
+done
+
+if [ $installed -gt 0 ]; then
+  echo "Updating font cache..."
+  fc-cache -f "$FONT_DIR" >/dev/null 2>&1
+fi
+
+echo "Done. Installed $installed font file(s) to $FONT_DIR."
+[ $failed -eq 0 ] || exit 2
